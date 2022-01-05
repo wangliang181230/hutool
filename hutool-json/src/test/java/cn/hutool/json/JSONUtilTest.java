@@ -236,6 +236,6 @@ public class JSONUtilTest {
 		obj.set("key1", "v1")
 				.set("key2", ListUtil.of("a", "b", "c"));
 		final String xmlStr = JSONUtil.toXmlStr(obj);
-		Assert.assertEquals("<key1>v1</key1><key2>a</key2><key2>b</key2><key2>c</key2>", xmlStr);
+		Assertions.assertEquals("<key1>v1</key1><key2>a</key2><key2>b</key2><key2>c</key2>", xmlStr);
 	}
 }
