@@ -11,11 +11,14 @@
 * 【core   】     CharSequenceUtil.replace方法支持增补字符（pr#2041@Github）
 * 【extra  】     增加SshjSftp（pr#493@Gitee）
 * 【core   】     增加CheckedUtil（pr#491@Gitee）
+* 【extra  】     增加Sftp.isDir中的抛异常判断条件（issues#I4P9ED@Gitee）
 
 ### 🐞Bug修复
 * 【http   】     HttpUtil重定向次数失效问题（issue#I4O28Q@Gitee）
 * 【core   】     修复UrlPath空白path多/问题（issue#I49KAL@Gitee）
 * 【core   】     修复ServletUtil写出文件时未添加双引号导致逗号等特殊符号引起的问题（issue#I4P1BF@Gitee）
+* 【core   】     NumberUtil增加equals重载解决long传入判断问题（pr#2064@Github）
+* 【core   】     修复CsvParser行号有误问题（pr#2065@Github）
 
 -------------------------------------------------------------------------------------------------------------
 # 5.7.18 (2021-12-25)
