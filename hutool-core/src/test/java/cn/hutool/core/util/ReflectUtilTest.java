@@ -45,9 +45,19 @@ public class ReflectUtilTest {
 		Method[] methods = ReflectUtil.getMethods(ExamInfoDict.class);
 		Assertions.assertEquals(21, methods.length);
 
+		//过滤器测试
+		methods = ReflectUtil.getMethods(ExamInfoDict.class, t -> Integer.class.equals(t.getReturnType()));
+
+		Assertions.assertEquals(4, methods.length);
+		final Method method = methods[0];
+		Assertions.assertNotNull(method);
+
 		//null过滤器测试
 		methods = ReflectUtil.getMethods(ExamInfoDict.class, null);
+
 		Assertions.assertEquals(21, methods.length);
+		final Method method2 = methods[0];
+		Assertions.assertNotNull(method2);
 	}
 
 	@Test
