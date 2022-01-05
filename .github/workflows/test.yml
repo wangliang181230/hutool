@@ -24,4 +24,8 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Run Test With Maven
-        run: mvn clean install -e -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+        run: if [ "${{ matrix.java }}" == "8" ]; then
+               mvn clean install -e -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+             else
+               mvn clean install -e -P test-for-un-java8 -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
+             fi

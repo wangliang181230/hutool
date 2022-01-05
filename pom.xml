@@ -46,6 +46,8 @@
 		<junit.version>5.8.2</junit.version>
 		<mockito.version>4.0.0</mockito.version>
 		<lombok.version>1.18.22</lombok.version>
+
+		<maven.surefire.argLine></maven.surefire.argLine>
 	</properties>
 
 	<dependencyManagement>
@@ -148,14 +150,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.2</version>
 				<configuration>
-					<argLine>
-						--add-opens java.base/java.lang=ALL-UNNAMED
-						--add-opens java.base/java.util=ALL-UNNAMED
-						--add-opens java.base/java.util.regex=ALL-UNNAMED
-						--illegal-access=permit
-						-Dillegal-access=permit
-						-Duser.timezone=Asia/Shanghai
-					</argLine>
+					<argLine>${maven.surefire.argLine}</argLine>
+					<systemProperties>
+						<user.timezone>Asia/Shanghai</user.timezone>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -201,7 +199,7 @@
 								<format>html</format>
 								<format>xml</format>
 							</formats>
-							<check />
+							<check/>
 						</configuration>
 					</plugin>
 					<!-- Gpg Signature -->
@@ -232,6 +230,19 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+
+		<profile>
+			<id>test-for-un-java8</id>
+			<properties>
+				<maven.surefire.argLine>
+					--add-opens java.base/java.lang=ALL-UNNAMED
+					--add-opens java.base/java.util=ALL-UNNAMED
+					--add-opens java.base/java.util.regex=ALL-UNNAMED
+					--illegal-access=permit
+					-Dillegal-access=permit
+				</maven.surefire.argLine>
+			</properties>
 		</profile>
 	</profiles>
 
