@@ -566,8 +566,21 @@ public class StrUtilTest {
 	@Test
 	public void briefTest3() {
 		String str = "123abc";
-		int maxLength = 3;
+
+		int maxLength = 6;
 		String brief = StrUtil.brief(str, maxLength);
+		Assertions.assertEquals(str, brief);
+
+		maxLength = 5;
+		brief = StrUtil.brief(str, maxLength);
+		Assertions.assertEquals("1...c", brief);
+
+		maxLength = 4;
+		brief = StrUtil.brief(str, maxLength);
+		Assertions.assertEquals("1..c", brief);
+
+		maxLength = 3;
+		brief = StrUtil.brief(str, maxLength);
 		Assertions.assertEquals("1.c", brief);
 
 		maxLength = 2;
