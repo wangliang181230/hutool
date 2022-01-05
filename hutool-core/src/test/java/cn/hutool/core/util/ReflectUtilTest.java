@@ -4,6 +4,9 @@ import cn.hutool.core.lang.test.bean.ExamInfoDict;
 import cn.hutool.core.util.ClassUtilTest.TestSubClass;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnJre;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.JRE;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -16,6 +19,7 @@ import java.lang.reflect.Method;
 public class ReflectUtilTest {
 
 	@Test
+	@DisabledOnJre(JRE.JAVA_17)
 	public void getMethodsTest() {
 		Method[] methods = ReflectUtil.getMethods(ExamInfoDict.class);
 		Assertions.assertEquals(22, methods.length);
@@ -33,6 +37,17 @@ public class ReflectUtilTest {
 		Assertions.assertEquals(22, methods.length);
 		final Method method2 = methods[0];
 		Assertions.assertNotNull(method2);
+	}
+
+	@Test
+	@EnabledOnJre(JRE.JAVA_17)
+	public void getMethodsTestForJava17() {
+		Method[] methods = ReflectUtil.getMethods(ExamInfoDict.class);
+		Assertions.assertEquals(21, methods.length);
+
+		//null过滤器测试
+		methods = ReflectUtil.getMethods(ExamInfoDict.class, null);
+		Assertions.assertEquals(21, methods.length);
 	}
 
 	@Test

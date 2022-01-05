@@ -3,12 +3,15 @@ package cn.hutool.json;
 import lombok.Data;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnJre;
+import org.junit.jupiter.api.condition.JRE;
 
 import java.time.LocalDateTime;
 
 /**
  * 问题反馈对象中有JDK8日期对象时转换失败，5.0.7修复
  */
+@DisabledOnJre(JRE.JAVA_17)
 public class Issue644Test {
 
 	@Test
