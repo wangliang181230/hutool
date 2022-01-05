@@ -44,9 +44,8 @@
 		<!-- versions -->
 		<compile.version>8</compile.version>
 		<junit.version>5.8.2</junit.version>
+		<mockito.version>4.0.0</mockito.version>
 		<lombok.version>1.18.22</lombok.version>
-		<javax-jaxb.version>2.3.1</javax-jaxb.version>
-		<jaxws-rt.version>3.0.2</jaxws-rt.version>
 	</properties>
 
 	<dependencyManagement>
@@ -71,6 +70,12 @@
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -143,9 +148,14 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.2</version>
 				<configuration>
-					<systemPropertyVariables>
-						<user.timezone>Asia/Shanghai</user.timezone>
-					</systemPropertyVariables>
+					<argLine>
+						--add-opens java.base/java.lang=ALL-UNNAMED
+						--add-opens java.base/java.util=ALL-UNNAMED
+						--add-opens java.base/java.util.regex=ALL-UNNAMED
+						--illegal-access=permit
+						-Dillegal-access=permit
+						-Duser.timezone=Asia/Shanghai
+					</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
