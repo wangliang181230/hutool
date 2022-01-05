@@ -199,7 +199,7 @@
 								<format>html</format>
 								<format>xml</format>
 							</formats>
-							<check />
+							<check/>
 						</configuration>
 					</plugin>
 					<!-- Gpg Signature -->
@@ -233,8 +233,7 @@
 		</profile>
 
 		<profile>
-			<!-- 用于 '.github/workflows/test.yml' -->
-			<id>test-for-java17</id>
+			<id>test-for-un-java8</id>
 			<properties>
 				<maven.surefire.argLine>
 					--add-opens java.base/java.lang=ALL-UNNAMED
