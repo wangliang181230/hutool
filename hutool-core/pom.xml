@@ -16,4 +16,18 @@
 	<name>${project.artifactId}</name>
 	<description>Hutool核心，包括集合、字符串、Bean等工具</description>
 
+	<dependencies>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${javax-jaxb.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>${jaxws-rt.version}</version>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 </project>
