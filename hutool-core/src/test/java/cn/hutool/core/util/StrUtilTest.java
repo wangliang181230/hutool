@@ -89,18 +89,14 @@ public class StrUtilTest {
 		Assertions.assertEquals("", split.get(2));
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void splitNullTest() {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			StrUtil.split(null, '.');
-		});
+		StrUtil.split(null, '.');
 	}
 
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void splitToArrayNullTest() {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			StrUtil.splitToArray(null, '.');
-		});
+		StrUtil.splitToArray(null, '.');
 	}
 
 	@Test
@@ -533,10 +529,18 @@ public class StrUtilTest {
 
 	@Test
 	public void briefTest() {
-		String str = RandomUtil.randomString(1000);
-		int maxLength = RandomUtil.randomInt(1000);
-		String brief = StrUtil.brief(str, maxLength);
-		Assertions.assertEquals(brief.length(), maxLength);
+		// case: 1 至 str.length - 1
+		String str = RandomUtil.randomString(RandomUtil.randomInt(1, 100));
+		for (int maxLength = 1; maxLength < str.length(); maxLength++) {
+			String brief = StrUtil.brief(str, maxLength);
+			Assertions.assertEquals(brief.length(), maxLength);
+		}
+
+		// case: 不会格式化的值
+		Assertions.assertEquals(str, StrUtil.brief(str, 0));
+		Assertions.assertEquals(str, StrUtil.brief(str, -1));
+		Assertions.assertEquals(str, StrUtil.brief(str, str.length()));
+		Assertions.assertEquals(str, StrUtil.brief(str, str.length() + 1));
 	}
 
 	@Test
