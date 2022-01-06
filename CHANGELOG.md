@@ -3,7 +3,7 @@
 
 -------------------------------------------------------------------------------------------------------------
 
-# 5.7.19 (2022-01-04)
+# 5.7.19 (2022-01-06)
 
 ### 🐣新特性
 * 【db     】     优化Condition参数拆分（pr#2046@Github）
@@ -19,6 +19,10 @@
 * 【core   】     修复ServletUtil写出文件时未添加双引号导致逗号等特殊符号引起的问题（issue#I4P1BF@Gitee）
 * 【core   】     NumberUtil增加equals重载解决long传入判断问题（pr#2064@Github）
 * 【core   】     修复CsvParser行号有误问题（pr#2065@Github）
+* 【http   】     修复HttpRequest.of无法自动添加http前缀问题（issue#I4PEYL@Gitee）
+* 【core   】     修复 `CharSequenceUtil.brief(str, maxLength)` 方法字符串越界问题，以及 `maxLength` 部分值时结果与预期不符的问题（pr#2068@Github）
+* 【core   】     修复NamingCase中转换下划线字母+数字转换问题（issue#2070@Github）
+* 【core   】     修复split空判断不一致问题（pr#496@Gitee）
 
 -------------------------------------------------------------------------------------------------------------
 # 5.7.18 (2021-12-25)
