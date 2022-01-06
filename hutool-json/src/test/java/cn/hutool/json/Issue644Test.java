@@ -1,17 +1,15 @@
 package cn.hutool.json;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.Data;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnJre;
-import org.junit.jupiter.api.condition.JRE;
 
 import java.time.LocalDateTime;
 
 /**
  * 问题反馈对象中有JDK8日期对象时转换失败，5.0.7修复
  */
-@EnabledOnJre(JRE.JAVA_8)
 public class Issue644Test {
 
 	@Test
@@ -22,10 +20,12 @@ public class Issue644Test {
 		final JSONObject jsonObject = JSONUtil.parseObj(beanWithDate);
 
 		BeanWithDate beanWithDate2 = JSONUtil.toBean(jsonObject, BeanWithDate.class);
-		Assertions.assertEquals(beanWithDate.getDate(), beanWithDate2.getDate());
+		Assertions.assertEquals(LocalDateTimeUtil.formatNormal(beanWithDate.getDate()),
+				LocalDateTimeUtil.formatNormal(beanWithDate2.getDate()));
 
 		beanWithDate2 = JSONUtil.toBean(jsonObject.toString(), BeanWithDate.class);
-		Assertions.assertEquals(beanWithDate.getDate(), beanWithDate2.getDate());
+		Assertions.assertEquals(LocalDateTimeUtil.formatNormal(beanWithDate.getDate()),
+				LocalDateTimeUtil.formatNormal(beanWithDate2.getDate()));
 	}
 
 	@Data
