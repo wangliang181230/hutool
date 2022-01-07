@@ -14,7 +14,6 @@ import org.bouncycastle.crypto.engines.SM2Engine;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.jcajce.spec.OpenSSHPrivateKeySpec;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -314,7 +313,6 @@ public class SM2Test {
 	}
 
 	@Test
-	@Disabled("偶尔会报错，暂时先禁用")
 	public void dLengthTest(){
 		final SM2 sm2 = SmUtil.sm2();
 		Assertions.assertEquals(64, sm2.getDHex().length());
