@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.lang.test.bean.ExamInfoDict;
@@ -22,7 +22,7 @@ public class BeanPathTest {
 
 	Map<String, Object> tempMap;
 
-	@Before
+	@BeforeEach
 	public void init() {
 		// ------------------------------------------------- 考试信息列表
 		ExamInfoDict examInfoDict = new ExamInfoDict();

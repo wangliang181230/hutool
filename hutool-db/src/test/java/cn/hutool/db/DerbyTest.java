@@ -1,7 +1,7 @@
 package cn.hutool.db;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class DerbyTest {
 
 	private static final String DS_GROUP_NAME = "derby";
 
-	@BeforeClass
+	@BeforeAll
 	public static void init() throws SQLException {
 		Db db = Db.use(DS_GROUP_NAME);
 		try{

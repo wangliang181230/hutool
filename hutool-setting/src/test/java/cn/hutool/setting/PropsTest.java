@@ -6,7 +6,7 @@ import cn.hutool.log.dialect.console.ConsoleLogFactory;
 import cn.hutool.setting.dialect.Props;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class PropsTest {
 
-	@Before
+	@BeforeEach
 	public void init() {
 		LogFactory.setCurrentLogFactory(ConsoleLogFactory.class);
 	}

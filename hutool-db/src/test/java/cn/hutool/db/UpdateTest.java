@@ -1,7 +1,7 @@
 package cn.hutool.db;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ public class UpdateTest {
 
 	Db db;
 
-	@Before
+	@BeforeEach
 	public void init() {
 		db = Db.use("test");
 	}

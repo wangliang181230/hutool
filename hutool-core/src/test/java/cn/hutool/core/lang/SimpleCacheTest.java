@@ -3,12 +3,12 @@ package cn.hutool.core.lang;
 import cn.hutool.core.thread.ConcurrencyTester;
 import cn.hutool.core.thread.ThreadUtil;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SimpleCacheTest {
 
-	@Before
+	@BeforeEach
 	public void putTest(){
 		final SimpleCache<String, String> cache = new SimpleCache<>();
 		ThreadUtil.execute(()->cache.put("key1", "value1"));
