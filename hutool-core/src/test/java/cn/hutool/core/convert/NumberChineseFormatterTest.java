@@ -267,16 +267,20 @@ public class NumberChineseFormatterTest {
 		Assert.assertEquals(1300, NumberChineseFormatter.chineseToNumber("千三"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void badNumberTest(){
-		// 连续数字检查
-		NumberChineseFormatter.chineseToNumber("一百一二三");
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			// 连续数字检查
+			NumberChineseFormatter.chineseToNumber("一百一二三");
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void badNumberTest2(){
-		// 非法字符
-		NumberChineseFormatter.chineseToNumber("一百你三");
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			// 非法字符
+			NumberChineseFormatter.chineseToNumber("一百你三");
+		});
 	}
 
 	@Test

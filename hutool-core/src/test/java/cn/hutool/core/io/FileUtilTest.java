@@ -19,15 +19,17 @@ import java.util.List;
  */
 public class FileUtilTest {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void fileTest() {
-		File file = FileUtil.file("d:/aaa", "bbb");
-		Assert.assertNotNull(file);
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			File file = FileUtil.file("d:/aaa", "bbb");
+			Assert.assertNotNull(file);
 
-		// 构建目录中出现非子目录抛出异常
-		FileUtil.file(file, "../ccc");
+			// 构建目录中出现非子目录抛出异常
+			FileUtil.file(file, "../ccc");
 
-		FileUtil.file("E:/");
+			FileUtil.file("E:/");
+		});
 	}
 
 	@Test

@@ -69,14 +69,15 @@ public class JWTTest {
 	/**
 	 * 必须定义签名器
 	 */
-	@Test(expected = JWTException.class)
+	@Test
 	public void needSignerTest(){
-		JWT jwt = JWT.create()
-				.setPayload("sub", "1234567890")
-				.setPayload("name", "looly")
-				.setPayload("admin", true);
-
-		jwt.sign();
+		Assert.assertThrows(JWTException.class, () -> {
+			JWT jwt = JWT.create()
+					.setPayload("sub", "1234567890")
+					.setPayload("name", "looly")
+					.setPayload("admin", true);
+			jwt.sign();
+		});
 	}
 
 	@Test

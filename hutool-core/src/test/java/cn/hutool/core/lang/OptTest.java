@@ -113,25 +113,31 @@ public class OptTest {
 		Assert.assertEquals("hutool", name);
 	}
 
-	@Test(expected = NoSuchElementException.class)
+	@Test
 	public void orElseThrowTest() {
-		// 获取一个不可能为空的值，否则抛出NoSuchElementException异常
-		Object obj = Opt.ofNullable(null).orElseThrow();
-		Assert.assertNull(obj);
+		Assert.assertThrows(NoSuchElementException.class, () -> {
+			// 获取一个不可能为空的值，否则抛出NoSuchElementException异常
+			Object obj = Opt.ofNullable(null).orElseThrow();
+			Assert.assertNull(obj);
+		});
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void orElseThrowTest2() {
-		// 获取一个不可能为空的值，否则抛出自定义异常
-		Object assignException = Opt.ofNullable(null).orElseThrow(IllegalStateException::new);
-		Assert.assertNull(assignException);
+		Assert.assertThrows(IllegalStateException.class, () -> {
+			// 获取一个不可能为空的值，否则抛出自定义异常
+			Object assignException = Opt.ofNullable(null).orElseThrow(IllegalStateException::new);
+			Assert.assertNull(assignException);
+		});
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void orElseThrowTest3() {
-		// 获取一个不可能为空的值，否则抛出带自定义消息的自定义异常
-		Object exceptionWithMessage = Opt.empty().orElseThrow(IllegalStateException::new, "Ops!Something is wrong!");
-		Assert.assertNull(exceptionWithMessage);
+		Assert.assertThrows(IllegalStateException.class, () -> {
+			// 获取一个不可能为空的值，否则抛出带自定义消息的自定义异常
+			Object exceptionWithMessage = Opt.empty().orElseThrow(IllegalStateException::new, "Ops!Something is wrong!");
+			Assert.assertNull(exceptionWithMessage);
+		});
 	}
 
 	@Test

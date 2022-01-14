@@ -11,8 +11,10 @@ public class PrimitiveConvertTest {
 		Assert.assertEquals(123, convert);
 	}
 
-	@Test(expected = NumberFormatException.class)
+	@Test
 	public void toIntErrorTest(){
-		final int convert = Convert.convert(int.class, "aaaa");
+		Assert.assertThrows(NumberFormatException.class, () -> {
+			Convert.convert(int.class, "aaaa");
+		});
 	}
 }

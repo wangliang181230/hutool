@@ -24,19 +24,23 @@ public class JSONUtilTest {
 	/**
 	 * 出现语法错误时报错，检查解析\x字符时是否会导致死循环异常
 	 */
-	@Test(expected = JSONException.class)
+	@Test
 	public void parseTest() {
-		JSONArray jsonArray = JSONUtil.parseArray("[{\"a\":\"a\\x]");
-		Console.log(jsonArray);
+		Assert.assertThrows(JSONException.class, () -> {
+			JSONArray jsonArray = JSONUtil.parseArray("[{\"a\":\"a\\x]");
+			Console.log(jsonArray);
+		});
 	}
 
 	/**
 	 * 数字解析为JSONArray报错
 	 */
-	@Test(expected = JSONException.class)
+	@Test
 	public void parseNumberTest() {
-		JSONArray json = JSONUtil.parseArray(123L);
-		Console.log(json);
+		Assert.assertThrows(JSONException.class, () -> {
+			JSONArray json = JSONUtil.parseArray(123L);
+			Console.log(json);
+		});
 	}
 
 	/**

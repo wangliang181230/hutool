@@ -165,11 +165,13 @@ public class BeanUtilTest {
 	/**
 	 * 测试在不忽略错误情况下，转换失败需要报错。
 	 */
-	@Test(expected = NumberFormatException.class)
+	@Test
 	public void mapToBeanWinErrorTest() {
-		Map<String, String> map = new HashMap<>();
-		map.put("age", "哈哈");
-		BeanUtil.toBean(map, Person.class);
+		Assert.assertThrows(NumberFormatException.class, () -> {
+			Map<String, String> map = new HashMap<>();
+			map.put("age", "哈哈");
+			BeanUtil.toBean(map, Person.class);
+		});
 	}
 
 	@Test

@@ -14,6 +14,7 @@ import java.util.List;
  * @author youyongkun
  * @since 5.7.18
  */
+@Disabled
 public class SftpTest {
 
 	private SshjSftp sshjSftp;

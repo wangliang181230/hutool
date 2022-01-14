@@ -28,7 +28,7 @@ public class QrCodeUtilTest {
 	}
 
 	@Test
-//	@Disabled
+//	@Ignore
 	public void generateCustomTest() {
 		QrConfig config = new QrConfig();
 		config.setMargin(0);

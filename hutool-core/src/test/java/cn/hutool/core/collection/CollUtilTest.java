@@ -606,18 +606,19 @@ public class CollUtilTest {
 		Assert.assertEquals(arrayList, retval);
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test
 	public void subInput1PositiveNegativePositiveOutputArrayIndexOutOfBoundsException() {
-		// Arrange
-		final List<Integer> list = new ArrayList<>();
-		list.add(null);
-		final int start = 2_147_483_643;
-		final int end = -2_147_483_648;
-		final int step = 2;
+		Assert.assertThrows(IndexOutOfBoundsException.class, () -> {
+			// Arrange
+			final List<Integer> list = new ArrayList<>();
+			list.add(null);
+			final int start = 2_147_483_643;
+			final int end = -2_147_483_648;
+			final int step = 2;
 
-		// Act
-		CollUtil.sub(list, start, end, step);
-		// Method is not expected to return due to exception thrown
+			// Act
+			CollUtil.sub(list, start, end, step);
+		});
 	}
 
 	@Test

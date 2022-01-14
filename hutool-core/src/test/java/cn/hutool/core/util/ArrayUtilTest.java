@@ -182,10 +182,11 @@ public class ArrayUtilTest {
 		Assert.assertEquals(9, range[9]);
 	}
 
-	@Test(expected = NegativeArraySizeException.class)
+	@Test
 	public void rangeMinTest() {
-		//noinspection ResultOfMethodCallIgnored
-		ArrayUtil.range(0, Integer.MIN_VALUE);
+		Assert.assertThrows(NegativeArraySizeException.class, () -> {
+			ArrayUtil.range(0, Integer.MIN_VALUE);
+		});
 	}
 
 	@Test

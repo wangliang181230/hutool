@@ -305,10 +305,12 @@ public class ConvertTest {
 		}
 	}
 
-	@Test(expected = DateException.class)
+	@Test
 	public void toDateTest(){
-		// 默认转换失败报错而不是返回null
-		Convert.convert(Date.class, "aaaa");
+		Assert.assertThrows(DateException.class, () -> {
+			// 默认转换失败报错而不是返回null
+			Convert.convert(Date.class, "aaaa");
+		});
 	}
 
 	@Test

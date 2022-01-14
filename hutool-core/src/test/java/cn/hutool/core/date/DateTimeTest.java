@@ -135,9 +135,11 @@ public class DateTimeTest {
 	/**
 	 * 严格模式下，不允许非常规的数字，如秒部分最多59，99则报错
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void ofTest(){
-		String a = "2021-09-27 00:00:99";
-		new DateTime(a, DatePattern.NORM_DATETIME_FORMAT, false);
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			String a = "2021-09-27 00:00:99";
+			new DateTime(a, DatePattern.NORM_DATETIME_FORMAT, false);
+		});
 	}
 }

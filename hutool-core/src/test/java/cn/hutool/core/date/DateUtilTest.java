@@ -851,11 +851,13 @@ public class DateUtilTest {
 		Assert.assertEquals(18, age);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void ageTest2() {
-		String d1 = "2019-02-29";
-		String d2 = "2018-02-28";
-		DateUtil.age(DateUtil.parseDate(d1), DateUtil.parseDate(d2));
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			String d1 = "2019-02-29";
+			String d2 = "2018-02-28";
+			DateUtil.age(DateUtil.parseDate(d1), DateUtil.parseDate(d2));
+		});
 	}
 
 	@Test
@@ -948,11 +950,13 @@ public class DateUtilTest {
 		Assert.assertEquals("2020-06-03 12:32:12", parse.toString());
 	}
 
-	@Test(expected = DateException.class)
+	@Test
 	public void parseNotFitTest() {
-		//https://github.com/looly/hutool/issues/1332
-		// 在日期格式不匹配的时候，测试是否正常报错
-		DateUtil.parse("2020-12-23", DatePattern.PURE_DATE_PATTERN);
+		Assert.assertThrows(DateException.class, () -> {
+			//https://github.com/looly/hutool/issues/1332
+			// 在日期格式不匹配的时候，测试是否正常报错
+			DateUtil.parse("2020-12-23", DatePattern.PURE_DATE_PATTERN);
+		});
 	}
 
 	@Test

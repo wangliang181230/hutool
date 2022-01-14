@@ -8,21 +8,25 @@ import org.junit.jupiter.api.Test;
 
 public class JWTValidatorTest {
 
-	@Test(expected = ValidateException.class)
+	@Test
 	public void expiredAtTest(){
-		String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0Nzc1OTJ9.isvT0Pqx0yjnZk53mUFSeYFJLDs-Ls9IsNAm86gIdZo";
-		JWTValidator.of(token).validateDate(DateUtil.date());
+		Assert.assertThrows(ValidateException.class, () -> {
+			String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE0Nzc1OTJ9.isvT0Pqx0yjnZk53mUFSeYFJLDs-Ls9IsNAm86gIdZo";
+			JWTValidator.of(token).validateDate(DateUtil.date());
+		});
 	}
 
-	@Test(expected = ValidateException.class)
+	@Test
 	public void issueAtTest(){
-		final String token = JWT.create()
-				.setIssuedAt(DateUtil.date())
-				.setKey("123456".getBytes())
-				.sign();
+		Assert.assertThrows(ValidateException.class, () -> {
+			final String token = JWT.create()
+					.setIssuedAt(DateUtil.date())
+					.setKey("123456".getBytes())
+					.sign();
 
-		// 签发时间早于被检查的时间
-		JWTValidator.of(token).validateDate(DateUtil.yesterday());
+			// 签发时间早于被检查的时间
+			JWTValidator.of(token).validateDate(DateUtil.yesterday());
+		});
 	}
 
 	@Test
@@ -36,12 +40,14 @@ public class JWTValidatorTest {
 		JWTValidator.of(token).validateDate(DateUtil.date());
 	}
 
-	@Test(expected = ValidateException.class)
+	@Test
 	public void notBeforeTest(){
-		final JWT jwt = JWT.create()
-				.setNotBefore(DateUtil.date());
+		Assert.assertThrows(ValidateException.class, () -> {
+			final JWT jwt = JWT.create()
+					.setNotBefore(DateUtil.date());
 
-		JWTValidator.of(jwt).validateDate(DateUtil.yesterday());
+			JWTValidator.of(jwt).validateDate(DateUtil.yesterday());
+		});
 	}
 
 	@Test
@@ -70,13 +76,15 @@ public class JWTValidatorTest {
 		Assert.assertFalse(validate);
 	}
 
-	@Test(expected = ValidateException.class)
+	@Test
 	public void validateDateTest(){
-		final JWT jwt = JWT.create()
-				.setPayload("id", 123)
-				.setPayload("username", "hutool")
-				.setExpiresAt(DateUtil.parse("2021-10-13 09:59:00"));
+		Assert.assertThrows(ValidateException.class, () -> {
+			final JWT jwt = JWT.create()
+					.setPayload("id", 123)
+					.setPayload("username", "hutool")
+					.setExpiresAt(DateUtil.parse("2021-10-13 09:59:00"));
 
-		JWTValidator.of(jwt).validateDate(DateUtil.date());
+			JWTValidator.of(jwt).validateDate(DateUtil.date());
+		});
 	}
 }

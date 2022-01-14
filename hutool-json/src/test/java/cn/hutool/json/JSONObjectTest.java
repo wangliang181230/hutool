@@ -565,10 +565,12 @@ public class JSONObjectTest {
 		Assert.assertEquals("{\"test\":\"testValue\"}", jsonObject.toString());
 	}
 
-	@Test(expected = JSONException.class)
+	@Test
 	public void createJSONObjectTest() {
-		// 集合类不支持转为JSONObject
-		new JSONObject(new JSONArray(), JSONConfig.create());
+		Assert.assertThrows(JSONException.class, () -> {
+			// 集合类不支持转为JSONObject
+			new JSONObject(new JSONArray(), JSONConfig.create());
+		});
 	}
 
 	@Test

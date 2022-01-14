@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class ConsoleTableTest {
 
 	@Test
-//    @Disabled
+//    @Ignore
 	public void printTest() {
 		ConsoleTable t = new ConsoleTable();
 		t.addHeader("姓名", "年龄");

@@ -5,17 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.junit.Assert;
+import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class CellEditorTest {
 
-	@org.junit.Test
-	public void readTest(){
+	@Test
+	public void readTest() {
 		ExcelReader excelReader= ExcelUtil.getReader("cell_editor_test.xlsx");
 		excelReader.setCellEditor(new ExcelHandler());
-		List<Test> excelReaderObjects=excelReader.readAll(Test.class);
+		List<Test1> excelReaderObjects=excelReader.readAll(Test1.class);
 
 		Assert.assertEquals("0", excelReaderObjects.get(0).getTest1());
 		Assert.assertEquals("b", excelReaderObjects.get(0).getTest2());
@@ -27,7 +28,7 @@ public class CellEditorTest {
 
 	@AllArgsConstructor
 	@Data
-	public static class Test implements Serializable {
+	public static class Test1 implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		private String test1;

@@ -174,21 +174,25 @@ public class NumberUtilTest {
 		Assert.assertEquals("299,792,458", format);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void decimalFormatNaNTest(){
-		Double a = 0D;
-		Double b = 0D;
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			Double a = 0D;
+			Double b = 0D;
 
-		Double c = a / b;
-		Console.log(NumberUtil.decimalFormat("#%", c));
+			Double c = a / b;
+			Console.log(NumberUtil.decimalFormat("#%", c));
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void decimalFormatNaNTest2(){
-		Double a = 0D;
-		Double b = 0D;
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			Double a = 0D;
+			Double b = 0D;
 
-		Console.log(NumberUtil.decimalFormat("#%", a / b));
+			Console.log(NumberUtil.decimalFormat("#%", a / b));
+		});
 	}
 
 	@Test

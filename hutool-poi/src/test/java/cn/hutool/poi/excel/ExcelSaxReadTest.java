@@ -65,11 +65,13 @@ public class ExcelSaxReadTest {
 		reader.read("aaa.xls", "sheetName:校园入学");
 	}
 
-	@Test(expected = POIException.class)
+	@Test
 	public void excel03ByNameErrorTest() {
-		// sheet名称不存在则报错
-		Excel03SaxReader reader = new Excel03SaxReader(createRowHandler());
-		reader.read("aaa.xls", "校园入学1");
+		Assert.assertThrows(POIException.class, () -> {
+			// sheet名称不存在则报错
+			Excel03SaxReader reader = new Excel03SaxReader(createRowHandler());
+			reader.read("aaa.xls", "校园入学1");
+		});
 	}
 
 	@Test

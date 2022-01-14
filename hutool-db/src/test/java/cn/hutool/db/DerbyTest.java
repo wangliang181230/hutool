@@ -14,6 +14,7 @@ import java.util.List;
  * @author looly
  *
  */
+@Disabled
 public class DerbyTest {
 
 	private static final String DS_GROUP_NAME = "derby";

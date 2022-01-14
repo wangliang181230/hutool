@@ -96,9 +96,11 @@ public class ValidatorTest {
 		Assert.assertTrue(b2);
 	}
 
-	@Test(expected = ValidateException.class)
+	@Test
 	public void validateTest() throws ValidateException {
-		Validator.validateChinese("我是一段zhongwen", "内容中包含非中文");
+		Assert.assertThrows(ValidateException.class, () -> {
+			Validator.validateChinese("我是一段zhongwen", "内容中包含非中文");
+		});
 	}
 
 	@Test

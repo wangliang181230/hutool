@@ -143,10 +143,12 @@ public class CronPatternTest {
 		assertMatch(pattern, "2017-12-02 23:59:59");
 	}
 
-	@Test(expected = CronException.class)
+	@Test
 	public void rangeYearTest() {
-		// year的范围是1970~2099年，超出报错
-		new CronPattern("0/1 * * * 1/1 ? 2020-2120");
+		Assert.assertThrows(CronException.class, () -> {
+			// year的范围是1970~2099年，超出报错
+			new CronPattern("0/1 * * * 1/1 ? 2020-2120");
+		});
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class SingletonTest {
 	 * 测试单例构建属性锁死问题
 	 * C构建单例时候，同时构建B，此时在SimpleCache中会有写锁竞争（写入C时获取了写锁，此时要写入B，也要获取写锁）
 	 */
-	@Test(timeout = 1000L)
+	@Test//(timeout = 1000L)
 	public void reentrantTest(){
 		final C c = Singleton.get(C.class);
 		Assert.assertEquals("aaa", c.getB().getA());

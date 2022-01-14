@@ -79,10 +79,12 @@ public class ListUtilTest {
 		Assert.assertEquals("[[1, 2], [3]]", lists.toString());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void splitAvgNotZero(){
-		// limit不能小于等于0
-		ListUtil.splitAvg(Arrays.asList(1, 2, 3, 4), 0);
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			// limit不能小于等于0
+			ListUtil.splitAvg(Arrays.asList(1, 2, 3, 4), 0);
+		});
 	}
 
 	@Test

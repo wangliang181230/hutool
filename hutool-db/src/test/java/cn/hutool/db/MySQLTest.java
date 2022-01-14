@@ -1,6 +1,7 @@
 package cn.hutool.db;
 
 import cn.hutool.core.lang.Console;
+import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +14,10 @@ import java.util.List;
  * @author looly
  *
  */
+@Disabled
 public class MySQLTest {
 
 	@Test
-	@Disabled
 	public void insertTest() throws SQLException {
 		for (int id = 100; id < 200; id++) {
 			Db.use("mysql").insert(Entity.create("user")//
@@ -34,22 +35,22 @@ public class MySQLTest {
 	 *
 	 * @throws SQLException SQL异常
 	 */
-	@Test(expected=SQLException.class)
-	@Disabled
+	@Test
 	public void txTest() throws SQLException {
-		Db.use("mysql").tx(db -> {
-			int update = db.update(Entity.create("user").set("text", "描述100"), Entity.create().set("id", 100));
-			db.update(Entity.create("user").set("text", "描述101"), Entity.create().set("id", 101));
-			if(1 == update) {
-				// 手动指定异常，然后测试回滚触发
-				throw new RuntimeException("Error");
-			}
-			db.update(Entity.create("user").set("text", "描述102"), Entity.create().set("id", 102));
+		Assert.assertThrows(SQLException.class, () -> {
+			Db.use("mysql").tx(db -> {
+				int update = db.update(Entity.create("user").set("text", "描述100"), Entity.create().set("id", 100));
+				db.update(Entity.create("user").set("text", "描述101"), Entity.create().set("id", 101));
+				if(1 == update) {
+					// 手动指定异常，然后测试回滚触发
+					throw new RuntimeException("Error");
+				}
+				db.update(Entity.create("user").set("text", "描述102"), Entity.create().set("id", 102));
+			});
 		});
 	}
 
 	@Test
-	@Disabled
 	public void pageTest() throws SQLException {
 		PageResult<Entity> result = Db.use("mysql").page(Entity.create("user"), new Page(2, 10));
 		for (Entity entity : result) {
@@ -58,7 +59,6 @@ public class MySQLTest {
 	}
 
 	@Test
-	@Disabled
 	public void getTimeStampTest() throws SQLException {
 		final List<Entity> all = Db.use("mysql").findAll("test");
 		Console.log(all);

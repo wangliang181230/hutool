@@ -27,10 +27,12 @@ import java.util.Map;
  */
 public class JSONArrayTest {
 
-	@Test(expected = JSONException.class)
+	@Test
 	public void createJSONArrayTest(){
-		// 集合类不支持转为JSONObject
-		new JSONArray(new JSONObject(), JSONConfig.create());
+		Assert.assertThrows(JSONException.class, () -> {
+			// 集合类不支持转为JSONObject
+			new JSONArray(new JSONObject(), JSONConfig.create());
+		});
 	}
 
 	@Test
@@ -167,12 +169,14 @@ public class JSONArrayTest {
 		Assert.assertEquals("bvalue", list.get(1).getBkey());
 	}
 
-	@Test(expected = ConvertException.class)
+	@Test
 	public void toListWithErrorTest(){
-		String json = "[['aaa',{'akey':'avalue','bkey':'bvalue'}]]";
-		JSONArray ja = JSONUtil.parseArray(json);
+		Assert.assertThrows(ConvertException.class, () -> {
+			String json = "[['aaa',{'akey':'avalue','bkey':'bvalue'}]]";
+			JSONArray ja = JSONUtil.parseArray(json);
 
-		ja.toBean(new TypeReference<List<List<KeyBean>>>() {});
+			ja.toBean(new TypeReference<List<List<KeyBean>>>() {});
+		});
 	}
 
 	@Test
