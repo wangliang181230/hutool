@@ -5,7 +5,7 @@ import cn.hutool.db.sql.Condition;
 import cn.hutool.log.StaticLog;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

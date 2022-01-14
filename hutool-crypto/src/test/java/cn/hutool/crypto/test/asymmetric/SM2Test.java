@@ -14,7 +14,7 @@ import org.bouncycastle.crypto.engines.SM2Engine;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.jcajce.spec.OpenSSHPrivateKeySpec;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;

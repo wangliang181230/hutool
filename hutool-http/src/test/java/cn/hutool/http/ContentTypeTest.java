@@ -2,7 +2,7 @@ package cn.hutool.http;
 
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * ContentType 单元测试

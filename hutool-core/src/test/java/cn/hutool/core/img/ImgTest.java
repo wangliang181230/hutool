@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.URLUtil;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.Font;

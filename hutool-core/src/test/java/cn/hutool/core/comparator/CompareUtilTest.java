@@ -2,7 +2,7 @@ package cn.hutool.core.comparator;
 
 import cn.hutool.core.collection.ListUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

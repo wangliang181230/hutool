@@ -1,7 +1,7 @@
 package cn.hutool.core.comparator;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 版本比较单元测试

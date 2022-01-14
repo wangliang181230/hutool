@@ -8,7 +8,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.Ignore;
 
 import java.util.List;

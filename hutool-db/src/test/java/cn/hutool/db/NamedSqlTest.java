@@ -3,7 +3,7 @@ package cn.hutool.db;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.db.sql.NamedSql;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.HashMap;

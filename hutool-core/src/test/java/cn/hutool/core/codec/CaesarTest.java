@@ -1,7 +1,7 @@
 package cn.hutool.core.codec;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CaesarTest {
 

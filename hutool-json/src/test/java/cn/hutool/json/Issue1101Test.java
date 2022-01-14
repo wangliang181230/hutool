@@ -5,7 +5,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.TypeReference;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
 import java.util.TreeSet;

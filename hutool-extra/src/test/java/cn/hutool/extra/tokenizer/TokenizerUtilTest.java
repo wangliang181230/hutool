@@ -10,7 +10,7 @@ import cn.hutool.extra.tokenizer.engine.mmseg.MmsegEngine;
 import cn.hutool.extra.tokenizer.engine.mynlp.MynlpEngine;
 import cn.hutool.extra.tokenizer.engine.word.WordEngine;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 模板引擎单元测试

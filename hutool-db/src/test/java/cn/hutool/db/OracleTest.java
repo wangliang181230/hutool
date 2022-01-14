@@ -6,13 +6,13 @@ import cn.hutool.db.sql.SqlBuilder;
 import cn.hutool.db.sql.SqlUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
 /**
  * Oracle操作单元测试
- * 
+ *
  * @author looly
  *
  */

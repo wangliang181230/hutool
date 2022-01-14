@@ -16,7 +16,7 @@ import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import cn.hutool.crypto.symmetric.Vigenere;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;

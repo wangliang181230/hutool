@@ -2,7 +2,7 @@ package cn.hutool.core.lang;
 
 import cn.hutool.core.date.DateTime;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class DictTest {
 				.set("key1", 1)//int
 				.set("key2", 1000L)//long
 				.set("key3", DateTime.now());//Date
-		
+
 		Long v2 = dict.getLong("key2");
 		Assert.assertEquals(Long.valueOf(1000L), v2);
 	}

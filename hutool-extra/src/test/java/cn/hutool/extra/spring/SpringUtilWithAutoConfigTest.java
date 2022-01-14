@@ -4,7 +4,7 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;

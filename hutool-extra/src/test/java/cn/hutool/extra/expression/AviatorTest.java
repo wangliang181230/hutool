@@ -6,7 +6,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.extra.expression.engine.aviator.AviatorEngine;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 

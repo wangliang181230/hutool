@@ -6,7 +6,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.net.SSLProtocols;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;

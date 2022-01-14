@@ -12,7 +12,7 @@ import cn.hutool.extra.template.engine.velocity.VelocityEngine;
 import cn.hutool.extra.template.engine.wit.WitEngine;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.HashMap;

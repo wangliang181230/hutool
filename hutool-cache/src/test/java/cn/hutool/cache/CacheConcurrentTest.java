@@ -8,7 +8,7 @@ import cn.hutool.core.thread.ConcurrencyTester;
 import cn.hutool.core.thread.ThreadUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

@@ -4,7 +4,7 @@ import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

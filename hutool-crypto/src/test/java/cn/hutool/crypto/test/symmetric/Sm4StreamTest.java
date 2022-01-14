@@ -2,7 +2,7 @@ package cn.hutool.crypto.test.symmetric;
 
 import cn.hutool.crypto.symmetric.SM4;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

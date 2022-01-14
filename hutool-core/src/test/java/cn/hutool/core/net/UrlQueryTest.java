@@ -6,7 +6,7 @@ import cn.hutool.core.net.url.UrlQuery;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.URLUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

@@ -2,7 +2,7 @@ package cn.hutool.core.util;
 
 import cn.hutool.core.collection.CollUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

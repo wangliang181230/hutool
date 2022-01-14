@@ -3,21 +3,21 @@ package cn.hutool.db;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.List;
 
 /**
  * Derby数据库单元测试
- * 
+ *
  * @author looly
  *
  */
 public class DerbyTest {
-	
+
 	private static final String DS_GROUP_NAME = "derby";
-	
+
 	@BeforeClass
 	public static void init() throws SQLException {
 		Db db = Db.use(DS_GROUP_NAME);
@@ -33,7 +33,7 @@ public class DerbyTest {
 		db.insert(Entity.create("test").set("a", 3).set("b", 31));
 		db.insert(Entity.create("test").set("a", 4).set("b", 41));
 	}
-	
+
 	@Test
 	@Ignore
 	public void queryTest() throws SQLException {

@@ -5,7 +5,7 @@ import cn.hutool.core.io.resource.FileResource;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ZipUtil;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 

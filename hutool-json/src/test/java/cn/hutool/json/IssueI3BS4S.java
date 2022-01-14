@@ -3,7 +3,7 @@ package cn.hutool.json;
 import cn.hutool.core.bean.BeanUtil;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 

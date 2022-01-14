@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.date.DateUtil;
 
@@ -53,18 +53,18 @@ public class DateConvertTest {
 		java.sql.Date value2 = Convert.convert(java.sql.Date.class, timeLong);
 		Assert.assertEquals(timeLong, value2.getTime());
 	}
-	
+
 	@Test
 	public void toLocalDateTimeTest() {
 		Date src = new Date();
-		
+
 		LocalDateTime ldt = Convert.toLocalDateTime(src);
 		Assert.assertEquals(ldt, DateUtil.toLocalDateTime(src));
-		
+
 		Timestamp ts = Timestamp.from(src.toInstant());
 		ldt = Convert.toLocalDateTime(ts);
 		Assert.assertEquals(ldt, DateUtil.toLocalDateTime(src));
-		
+
 		String str = "2020-12-12 12:12:12.0";
 		ldt = Convert.toLocalDateTime(str);
 		Assert.assertEquals(ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S")), str);

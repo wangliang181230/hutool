@@ -4,7 +4,7 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.json.test.bean.ResultBean;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 测试在bean转换时使用BeanConverter，默认忽略转换失败的字段。

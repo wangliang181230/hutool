@@ -1,7 +1,7 @@
 package cn.hutool.core.img;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Font;
 

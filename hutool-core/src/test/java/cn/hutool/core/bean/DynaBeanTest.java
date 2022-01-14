@@ -2,7 +2,7 @@ package cn.hutool.core.bean;
 
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link DynaBean}单元测试

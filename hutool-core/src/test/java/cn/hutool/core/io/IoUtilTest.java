@@ -2,7 +2,7 @@ package cn.hutool.core.io;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;

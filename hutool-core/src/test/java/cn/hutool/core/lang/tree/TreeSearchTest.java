@@ -1,7 +1,7 @@
 package cn.hutool.core.lang.tree;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package cn.hutool.core.exceptions;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.IORuntimeException;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 

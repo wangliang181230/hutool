@@ -2,7 +2,7 @@ package cn.hutool.cache;
 
 import cn.hutool.cache.impl.LRUCache;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
 

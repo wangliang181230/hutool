@@ -2,7 +2,7 @@ package cn.hutool.core.thread;
 
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;

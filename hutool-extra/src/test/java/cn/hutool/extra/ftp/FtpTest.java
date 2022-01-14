@@ -5,7 +5,7 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.extra.ssh.Sftp;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

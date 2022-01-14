@@ -2,7 +2,7 @@ package cn.hutool.extra.pinyin;
 
 import cn.hutool.extra.pinyin.engine.bopomofo4j.Bopomofo4jEngine;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Bopomofo4jTest {
 

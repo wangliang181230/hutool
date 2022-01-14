@@ -1,10 +1,10 @@
 package cn.hutool.core.swing;
 
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DesktopUtilTest {
-	
+
 	@Test
 	@Ignore
 	public void browseTest() {

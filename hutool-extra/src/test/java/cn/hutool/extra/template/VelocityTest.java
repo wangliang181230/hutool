@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.extra.template.engine.velocity.VelocityEngine;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class VelocityTest {
 

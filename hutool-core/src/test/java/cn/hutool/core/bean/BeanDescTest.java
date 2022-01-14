@@ -1,7 +1,7 @@
 package cn.hutool.core.bean;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link BeanDesc} 单元测试类

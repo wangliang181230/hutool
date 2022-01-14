@@ -7,7 +7,7 @@ import cn.hutool.cron.TaskExecutor;
 import cn.hutool.cron.listener.TaskListener;
 import cn.hutool.cron.task.Task;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 定时任务样例

@@ -6,7 +6,7 @@ import cn.hutool.jwt.signers.AlgorithmUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JWTSignerTest {
 

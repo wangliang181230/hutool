@@ -5,7 +5,7 @@ import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.crypto.digest.otp.HOTP;
 import cn.hutool.crypto.digest.otp.TOTP;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;

@@ -2,7 +2,7 @@ package cn.hutool.core.convert;
 
 import cn.hutool.core.date.DateUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;

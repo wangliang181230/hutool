@@ -1,7 +1,7 @@
 package cn.hutool.core.util;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 坐标转换工具类单元测试<br>

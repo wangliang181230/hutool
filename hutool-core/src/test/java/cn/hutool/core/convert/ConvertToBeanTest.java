@@ -3,7 +3,7 @@ package cn.hutool.core.convert;
 import cn.hutool.core.bean.BeanUtilTest.SubPerson;
 import cn.hutool.core.lang.TypeReference;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

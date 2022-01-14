@@ -3,7 +3,7 @@ package cn.hutool.core.io;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.Charset;
 

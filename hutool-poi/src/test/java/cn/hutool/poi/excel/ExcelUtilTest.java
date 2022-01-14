@@ -2,7 +2,7 @@ package cn.hutool.poi.excel;
 
 import cn.hutool.poi.excel.cell.CellLocation;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.Ignore;
 
 public class ExcelUtilTest {

@@ -3,7 +3,7 @@ package cn.hutool.core.util;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 身份证单元测试

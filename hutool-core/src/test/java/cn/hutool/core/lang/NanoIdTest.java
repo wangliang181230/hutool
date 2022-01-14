@@ -2,7 +2,7 @@ package cn.hutool.core.lang;
 
 import cn.hutool.core.lang.id.NanoId;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.SecureRandom;
 import java.util.HashMap;

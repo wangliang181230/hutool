@@ -2,7 +2,7 @@ package cn.hutool.db;
 
 import cn.hutool.db.sql.Order;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PageTest {
 

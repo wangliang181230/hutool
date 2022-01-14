@@ -3,7 +3,7 @@ package cn.hutool.core.io;
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 

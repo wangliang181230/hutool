@@ -5,7 +5,7 @@ import cn.hutool.crypto.asymmetric.AsymmetricCrypto;
 import cn.hutool.crypto.asymmetric.ECIES;
 import cn.hutool.crypto.asymmetric.KeyType;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ECIESTest {
 

@@ -2,7 +2,7 @@ package cn.hutool.crypto.test.digest;
 
 import cn.hutool.crypto.digest.BCrypt;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BCryptTest {
 

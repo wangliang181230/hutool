@@ -1,7 +1,7 @@
 package cn.hutool.db;
 
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
@@ -11,7 +11,7 @@ import java.sql.SQLException;
  *
  */
 public class SessionTest {
-	
+
 	@Test
 	@Ignore
 	public void transTest() {
@@ -24,7 +24,7 @@ public class SessionTest {
 			session.quietRollback();
 		}
 	}
-	
+
 	@Test
 	@Ignore
 	public void txTest() throws SQLException {

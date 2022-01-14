@@ -12,7 +12,7 @@ import cn.hutool.json.test.bean.JsonNode;
 import cn.hutool.json.test.bean.KeyBean;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;

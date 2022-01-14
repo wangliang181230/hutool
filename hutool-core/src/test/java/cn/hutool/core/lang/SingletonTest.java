@@ -4,7 +4,7 @@ import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.thread.ThreadUtil;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SingletonTest {
 

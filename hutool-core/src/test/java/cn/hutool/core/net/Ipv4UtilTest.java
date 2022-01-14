@@ -1,7 +1,7 @@
 package cn.hutool.core.net;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.function.ThrowingRunnable;
 
 import java.util.List;

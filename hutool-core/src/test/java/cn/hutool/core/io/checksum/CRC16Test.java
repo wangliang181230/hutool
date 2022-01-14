@@ -11,7 +11,7 @@ import cn.hutool.core.io.checksum.crc16.CRC16USB;
 import cn.hutool.core.io.checksum.crc16.CRC16X25;
 import cn.hutool.core.io.checksum.crc16.CRC16XModem;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CRC16Test {
 

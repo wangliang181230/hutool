@@ -4,7 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.json.XML;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.hamcrest.CoreMatchers;
 
 public class XMLTest {

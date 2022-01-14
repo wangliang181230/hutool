@@ -1,10 +1,10 @@
 package cn.hutool.core.date;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DateFieldTest {
-	
+
 	@Test
 	public void ofTest() {
 		DateField field = DateField.of(11);

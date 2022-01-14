@@ -1,7 +1,7 @@
 package cn.hutool.extra.servlet;
 
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;

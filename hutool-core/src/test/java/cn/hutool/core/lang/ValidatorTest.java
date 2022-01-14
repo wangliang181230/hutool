@@ -3,7 +3,7 @@ package cn.hutool.core.lang;
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.IdUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 验证器单元测试

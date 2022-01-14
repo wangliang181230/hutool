@@ -1,7 +1,7 @@
 package cn.hutool.core.swing;
 
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.io.FileUtil;
 

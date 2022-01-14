@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.StringTemplateResolver;
 
@@ -19,7 +19,7 @@ import cn.hutool.extra.template.engine.thymeleaf.ThymeleafEngine;
 
 /**
  * Thymeleaf单元测试
- * 
+ *
  * @author looly
  *
  */

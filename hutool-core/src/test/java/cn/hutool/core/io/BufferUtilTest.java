@@ -3,14 +3,14 @@ package cn.hutool.core.io;
 import java.nio.ByteBuffer;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
  * BufferUtil单元测试
- * 
+ *
  * @author looly
  *
  */

@@ -3,7 +3,7 @@ package cn.hutool.extra.mail;
 import cn.hutool.core.io.FileUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.util.HashMap;

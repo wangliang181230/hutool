@@ -3,7 +3,7 @@ package cn.hutool.json;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.lang.TypeReference;
@@ -14,12 +14,12 @@ public class Issue488Test {
 	@Test
 	public void toBeanTest() {
 		String jsonStr = ResourceUtil.readUtf8Str("issue488.json");
-		
+
 		ResultSuccess<List<EmailAddress>> result = JSONUtil.toBean(jsonStr,
 				new TypeReference<ResultSuccess<List<EmailAddress>>>() {}, false);
-		
+
 		Assert.assertEquals("https://graph.microsoft.com/beta/$metadata#Collection(microsoft.graph.emailAddress)", result.getContext());
-		
+
 		List<EmailAddress> adds = result.getValue();
 		Assert.assertEquals("会议室101", adds.get(0).getName());
 		Assert.assertEquals("MeetingRoom101@abc.com", adds.get(0).getAddress());

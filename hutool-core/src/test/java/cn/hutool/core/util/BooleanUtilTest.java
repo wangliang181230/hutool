@@ -1,10 +1,10 @@
 package cn.hutool.core.util;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BooleanUtilTest {
-	
+
 	@Test
 	public void toBooleanTest() {
 		Assert.assertTrue(BooleanUtil.toBoolean("true"));
@@ -16,7 +16,7 @@ public class BooleanUtilTest {
 		Assert.assertTrue(BooleanUtil.toBoolean("是"));
 		Assert.assertTrue(BooleanUtil.toBoolean("对"));
 		Assert.assertTrue(BooleanUtil.toBoolean("真"));
-		
+
 		Assert.assertFalse(BooleanUtil.toBoolean("false"));
 		Assert.assertFalse(BooleanUtil.toBoolean("6455434"));
 		Assert.assertFalse(BooleanUtil.toBoolean(""));

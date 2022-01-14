@@ -1,9 +1,9 @@
 package cn.hutool.core.lang;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AssertTest {
-	
+
 	@Test
 	public void isNullTest(){
 		String a = null;

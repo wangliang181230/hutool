@@ -3,7 +3,7 @@ package cn.hutool.core.util;
 import cn.hutool.core.collection.EnumerationIter;
 import cn.hutool.core.lang.Console;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;

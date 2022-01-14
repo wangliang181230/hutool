@@ -3,7 +3,7 @@ package cn.hutool.extra.ssh;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;

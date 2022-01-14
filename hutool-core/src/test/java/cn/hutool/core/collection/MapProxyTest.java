@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.map.MapProxy;
 

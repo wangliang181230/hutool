@@ -5,7 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 

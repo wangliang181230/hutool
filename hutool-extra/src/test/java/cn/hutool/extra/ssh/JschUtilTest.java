@@ -5,11 +5,11 @@ import cn.hutool.core.lang.Console;
 import com.jcraft.jsch.Session;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Jsch工具类单元测试
- * 
+ *
  * @author looly
  *
  */
@@ -47,7 +47,7 @@ public class JschUtilTest {
 		sftp.mkDirs("/opt/test/aaa/bbb");
 		Console.log("OK");
 	}
-	
+
 	@Test
 	@Ignore
 	public void reconnectIfTimeoutTest() throws InterruptedException {

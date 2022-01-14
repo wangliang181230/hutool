@@ -1,7 +1,7 @@
 package cn.hutool.core.util;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 脱敏工具类 DesensitizedUtils 安全测试

@@ -2,7 +2,7 @@ package cn.hutool.core.bean;
 
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * https://github.com/dromara/hutool/issues/2082<br>

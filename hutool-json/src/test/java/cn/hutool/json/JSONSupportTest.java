@@ -3,7 +3,7 @@ package cn.hutool.json;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JSONSupportTest {
 

@@ -3,7 +3,7 @@ package cn.hutool.core.map;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

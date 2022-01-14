@@ -13,7 +13,7 @@ import cn.hutool.poi.exceptions.POIException;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;

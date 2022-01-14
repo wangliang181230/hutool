@@ -1,7 +1,7 @@
 package cn.hutool.core.lang.reflect;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
 import java.util.Map;

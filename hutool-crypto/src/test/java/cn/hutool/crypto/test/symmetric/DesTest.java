@@ -6,7 +6,7 @@ import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.DES;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * DES加密解密单元测试

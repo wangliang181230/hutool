@@ -2,7 +2,7 @@ package cn.hutool.core.net;
 
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UrlDecoderTest {
 	@Test

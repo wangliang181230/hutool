@@ -1,7 +1,7 @@
 package cn.hutool.core.text.finder;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CharFinderTest {
 

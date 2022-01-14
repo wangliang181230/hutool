@@ -15,7 +15,7 @@ import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.Cipher;
 import java.math.BigInteger;

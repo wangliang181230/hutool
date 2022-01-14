@@ -3,7 +3,7 @@ package cn.hutool.core.convert;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.TypeReference;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

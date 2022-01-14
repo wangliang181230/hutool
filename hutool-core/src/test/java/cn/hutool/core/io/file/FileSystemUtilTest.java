@@ -3,7 +3,7 @@ package cn.hutool.core.io.file;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.FileSystem;
 import java.nio.file.FileVisitResult;

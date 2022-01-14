@@ -3,22 +3,22 @@ package cn.hutool.db;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
 public class UpdateTest {
-	
+
 	Db db;
 
 	@Before
 	public void init() {
 		db = Db.use("test");
 	}
-	
+
 	/**
 	 * 对更新做单元测试
-	 * 
+	 *
 	 * @throws SQLException SQL异常
 	 */
 	@Test

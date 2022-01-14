@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.json.JSONUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Rest类型请求单元测试

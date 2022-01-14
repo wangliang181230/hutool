@@ -3,7 +3,7 @@ package cn.hutool.core.util;
 import cn.hutool.core.lang.test.bean.ExamInfoDict;
 import cn.hutool.core.util.ClassUtilTest.TestSubClass;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

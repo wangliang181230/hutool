@@ -8,7 +8,7 @@ import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;

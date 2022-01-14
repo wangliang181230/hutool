@@ -9,7 +9,7 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.thread.ThreadUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 import java.util.UUID;

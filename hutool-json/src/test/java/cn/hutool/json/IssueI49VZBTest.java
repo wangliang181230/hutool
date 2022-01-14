@@ -4,7 +4,7 @@ import cn.hutool.core.convert.Convert;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
 

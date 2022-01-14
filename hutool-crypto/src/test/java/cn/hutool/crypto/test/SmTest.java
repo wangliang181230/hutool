@@ -8,7 +8,7 @@ import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.digest.HMac;
 import cn.hutool.crypto.symmetric.SM4;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
 

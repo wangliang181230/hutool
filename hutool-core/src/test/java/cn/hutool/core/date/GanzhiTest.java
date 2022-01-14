@@ -2,7 +2,7 @@ package cn.hutool.core.date;
 
 import cn.hutool.core.date.chinese.GanZhi;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GanzhiTest {
 

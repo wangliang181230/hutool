@@ -6,7 +6,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

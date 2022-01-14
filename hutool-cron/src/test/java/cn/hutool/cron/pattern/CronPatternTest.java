@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.cron.CronException;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 定时任务单元测试类

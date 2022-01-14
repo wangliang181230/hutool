@@ -10,7 +10,7 @@ import cn.hutool.db.ds.hikari.HikariDSFactory;
 import cn.hutool.db.ds.pooled.PooledDSFactory;
 import cn.hutool.db.ds.tomcat.TomcatDSFactory;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;

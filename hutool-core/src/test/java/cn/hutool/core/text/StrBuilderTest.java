@@ -2,7 +2,7 @@ package cn.hutool.core.text;
 
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;

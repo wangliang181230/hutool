@@ -4,7 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.symmetric.fpe.FPE;
 import org.bouncycastle.crypto.util.BasicAlphabetMapper;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FPETest {
 

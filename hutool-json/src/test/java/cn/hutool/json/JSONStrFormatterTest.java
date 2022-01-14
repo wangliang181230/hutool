@@ -2,7 +2,7 @@ package cn.hutool.json;
 
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JSON字符串格式化单元测试

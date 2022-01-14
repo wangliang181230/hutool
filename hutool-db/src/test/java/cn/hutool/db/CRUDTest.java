@@ -9,7 +9,7 @@ import cn.hutool.db.sql.Condition;
 import cn.hutool.db.sql.Condition.LikeType;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

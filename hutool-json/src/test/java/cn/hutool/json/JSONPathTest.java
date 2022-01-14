@@ -1,7 +1,7 @@
 package cn.hutool.json;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * JSON路径单元测试

@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JWTValidatorTest {
 

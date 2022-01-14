@@ -2,7 +2,7 @@ package cn.hutool.core.bean.copier;
 
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BeanCopierTest {
 

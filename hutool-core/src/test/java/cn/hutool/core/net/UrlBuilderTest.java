@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;

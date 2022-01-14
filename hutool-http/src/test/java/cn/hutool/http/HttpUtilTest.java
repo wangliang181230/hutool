@@ -7,7 +7,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ReUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;

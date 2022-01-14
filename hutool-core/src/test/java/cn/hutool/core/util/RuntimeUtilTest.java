@@ -3,7 +3,7 @@ package cn.hutool.core.util;
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 命令行单元测试

@@ -1,7 +1,7 @@
 package cn.hutool.core.lang;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.collection.CollUtil;
 

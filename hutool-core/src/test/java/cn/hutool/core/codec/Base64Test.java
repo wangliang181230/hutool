@@ -4,7 +4,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Base64单元测试

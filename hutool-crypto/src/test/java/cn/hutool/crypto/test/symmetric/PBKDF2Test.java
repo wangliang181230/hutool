@@ -3,7 +3,7 @@ package cn.hutool.crypto.test.symmetric;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PBKDF2Test {
 

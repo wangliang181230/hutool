@@ -9,7 +9,7 @@ import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.asymmetric.SM2;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;

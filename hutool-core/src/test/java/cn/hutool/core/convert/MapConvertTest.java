@@ -2,7 +2,7 @@ package cn.hutool.core.convert;
 
 import cn.hutool.core.map.MapBuilder;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Map转换单元测试
- * 
+ *
  * @author looly
  *
  */

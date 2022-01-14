@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RandomUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 缓存测试用例

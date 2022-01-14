@@ -6,7 +6,7 @@ import cn.hutool.core.date.format.FastDateFormat;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.RandomUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;

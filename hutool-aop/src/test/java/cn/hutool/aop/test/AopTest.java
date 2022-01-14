@@ -5,7 +5,7 @@ import cn.hutool.aop.aspects.TimeIntervalAspect;
 import cn.hutool.core.lang.Console;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * AOP模块单元测试

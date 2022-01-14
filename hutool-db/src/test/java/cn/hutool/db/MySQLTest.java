@@ -2,14 +2,14 @@ package cn.hutool.db;
 
 import cn.hutool.core.lang.Console;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.List;
 
 /**
  * MySQL操作单元测试
- * 
+ *
  * @author looly
  *
  */

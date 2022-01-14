@@ -3,7 +3,7 @@ package cn.hutool.core.lang.reflect;
 import cn.hutool.core.util.ClassLoaderUtil;
 import cn.hutool.core.util.ReflectUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;

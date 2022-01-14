@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.lang.test.bean.ExamInfoDict;
 import cn.hutool.core.lang.test.bean.UserInfoDict;

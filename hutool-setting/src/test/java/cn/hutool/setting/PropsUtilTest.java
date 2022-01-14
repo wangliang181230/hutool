@@ -2,7 +2,7 @@ package cn.hutool.setting;
 
 import cn.hutool.setting.dialect.PropsUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 

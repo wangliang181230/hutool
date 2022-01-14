@@ -3,7 +3,7 @@ package cn.hutool.http.webservice;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;

@@ -17,7 +17,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;

@@ -8,7 +8,7 @@ import cn.hutool.crypto.digest.HMac;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import cn.hutool.crypto.symmetric.ZUC;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.spec.IvParameterSpec;
 

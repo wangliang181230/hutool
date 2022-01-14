@@ -3,7 +3,7 @@ package cn.hutool.core.clone;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * 克隆单元测试

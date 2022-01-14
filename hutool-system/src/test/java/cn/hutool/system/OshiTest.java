@@ -3,7 +3,7 @@ package cn.hutool.system;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import oshi.software.os.OSProcess;
 
 /**

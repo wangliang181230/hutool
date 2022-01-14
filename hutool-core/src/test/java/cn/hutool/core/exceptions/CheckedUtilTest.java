@@ -3,7 +3,7 @@ package cn.hutool.core.exceptions;
 import cn.hutool.core.lang.func.Func1;
 import cn.hutool.core.lang.func.VoidFunc0;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;

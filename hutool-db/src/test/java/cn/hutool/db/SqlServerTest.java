@@ -3,18 +3,18 @@ package cn.hutool.db;
 import java.sql.SQLException;
 
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.lang.Console;
 
 /**
  * SQL Server操作单元测试
- * 
+ *
  * @author looly
  *
  */
 public class SqlServerTest {
-	
+
 	@Test
 	@Ignore
 	public void createTableTest() throws SQLException {

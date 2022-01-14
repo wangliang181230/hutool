@@ -5,7 +5,7 @@ import cn.hutool.core.lang.PatternPool;
 import cn.hutool.core.util.ReUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.HttpCookie;
 import java.net.InetAddress;

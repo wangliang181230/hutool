@@ -6,7 +6,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.extra.compress.archiver.StreamArchiver;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 

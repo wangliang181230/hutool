@@ -3,7 +3,7 @@ package cn.hutool.core.io;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Properties;

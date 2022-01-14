@@ -3,7 +3,7 @@ package cn.hutool.core.lang;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.thread.ThreadUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 

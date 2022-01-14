@@ -2,7 +2,7 @@ package cn.hutool.bloomfilter;
 
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.bloomfilter.bitMap.IntMap;
 import cn.hutool.bloomfilter.bitMap.LongMap;

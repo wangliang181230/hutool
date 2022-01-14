@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateRange;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.NoSuchElementException;

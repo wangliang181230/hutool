@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.ArrayList;

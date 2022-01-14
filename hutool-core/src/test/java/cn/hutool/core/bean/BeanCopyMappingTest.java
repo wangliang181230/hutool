@@ -5,7 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import lombok.Builder;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BeanCopyMappingTest {
 

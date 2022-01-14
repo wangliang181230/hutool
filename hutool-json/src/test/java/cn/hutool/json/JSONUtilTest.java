@@ -10,7 +10,7 @@ import cn.hutool.json.test.bean.Price;
 import cn.hutool.json.test.bean.UserA;
 import cn.hutool.json.test.bean.UserC;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

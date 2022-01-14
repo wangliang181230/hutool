@@ -3,7 +3,7 @@ package cn.hutool.extra.mail;
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.GeneralSecurityException;
 

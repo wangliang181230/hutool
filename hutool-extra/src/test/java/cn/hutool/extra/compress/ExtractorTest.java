@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.extra.compress.extractor.Extractor;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ExtractorTest {
 

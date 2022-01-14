@@ -8,7 +8,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

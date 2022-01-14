@@ -8,7 +8,7 @@ import cn.hutool.poi.excel.cell.CellHandler;
 import lombok.Data;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;

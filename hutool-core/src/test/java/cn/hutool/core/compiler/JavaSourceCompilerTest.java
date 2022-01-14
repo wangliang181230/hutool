@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.ZipUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.InputStream;

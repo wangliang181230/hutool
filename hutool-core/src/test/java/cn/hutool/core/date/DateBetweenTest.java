@@ -2,7 +2,7 @@ package cn.hutool.core.date;
 
 import cn.hutool.core.date.BetweenFormatter.Level;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -54,7 +54,7 @@ public class DateBetweenTest {
 		long betweenMonth2 = new DateBetween(start2, end2).betweenMonth(false);
 		Assert.assertEquals(11, betweenMonth2);
 	}
-	
+
 	@Test
 	public void betweenMinuteTest() {
 		Date date1 = DateUtil.parse("2017-03-01 20:33:23");

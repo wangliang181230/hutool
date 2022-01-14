@@ -7,7 +7,7 @@ import cn.hutool.extra.expression.engine.mvel.MvelEngine;
 import cn.hutool.extra.expression.engine.rhino.RhinoEngine;
 import cn.hutool.extra.expression.engine.spel.SpELEngine;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

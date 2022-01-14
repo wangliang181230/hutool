@@ -5,7 +5,7 @@ import cn.hutool.core.text.finder.LengthFinder;
 import cn.hutool.core.text.finder.PatternFinder;
 import cn.hutool.core.text.finder.StrFinder;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.regex.Pattern;

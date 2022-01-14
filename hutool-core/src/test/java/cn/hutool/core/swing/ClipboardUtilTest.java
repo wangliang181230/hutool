@@ -1,13 +1,13 @@
 package cn.hutool.core.swing;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.swing.clipboard.ClipboardUtil;
 
 /**
  * 剪贴板工具类单元测试
- * 
+ *
  * @author looly
  *
  */
