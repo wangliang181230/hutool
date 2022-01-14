@@ -5,18 +5,15 @@ import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {SpringUtil.class, SpringUtilTest.Demo2.class})
 //@Import(cn.hutool.extra.spring.SpringUtil.class)
 public class SpringUtilTest {
