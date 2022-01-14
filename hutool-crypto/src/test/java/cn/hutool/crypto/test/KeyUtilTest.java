@@ -4,7 +4,7 @@ import cn.hutool.crypto.CryptoException;
 import cn.hutool.crypto.GlobalBouncyCastleProvider;
 import cn.hutool.crypto.KeyUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;
@@ -17,7 +17,7 @@ public class KeyUtilTest {
 	 * 测试关闭BouncyCastle支持时是否会正常抛出异常，即关闭是否有效
 	 */
 	@Test(expected = CryptoException.class)
-	@Ignore
+	@Disabled
 	public void generateKeyPairTest() {
 		GlobalBouncyCastleProvider.setUseBouncyCastle(false);
 		KeyPair pair = KeyUtil.generateKeyPair("SM2");

@@ -6,7 +6,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -52,7 +52,7 @@ public class SnowflakeTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void uniqueTest(){
 		// 测试并发环境下生成ID是否重复
 		Snowflake snowflake = IdUtil.getSnowflake(0, 0);

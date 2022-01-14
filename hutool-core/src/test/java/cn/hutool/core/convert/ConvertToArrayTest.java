@@ -4,7 +4,7 @@ import cn.hutool.core.convert.impl.ArrayConverter;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -130,7 +130,7 @@ public class ConvertToArrayTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void toUrlArrayTest() {
 		File[] files = FileUtil.file("D:\\workspace").listFiles();
 

@@ -8,7 +8,7 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import cn.hutool.crypto.asymmetric.SM2;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -63,7 +63,7 @@ public class PemUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readECPrivateKeyTest2() {
 		// https://gitee.com/loolly/hutool/issues/I37Z75
 		byte[] d = PemUtil.readPem(FileUtil.getInputStream("d:/test/keys/priv.key"));

@@ -4,7 +4,7 @@ import cn.hutool.db.handler.EntityListHandler;
 import cn.hutool.db.sql.Condition;
 import cn.hutool.log.StaticLog;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
@@ -104,7 +104,7 @@ public class DbTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void txTest() throws SQLException {
 		Db.use().tx(db -> {
 			db.insert(Entity.create("user").set("name", "unitTestUser2"));
@@ -114,7 +114,7 @@ public class DbTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void queryFetchTest() throws SQLException {
 		// https://gitee.com/dromara/hutool/issues/I4JXWN
 		Db.use().query((conn->{

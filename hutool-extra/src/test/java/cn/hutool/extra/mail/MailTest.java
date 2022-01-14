@@ -2,7 +2,7 @@ package cn.hutool.extra.mail;
 
 import cn.hutool.core.io.FileUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
@@ -18,20 +18,20 @@ import java.util.Properties;
 public class MailTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sendWithFileTest() {
 		MailUtil.send("hutool@foxmail.com", "测试", "<h1>邮件来自Hutool测试</h1>", true, FileUtil.file("d:/测试附件文本.txt"));
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sendWithLongNameFileTest() {
 		//附件名长度大于60时的测试
 		MailUtil.send("hutool@foxmail.com", "测试", "<h1>邮件来自Hutool测试</h1>", true, FileUtil.file("d:/6-LongLong一阶段平台建设周报2018.3.12-3.16.xlsx"));
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sendWithImageTest() {
 		Map<String, InputStream> map = new HashMap<>();
 		map.put("testImage", FileUtil.getInputStream("f:/test/me.png"));
@@ -39,13 +39,13 @@ public class MailTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sendHtmlTest() {
 		MailUtil.send("hutool@foxmail.com", "测试", "<h1>邮件来自Hutool测试</h1>", true);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sendByAccountTest() {
 		MailAccount account = new MailAccount();
 		account.setHost("smtp.yeah.net");

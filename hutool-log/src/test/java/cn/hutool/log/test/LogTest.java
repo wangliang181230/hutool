@@ -1,6 +1,6 @@
 package cn.hutool.log.test;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import cn.hutool.log.Log;
@@ -31,7 +31,7 @@ public class LogTest {
 	 * 兼容slf4j日志消息格式测试，即第二个参数是异常对象时正常输出异常信息
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void logWithExceptionTest() {
 		Log log = LogFactory.get();
 		Exception e = new Exception("test Exception");

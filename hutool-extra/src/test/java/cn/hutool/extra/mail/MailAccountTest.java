@@ -2,7 +2,7 @@ package cn.hutool.extra.mail;
 
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.security.GeneralSecurityException;
@@ -31,7 +31,7 @@ public class MailAccountTest {
 	 * 已经测试通过
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void customPropertyTest() throws GeneralSecurityException {
 		MailAccount mailAccount = new MailAccount();
 		mailAccount.setFrom("xxx@xxx.com");

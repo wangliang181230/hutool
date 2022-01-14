@@ -8,7 +8,7 @@ import cn.hutool.db.pojo.User;
 import cn.hutool.db.sql.Condition;
 import cn.hutool.db.sql.Condition.LikeType;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -126,7 +126,7 @@ public class CRUDTest {
 	 * @throws SQLException SQL异常
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void crudTest() throws SQLException {
 
 		// 增
@@ -149,7 +149,7 @@ public class CRUDTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void insertBatchTest() throws SQLException {
 		User user1 = new User();
 		user1.setName("张三");
@@ -175,7 +175,7 @@ public class CRUDTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void insertBatchOneTest() throws SQLException {
 		User user1 = new User();
 		user1.setName("张三");

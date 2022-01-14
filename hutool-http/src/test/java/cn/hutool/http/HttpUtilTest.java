@@ -6,7 +6,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ReUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class HttpUtilTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void postTest() {
 		String result = HttpUtil.createPost("api.uhaozu.com/goods/description/1120448506")
 				.charset(CharsetUtil.UTF_8)
@@ -26,7 +26,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void postTest2() {
 		// 某些接口对Accept头有特殊要求，此处自定义头
 		String result = HttpUtil
@@ -38,14 +38,14 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getTest() {
 		String result1 = HttpUtil.get("http://photo.qzone.qq.com/fcgi-bin/fcg_list_album?uin=88888&outstyle=2", CharsetUtil.CHARSET_GBK);
 		Console.log(result1);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getTest2() {
 		// 此链接较为特殊，User-Agent去掉后进入一个JS跳转页面，如果设置了，需要开启302跳转
 		// 自定义的默认header无效
@@ -56,7 +56,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getTest3() {
 		// 测试url中带有空格的情况
 		String result1 = HttpUtil.get("http://hutool.cn:5000/kf?abc= d");
@@ -64,7 +64,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getTest4() {
 		// 测试url中带有空格的情况
 		byte[] str = HttpRequest.get("http://img01.fs.yiban.cn/mobile/2D0Y71").execute().bodyBytes();
@@ -74,7 +74,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getTest5() {
 		String url2 = "http://storage.chancecloud.com.cn/20200413_%E7%B2%A4B12313_386.pdf";
 		ByteArrayOutputStream os2 = new ByteArrayOutputStream();
@@ -85,7 +85,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void get12306Test() {
 		HttpRequest.get("https://kyfw.12306.cn/otn/")
 				.setFollowRedirects(true)
@@ -93,7 +93,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadStringTest() {
 		String url = "https://www.baidu.com";
 		// 从远程直接读取字符串，需要自定义编码，直接调用JDK方法
@@ -102,7 +102,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void oschinaTest() {
 		// 请求列表页
 		String listContent = HttpUtil.get("https://www.oschina.net/action/ajax/get_more_news_list?newsType=&p=2");
@@ -250,7 +250,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void patchTest() {
 		// 验证patch请求是否可用
 		String body = HttpRequest.patch("https://www.baidu.com").execute().body();
@@ -315,7 +315,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getWeixinTest(){
 		// 测试特殊URL，即URL中有&amp;情况是否请求正常
 		String url = "https://mp.weixin.qq.com/s?__biz=MzI5NjkyNTIxMg==&amp;mid=100000465&amp;idx=1&amp;sn=1044c0d19723f74f04f4c1da34eefa35&amp;chksm=6cbda3a25bca2ab4516410db6ce6e125badaac2f8c5548ea6e18eab6dc3c5422cb8cbe1095f7";
@@ -324,7 +324,7 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getNocovTest(){
 		String url = "https://qiniu.nocov.cn/medical-manage%2Ftest%2FBANNER_IMG%2F444004467954556928%2F1595215173047icon.png~imgReduce?e=1597081986&token=V2lJYVgQgAv_sbypfEZ0qpKs6TzD1q5JIDVr0Tw8:89cbBkLLwEc9JsMoCLkAEOu820E=";
 		final String s = HttpUtil.get(url);
@@ -332,21 +332,21 @@ public class HttpUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sinajsTest(){
 		final String s = HttpUtil.get("http://hq.sinajs.cn/list=sh600519");
 		Console.log(s);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void gimg2Test(){
 		byte[] bytes = HttpUtil.downloadBytes("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.jj20.com%2Fup%2Fallimg%2F1114%2F0H320120Z3%2F200H3120Z3-6-1200.jpg&refer=http%3A%2F%2Fpic.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1621996490&t=8c384c2823ea453da15a1b9cd5183eea");
 		Console.log(Base64.encode(bytes));
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void acplayTest(){
 		final String body = HttpRequest.get("https://api.acplay.net/api/v2/bangumi/9541")
 				.execute().body();

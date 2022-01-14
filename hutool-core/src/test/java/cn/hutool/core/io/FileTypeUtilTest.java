@@ -2,7 +2,7 @@ package cn.hutool.core.io;
 
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,7 +15,7 @@ import java.io.File;
 public class FileTypeUtilTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void fileTypeUtilTest() {
 		File file = FileUtil.file("hutool.jpg");
 		String type = FileTypeUtil.getType(file);
@@ -27,7 +27,7 @@ public class FileTypeUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void emptyTest() {
 		File file = FileUtil.file("d:/empty.txt");
 		String type = FileTypeUtil.getType(file);
@@ -35,7 +35,7 @@ public class FileTypeUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void docTest() {
 		File file = FileUtil.file("f:/test/test.doc");
 		String type = FileTypeUtil.getType(file);
@@ -43,7 +43,7 @@ public class FileTypeUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void ofdTest() {
 		File file = FileUtil.file("e:/test.ofd");
 		String hex = IoUtil.readHex28Upper(FileUtil.getInputStream(file));
@@ -55,7 +55,7 @@ public class FileTypeUtilTest {
 
 
 	@Test
-	@Ignore
+	@Disabled
 	public void inputStreamAndFilenameTest() {
 		File file = FileUtil.file("e:/laboratory/test.xlsx");
 		String type = FileTypeUtil.getType(file);

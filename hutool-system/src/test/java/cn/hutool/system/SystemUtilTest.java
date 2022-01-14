@@ -1,7 +1,7 @@
 package cn.hutool.system;
 
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.File;
 public class SystemUtilTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void dumpTest() {
 		SystemUtil.dumpSystemInfo();
 	}

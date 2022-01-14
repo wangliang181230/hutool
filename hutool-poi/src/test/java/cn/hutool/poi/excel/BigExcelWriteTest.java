@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class BigExcelWriteTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeTest2() {
 		List<String> row = CollUtil.newArrayList("姓名", "加班日期", "下班时间", "加班时长", "餐补", "车补次数", "车补", "总计");
 		BigExcelWriter overtimeWriter = ExcelUtil.getBigWriter("e:/excel/single_line.xlsx");
@@ -37,7 +37,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeTest() {
 		List<?> row1 = CollUtil.newArrayList("aaaaa", "bb", "cc", "dd", DateUtil.date(), 3.22676575765);
 		List<?> row2 = CollUtil.newArrayList("aa1", "bb1", "cc1", "dd1", DateUtil.date(), 250.7676);
@@ -68,7 +68,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void mergeTest() {
 		List<?> row1 = CollUtil.newArrayList("aa", "bb", "cc", "dd", DateUtil.date(), 3.22676575765);
 		List<?> row2 = CollUtil.newArrayList("aa1", "bb1", "cc1", "dd1", DateUtil.date(), 250.7676);
@@ -98,7 +98,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeMapTest() {
 		Map<String, Object> row1 = new LinkedHashMap<>();
 		row1.put("姓名", "张三");
@@ -137,7 +137,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeMapTest2() {
 		Map<String, Object> row1 = MapUtil.newHashMap(true);
 		row1.put("姓名", "张三");
@@ -158,7 +158,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeBeanTest() {
 		cn.hutool.poi.excel.TestBean bean1 = new cn.hutool.poi.excel.TestBean();
 		bean1.setName("张三");
@@ -194,7 +194,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeCellValueTest() {
 		String path = "d:/test/cellValueTest.xlsx";
 		FileUtil.del(path);
@@ -204,7 +204,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void closeTest() {
 		final Map<String, ?> map1 = MapUtil.of("id", "123456");
 		final Map<String, ?> map2 = MapUtil.of("id", "123457");
@@ -217,7 +217,7 @@ public class BigExcelWriteTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void issue1210() {
 		// 通过工具类创建writer
 		String path = "d:/test/issue1210.xlsx";

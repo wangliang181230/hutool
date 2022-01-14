@@ -2,7 +2,7 @@ package cn.hutool.core.io.file;
 
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.FileSystem;
@@ -14,7 +14,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 public class FileSystemUtilTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void listTest(){
 		final FileSystem fileSystem = FileSystemUtil.createZip("d:/test/test.zip",
 				CharsetUtil.CHARSET_GBK);

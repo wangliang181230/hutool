@@ -3,7 +3,7 @@ package cn.hutool.poi.excel;
 import cn.hutool.poi.excel.cell.CellLocation;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 
 public class ExcelUtilTest {
 
@@ -45,7 +45,7 @@ public class ExcelUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readAndWriteTest(){
 		ExcelReader reader = ExcelUtil.getReader("d:\\test/select.xls");
 		ExcelWriter writer = reader.getWriter();

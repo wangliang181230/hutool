@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class OptTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void ifPresentOrElseTest() {
 		// 存在就打印对应的值，不存在则用{@code System.err.println}打印另一句字符串
 		Opt.ofNullable("Hello Hutool!").ifPresentOrElse(Console::log, () -> Console.error("Ops!Something is wrong!"));

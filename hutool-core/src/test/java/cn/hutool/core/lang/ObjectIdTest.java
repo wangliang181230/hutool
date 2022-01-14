@@ -3,7 +3,7 @@ package cn.hutool.core.lang;
 import java.util.HashSet;
 
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -26,7 +26,7 @@ public class ObjectIdTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void nextTest() {
 		Console.log(ObjectId.next());
 	}

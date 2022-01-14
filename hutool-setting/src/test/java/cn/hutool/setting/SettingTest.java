@@ -2,7 +2,7 @@ package cn.hutool.setting;
 
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -34,7 +34,7 @@ public class SettingTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void settingTestForAbsPath() {
 		//noinspection MismatchedQueryAndUpdateOfCollection
 		Setting setting = new Setting("d:\\excel-plugin\\other.setting", true);

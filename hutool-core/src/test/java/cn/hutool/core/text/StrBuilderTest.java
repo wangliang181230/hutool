@@ -1,7 +1,7 @@
 package cn.hutool.core.text;
 
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.date.DateUtil;
@@ -19,7 +19,7 @@ public class StrBuilderTest {
 	 * StrBuilder的性能测试
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void benchTest() {
 		TimeInterval timer = DateUtil.timer();
 		StrBuilder builder = StrBuilder.create();

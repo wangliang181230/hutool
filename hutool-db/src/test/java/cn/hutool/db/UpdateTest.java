@@ -2,7 +2,7 @@ package cn.hutool.db;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class UpdateTest {
 	 * @throws SQLException SQL异常
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void updateTest() throws SQLException {
 
 		// 改

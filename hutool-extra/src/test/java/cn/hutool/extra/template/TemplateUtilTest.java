@@ -11,7 +11,7 @@ import cn.hutool.extra.template.engine.thymeleaf.ThymeleafEngine;
 import cn.hutool.extra.template.engine.velocity.VelocityEngine;
 import cn.hutool.extra.template.engine.wit.WitEngine;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -144,7 +144,7 @@ public class TemplateUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void renderToFileTest() {
 		TemplateEngine engine = new BeetlEngine(new TemplateConfig("templates", ResourceMode.CLASSPATH));
 		Template template = engine.getTemplate("freemarker_test.ftl");

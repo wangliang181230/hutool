@@ -25,7 +25,7 @@ import cn.hutool.json.test.bean.report.StepReport;
 import cn.hutool.json.test.bean.report.SuiteReport;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -45,7 +45,7 @@ import java.util.Set;
 public class JSONObjectTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void toStringTest() {
 		String str = "{\"code\": 500, \"data\":null}";
 		JSONObject jsonObject = new JSONObject(str);
@@ -144,7 +144,7 @@ public class JSONObjectTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void parseStringWithBomTest() {
 		String jsonStr = FileUtil.readUtf8String("f:/test/jsontest.txt");
 		JSONObject json = new JSONObject(jsonStr);

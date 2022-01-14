@@ -12,7 +12,7 @@ import cn.hutool.poi.excel.sax.handler.RowHandler;
 import cn.hutool.poi.exceptions.POIException;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -73,7 +73,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readBlankLineTest() {
 		ExcelUtil.readBySax("e:/ExcelBlankLine.xlsx", 0, (sheetIndex, rowIndex, rowList) -> {
 			if (StrUtil.isAllEmpty(Convert.toStrArray(rowList))) {
@@ -99,7 +99,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readBySaxTest2() {
 		ExcelUtil.readBySax("d:/test/456789.xlsx", "0", (sheetIndex, rowIndex, rowList) -> Console.log(rowList));
 	}
@@ -115,7 +115,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void handle07CellTest() {
 		ExcelUtil.readBySax("d:/test/test.xlsx", -1, new RowHandler() {
 
@@ -133,7 +133,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void handle03CellTest() {
 		ExcelUtil.readBySax("d:/test/test.xls", -1, new RowHandler() {
 
@@ -201,7 +201,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void dateReadXlsxTest2() {
 		ExcelUtil.readBySax("d:/test/custom_date_format2.xlsx", 0,
 				(i, i1, list) -> Console.log(list)
@@ -209,7 +209,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readBlankTest() {
 		File file = new File("D:/test/b.xlsx");
 
@@ -219,7 +219,7 @@ public class ExcelSaxReadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readXlsmTest(){
 		ExcelUtil.readBySax("d:/test/WhiteListTemplate.xlsm", -1,
 				(sheetIndex, rowIndex, rowlist) -> Console.log("[{}] [{}] {}", sheetIndex, rowIndex, rowlist));

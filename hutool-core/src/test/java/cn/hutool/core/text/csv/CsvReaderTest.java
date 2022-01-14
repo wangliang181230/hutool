@@ -9,7 +9,7 @@ import cn.hutool.core.util.CharsetUtil;
 import lombok.Data;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 
 import java.util.List;
 import java.util.Map;
@@ -105,7 +105,7 @@ public class CsvReaderTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readTest2() {
 		final CsvReader reader = CsvUtil.getReader();
 		final CsvData read = reader.read(FileUtil.file("d:/test/test.csv"));
@@ -115,7 +115,7 @@ public class CsvReaderTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readTest3() {
 		final CsvReadConfig csvReadConfig = CsvReadConfig.defaultConfig();
 		csvReadConfig.setContainsHeader(true);
@@ -197,7 +197,7 @@ public class CsvReaderTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void streamTest() {
 		final CsvReader reader = CsvUtil.getReader(ResourceUtil.getUtf8Reader("test_bean.csv"));
 		reader.stream().limit(2).forEach(Console::log);

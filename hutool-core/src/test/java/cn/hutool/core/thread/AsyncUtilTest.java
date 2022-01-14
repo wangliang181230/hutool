@@ -1,7 +1,7 @@
 package cn.hutool.core.thread;
 
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class AsyncUtilTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void waitAndGetTest() {
 		CompletableFuture<String> hutool = CompletableFuture.supplyAsync(() -> {
 			ThreadUtil.sleep(1, TimeUnit.SECONDS);

@@ -8,7 +8,7 @@ import cn.hutool.core.util.CharsetUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class CsvUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readTest3() {
 		CsvReader reader = CsvUtil.getReader();
 		String path = FileUtil.isWindows() ? "d:/test/test.csv" : "~/test/test.csv";
@@ -89,7 +89,7 @@ public class CsvUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeTest() {
 		String path = FileUtil.isWindows() ? "d:/test/testWrite.csv" : "~/test/testWrite.csv";
 		CsvWriter writer = CsvUtil.getWriter(path, CharsetUtil.CHARSET_UTF_8);
@@ -101,7 +101,7 @@ public class CsvUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeBeansTest() {
 
 		@Data
@@ -137,7 +137,7 @@ public class CsvUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void readLfTest(){
 		final CsvReader reader = CsvUtil.getReader();
 		String path = FileUtil.isWindows() ? "d:/test/rw_test.csv" : "~/test/rw_test.csv";
@@ -148,7 +148,7 @@ public class CsvUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeWrapTest(){
 		List<List<Object>> resultList=new ArrayList<>();
 		List<Object> list =new ArrayList<>();
@@ -167,7 +167,7 @@ public class CsvUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeDataTest(){
 		@Data
 		@AllArgsConstructor

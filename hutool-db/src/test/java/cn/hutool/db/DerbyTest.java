@@ -2,7 +2,7 @@ package cn.hutool.db;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -35,14 +35,14 @@ public class DerbyTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void queryTest() throws SQLException {
 		List<Entity> query = Db.use(DS_GROUP_NAME).query("select * from test");
 		Assert.assertEquals(4, query.size());
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void findTest() throws SQLException {
 		List<Entity> query = Db.use(DS_GROUP_NAME).find(Entity.create("test"));
 		Assert.assertEquals(4, query.size());

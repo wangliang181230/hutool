@@ -16,7 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.beans.PropertyDescriptor;
@@ -312,7 +312,7 @@ public class BeanUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void multiThreadTest(){
 		Student student = new Student();
 		student.setName("张三");

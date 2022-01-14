@@ -3,7 +3,7 @@ package cn.hutool.core.math;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import cn.hutool.core.lang.Console;
@@ -56,7 +56,7 @@ public class ArrangementTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void selectTest2() {
 		List<String[]> list = MathUtil.arrangementSelect(new String[] { "1", "1", "3", "4" });
 		for (String[] strings : list) {

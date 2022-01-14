@@ -8,7 +8,7 @@ import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.map.MapUtil;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,7 +44,7 @@ public class XmlUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void writeTest() {
 		String result = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>"//
 				+ "<returnsms>"//
@@ -282,7 +282,7 @@ public class XmlUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void formatTest(){
 		// https://github.com/looly/hutool/pull/1234
 		Document xml = XmlUtil.createXml("NODES");

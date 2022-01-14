@@ -5,7 +5,7 @@ import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.io.StreamProgress;
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class DownloadTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadPicTest() {
 		String url = "http://wx.qlogo.cn/mmopen/vKhlFcibVUtNBVDjcIowlg0X8aJfHXrTNCEFBukWVH9ta99pfEN88lU39MKspCUCOP3yrFBH3y2NbV7sYtIIlon8XxLwAEqv2/0";
 		HttpUtil.downloadFile(url, "e:/pic/t3.jpg");
@@ -27,21 +27,21 @@ public class DownloadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadSizeTest() {
 		String url = "https://res.t-io.org/im/upload/img/67/8948/1119501/88097554/74541310922/85/231910/366466 - 副本.jpg";
 		HttpRequest.get(url).setSSLProtocol("TLSv1.2").executeAsync().writeBody("e:/pic/366466.jpg");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadTest1() {
 		long size = HttpUtil.downloadFile("http://explorer.bbfriend.com/crossdomain.xml", "e:/temp/");
 		System.out.println("Download size: " + size);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadTest() {
 		// 带进度显示的文件下载
 		HttpUtil.downloadFile("http://mirrors.sohu.com/centos/7/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso", FileUtil.file("d:/"), new StreamProgress() {
@@ -67,7 +67,7 @@ public class DownloadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadFileFromUrlTest1() {
 		File file = HttpUtil.downloadFileFromUrl("http://groovy-lang.org/changelogs/changelog-3.0.5.html", "d:/download/temp");
 		Assert.assertNotNull(file);
@@ -76,7 +76,7 @@ public class DownloadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadFileFromUrlTest2() {
 		File file = null;
 		try {
@@ -110,7 +110,7 @@ public class DownloadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadFileFromUrlTest3() {
 		File file = null;
 		try {
@@ -142,7 +142,7 @@ public class DownloadTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadFileFromUrlTest4() {
 		File file = null;
 		try {
@@ -162,7 +162,7 @@ public class DownloadTest {
 
 
 	@Test
-	@Ignore
+	@Disabled
 	public void downloadFileFromUrlTest5() {
 		File file = null;
 		try {

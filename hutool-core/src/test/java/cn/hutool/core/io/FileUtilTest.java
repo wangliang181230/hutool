@@ -4,7 +4,7 @@ import cn.hutool.core.io.file.LineSeparator;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -46,13 +46,13 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void touchTest() {
 		FileUtil.touch("d:\\tea\\a.jpg");
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void delTest() {
 		// 删除一个不存在的文件，应返回true
 		boolean result = FileUtil.del("e:/Hutool_test_3434543533409843.txt");
@@ -60,7 +60,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void delTest2() {
 		// 删除一个不存在的文件，应返回true
 		boolean result = FileUtil.del(Paths.get("e:/Hutool_test_3434543533409843.txt"));
@@ -68,13 +68,13 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void renameTest() {
 		FileUtil.rename(FileUtil.file("d:/test/3.jpg"), "2.jpg", false);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void renameTest2() {
 		FileUtil.move(FileUtil.file("d:/test/a"), FileUtil.file("d:/test/b"), false);
 	}
@@ -91,7 +91,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void copyFilesFromDirTest() {
 		File srcFile = FileUtil.file("D:\\驱动");
 		File destFile = FileUtil.file("d:\\驱动备份");
@@ -100,7 +100,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void copyDirTest() {
 		File srcFile = FileUtil.file("D:\\test");
 		File destFile = FileUtil.file("E:\\");
@@ -109,7 +109,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void moveDirTest() {
 		File srcFile = FileUtil.file("E:\\test2");
 		File destFile = FileUtil.file("D:\\");
@@ -135,7 +135,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void convertLineSeparatorTest() {
 		FileUtil.convertLineSeparator(FileUtil.file("d:/aaa.txt"), CharsetUtil.CHARSET_UTF_8, LineSeparator.WINDOWS);
 	}
@@ -272,7 +272,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void listFileNamesInJarTest() {
 		List<String> names = FileUtil.listFileNames("d:/test/hutool-core-5.1.0.jar!/cn/hutool/core/util ");
 		for (String name : names) {
@@ -281,7 +281,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void listFileNamesTest2() {
 		List<String> names = FileUtil.listFileNames("D:\\m2_repo\\commons-cli\\commons-cli\\1.0\\commons-cli-1.0.jar!org/apache/commons/cli/");
 		for (String string : names) {
@@ -290,7 +290,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void loopFilesTest() {
 		List<File> files = FileUtil.loopFiles("d:/");
 		for (File file : files) {
@@ -299,13 +299,13 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void loopFilesTest2() {
 		FileUtil.loopFiles("").forEach(Console::log);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void loopFilesWithDepthTest() {
 		List<File> files = FileUtil.loopFiles(FileUtil.file("d:/m2_repo"), 2, null);
 		for (File file : files) {

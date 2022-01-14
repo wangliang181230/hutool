@@ -5,7 +5,7 @@ import cn.hutool.db.sql.Query;
 import cn.hutool.db.sql.SqlBuilder;
 import cn.hutool.db.sql.SqlUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -40,7 +40,7 @@ public class OracleTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void insertTest() throws SQLException {
 		for (int id = 100; id < 200; id++) {
 			Db.use("orcl").insert(Entity.create("T_USER")//
@@ -53,7 +53,7 @@ public class OracleTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void pageTest() throws SQLException {
 		PageResult<Entity> result = Db.use("orcl").page(Entity.create("T_USER"), new Page(2, 10));
 		for (Entity entity : result) {

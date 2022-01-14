@@ -1,6 +1,6 @@
 package cn.hutool.db;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class SessionTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void transTest() {
 		Session session = Session.create("test");
 		try {
@@ -26,7 +26,7 @@ public class SessionTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void txTest() throws SQLException {
 		Session.create("test").tx(session -> session.update(Entity.create().set("age", 78), Entity.create("user").set("name", "unitTestUser")));
 	}

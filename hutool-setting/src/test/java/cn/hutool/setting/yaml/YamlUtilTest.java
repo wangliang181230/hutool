@@ -4,7 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class YamlUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void dumpTest() {
 		final Dict dict = Dict.create()
 				.set("name", "hutool")

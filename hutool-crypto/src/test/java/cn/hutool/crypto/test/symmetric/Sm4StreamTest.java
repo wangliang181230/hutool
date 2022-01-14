@@ -1,7 +1,7 @@
 package cn.hutool.crypto.test.symmetric;
 
 import cn.hutool.crypto.symmetric.SM4;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
@@ -20,7 +20,7 @@ public class Sm4StreamTest {
 	private static final boolean IS_CLOSE = false;
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sm4Test(){
 		String source = "d:/test/sm4_1.txt";
 		String target = "d:/test/sm4_2.data";

@@ -7,7 +7,7 @@ import cn.hutool.setting.dialect.Props;
 import lombok.Data;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -40,7 +40,7 @@ public class PropsTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void propTestForAbsPAth() {
 		//noinspection MismatchedQueryAndUpdateOfCollection
 		Props props = new Props("d:/test.properties");

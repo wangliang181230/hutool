@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.PatternPool;
 import cn.hutool.core.util.ReUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.HttpCookie;
@@ -21,21 +21,21 @@ import java.util.List;
 public class NetUtilTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getLocalhostStrTest() {
 		String localhost = NetUtil.getLocalhostStr();
 		Assert.assertNotNull(localhost);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getLocalhostTest() {
 		InetAddress localhost = NetUtil.getLocalhost();
 		Assert.assertNotNull(localhost);
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getLocalMacAddressTest() {
 		String macAddress = NetUtil.getLocalMacAddress();
 		Assert.assertNotNull(macAddress);
@@ -58,7 +58,7 @@ public class NetUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void isUsableLocalPortTest(){
 		Assert.assertTrue(NetUtil.isUsableLocalPort(80));
 	}
@@ -88,14 +88,14 @@ public class NetUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void isOpenTest(){
 		InetSocketAddress address = new InetSocketAddress("www.hutool.cn", 443);
 		Assert.assertTrue(NetUtil.isOpen(address, 200));
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void getDnsInfoTest(){
 		final List<String> txt = NetUtil.getDnsInfo("hutool.cn", "TXT");
 		Console.log(txt);

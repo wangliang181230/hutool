@@ -8,7 +8,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.thread.ThreadUtil;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -45,7 +45,7 @@ public class IdUtilTest {
 	 * UUID的性能测试
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	public void benchTest() {
 		TimeInterval timer = DateUtil.timer();
 		for (int i = 0; i < 1000000; i++) {
@@ -75,7 +75,7 @@ public class IdUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void snowflakeBenchTest() {
 		final Set<Long> set = new ConcurrentHashSet<>();
 		final Snowflake snowflake = IdUtil.getSnowflake(1, 1);
@@ -106,7 +106,7 @@ public class IdUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void snowflakeBenchTest2() {
 		final Set<Long> set = new ConcurrentHashSet<>();
 

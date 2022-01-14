@@ -7,7 +7,7 @@ import cn.hutool.core.util.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class ListUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void splitBenchTest() {
 		List<String> list = new ArrayList<>();
 		CollUtil.padRight(list, RandomUtil.randomInt(1000_0000, 1_0000_0000), "test");
