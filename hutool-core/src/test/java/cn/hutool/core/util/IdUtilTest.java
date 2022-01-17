@@ -139,6 +139,7 @@ public class IdUtilTest {
 	@Test
 	public void getDataCenterIdTest(){
 		//final long dataCenterId = IdUtil.getDataCenterId(Long.MAX_VALUE);
+		//Assert.assertTrue(dataCenterId > 1);
 
 		long dataCenterId = 1L;
 		final byte[] mac = NetUtil.getLocalHardwareAddress();
