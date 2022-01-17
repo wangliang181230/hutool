@@ -39,4 +39,12 @@ public class H2Test {
 		List<Entity> query = Db.use(DS_GROUP_NAME).find(Entity.create("test"));
 		Assert.assertEquals(4, query.size());
 	}
+
+	@Test
+	public void upsertTest() throws SQLException {
+		Db db=Db.use(DS_GROUP_NAME);
+		db.upsert(Entity.create("test").set("a",1).set("b",111),"a");
+		Entity a1=db.get("test","a",1);
+		Assert.assertEquals(Long.valueOf(111),a1.getLong("b"));
+	}
 }

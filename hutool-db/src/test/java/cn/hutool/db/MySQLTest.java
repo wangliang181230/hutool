@@ -2,6 +2,7 @@ package cn.hutool.db;
 
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +13,14 @@ import java.util.List;
  * MySQL操作单元测试
  *
  * @author looly
- *
  */
 @Disabled
 public class MySQLTest {
+	@BeforeClass
+	public static void createTable() throws SQLException {
+		Db db = Db.use("mysql");
+		db.executeBatch("drop table if exists testuser", "CREATE TABLE if not exists `testuser` ( `id` int(11) NOT NULL, `account` varchar(255) DEFAULT NULL, `pass` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+	}
 
 	@Test
 	public void insertTest() throws SQLException {
@@ -41,7 +46,7 @@ public class MySQLTest {
 			Db.use("mysql").tx(db -> {
 				int update = db.update(Entity.create("user").set("text", "描述100"), Entity.create().set("id", 100));
 				db.update(Entity.create("user").set("text", "描述101"), Entity.create().set("id", 101));
-				if(1 == update) {
+				if (1 == update) {
 					// 手动指定异常，然后测试回滚触发
 					throw new RuntimeException("Error");
 				}
@@ -64,4 +69,13 @@ public class MySQLTest {
 		Console.log(all);
 	}
 
+	@Test
+	public void upsertTest() throws SQLException {
+		Db db = Db.use("mysql");
+		db.insert(Entity.create("testuser").set("id", 1).set("account", "ice").set("pass", "123456"));
+		db.upsert(Entity.create("testuser").set("id", 1).set("account", "icefairy").set("pass", "a123456"));
+		Entity user = db.get(Entity.create("testuser").set("id", 1));
+		System.out.println("user======="+user.getStr("account")+"___"+user.getStr("pass"));
+		Assert.assertEquals(user.getStr("account"), new String("icefairy"));
+	}
 }
