@@ -153,6 +153,10 @@ public class IdUtilTest {
 
 
 	private String toString(byte[] mac) {
+		if (mac == null) {
+			return "null";
+		}
+
 		StringBuilder sb = new StringBuilder();
 		for (byte b : mac) {
 			if (sb.length() > 0) {
