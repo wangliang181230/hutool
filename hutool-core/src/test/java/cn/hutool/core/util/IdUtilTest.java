@@ -149,7 +149,7 @@ public class IdUtilTest {
 			dataCenterId = dataCenterId % (Long.MAX_VALUE + 1);
 		}
 
-		Assert.assertTrue("dataCenterId的值大于1，测试不通过，dataCenterId = " + dataCenterId + ", mac = " + toString(mac), dataCenterId > 1);
+		Assert.assertTrue("校验 `dataCenterId > 1` 不通过：dataCenterId = " + dataCenterId + ", mac = " + toString(mac), dataCenterId > 1);
 	}
 
 
