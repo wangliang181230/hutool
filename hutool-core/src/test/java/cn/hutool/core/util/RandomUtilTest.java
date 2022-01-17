@@ -62,7 +62,7 @@ public class RandomUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void randomStringWithoutStrTest() {
 		for (int i = 0; i < 100; i++) {
 			final String s = RandomUtil.randomStringWithoutStr(8, "0IPOL");

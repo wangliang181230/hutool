@@ -2,7 +2,7 @@ package cn.hutool.db;
 
 import cn.hutool.core.lang.Console;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Disabled
 public class MySQLTest {
-	@BeforeClass
+	@BeforeAll
 	public static void createTable() throws SQLException {
 		Db db = Db.use("mysql");
 		db.executeBatch("drop table if exists testuser", "CREATE TABLE if not exists `testuser` ( `id` int(11) NOT NULL, `account` varchar(255) DEFAULT NULL, `pass` varchar(255) DEFAULT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8");

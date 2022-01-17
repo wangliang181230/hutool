@@ -36,7 +36,7 @@ public class PostgreTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void upsertTest() throws SQLException {
 		Db db = Db.use("postgre");
 		db.executeBatch("drop table if exists ctest",

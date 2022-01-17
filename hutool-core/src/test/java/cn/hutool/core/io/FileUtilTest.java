@@ -449,7 +449,7 @@ public class FileUtilTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void appendLinesTest(){
 		List<String> list = ListUtil.toList("a", "b", "c");
 		FileUtil.appendLines(list, FileUtil.file("d:/test/appendLines.txt"), CharsetUtil.CHARSET_UTF_8);
