@@ -6,6 +6,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
@@ -137,7 +138,16 @@ public class IdUtilTest {
 
 	@Test
 	public void getDataCenterIdTest(){
-		final long dataCenterId = IdUtil.getDataCenterId(Long.MAX_VALUE);
-		Assert.assertTrue(dataCenterId > 1);
+		//final long dataCenterId = IdUtil.getDataCenterId(Long.MAX_VALUE);
+
+		long dataCenterId = 1L;
+		final byte[] mac = NetUtil.getLocalHardwareAddress();
+		if (null != mac) {
+			dataCenterId = ((0x000000FF & (long) mac[mac.length - 2])
+					| (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
+			dataCenterId = dataCenterId % (Long.MAX_VALUE + 1);
+		}
+
+		Assert.assertTrue("dataCenterId的值大于1，测试不通过，dataCenterId = " + dataCenterId + ", mac = " + mac, dataCenterId > 1);
 	}
 }
