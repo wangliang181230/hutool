@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.net.InetAddress;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -142,14 +143,17 @@ public class IdUtilTest {
 		//Assert.assertTrue(dataCenterId > 1);
 
 		long dataCenterId = 1L;
-		final byte[] mac = NetUtil.getLocalHardwareAddress();
+		InetAddress host = NetUtil.getLocalhost();
+		final byte[] mac = NetUtil.getHardwareAddress(host);
 		if (null != mac) {
 			dataCenterId = ((0x000000FF & (long) mac[mac.length - 2])
 					| (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
 			dataCenterId = dataCenterId % (Long.MAX_VALUE + 1);
 		}
 
-		Assert.assertTrue("校验 `dataCenterId > 1` 不通过：dataCenterId = " + dataCenterId + ", mac = " + toString(mac), dataCenterId > 1);
+		System.out.println("dataCenterId = " + dataCenterId + ", host = " + host + ", mac = " + toString(mac));
+
+		Assert.assertTrue("校验 `dataCenterId > 1` 不通过：dataCenterId = " + dataCenterId + ", host = " + host + ", mac = " + toString(mac), dataCenterId > 1);
 	}
 
 
