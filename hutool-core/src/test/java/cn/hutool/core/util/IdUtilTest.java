@@ -139,55 +139,8 @@ public class IdUtilTest {
 
 	@Test
 	public void getDataCenterIdTest(){
-		//final long dataCenterId = IdUtil.getDataCenterId(Long.MAX_VALUE);
-		//Assert.assertTrue(dataCenterId > 1);
-
-		long dataCenterId = 1L;
-		InetAddress host = NetUtil.getLocalhost();
-		final byte[] mac = NetUtil.getHardwareAddress(host);
-		if (null != mac) {
-			dataCenterId = ((0x000000FF & (long) mac[mac.length - 2])
-					| (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
-			dataCenterId = dataCenterId % ((Long.MAX_VALUE) + 1);
-		}
-
-		System.out.println("dataCenterId = " + dataCenterId + ", host = " + host + ", mac = " + toString(mac));
-
-		Assert.assertTrue("校验 `dataCenterId > 1` 不通过：dataCenterId = " + dataCenterId + ", host = " + host + ", mac = " + toString(mac), dataCenterId > 1);
-	}
-
-	@Test
-	public void getDataCenterIdTest_additional(){
-		//final long dataCenterId = IdUtil.getDataCenterId(Long.MAX_VALUE);
-		//Assert.assertTrue(dataCenterId > 1);
-
-		long dataCenterId = 1L;
-		InetAddress host = NetUtil.getLocalhost();
-		final byte[] mac = NetUtil.getHardwareAddress(host);
-		if (null != mac) {
-			dataCenterId = ((0x000000FF & (long) mac[mac.length - 2])
-					| (0x0000FF00 & (((long) mac[mac.length - 1]) << 8))) >> 6;
-			dataCenterId = dataCenterId % ((Long.MAX_VALUE - 1) + 1);
-		}
-
-		System.out.println("dataCenterId = " + dataCenterId + ", host = " + host + ", mac = " + toString(mac));
-
-		Assert.assertTrue("校验 `dataCenterId > 1` 不通过：dataCenterId = " + dataCenterId + ", host = " + host + ", mac = " + toString(mac), dataCenterId > 1);
-	}
-
-
-	private String toString(byte[] mac) {
-		if (mac == null) {
-			return "null";
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (byte b : mac) {
-			if (sb.length() > 0) {
-				sb.append(",");
-			}
-			sb.append(b);
-		}
-		return "[" + sb + "]";
+		//按照mac地址算法拼接的算法，maxDatacenterId应该是0xffffffffL>>6-1此处暂时按照0x7fffffffffffffffL-1，防止最后取模溢出
+		final long dataCenterId = IdUtil.getDataCenterId(Long.MAX_VALUE);
+		Assert.assertTrue(dataCenterId >= 0);
 	}
 }
