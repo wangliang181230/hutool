@@ -42,7 +42,7 @@
 		<project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 
 		<!-- versions -->
-		<spring-boot.version>2.6.2</spring-boot.version>
+		<spring-boot.version>2.6.3</spring-boot.version>
 		<compile.version>8</compile.version>
 		<junit.version>4.13.2</junit.version>
 		<junit-jupiter.version>5.8.2</junit-jupiter.version>
