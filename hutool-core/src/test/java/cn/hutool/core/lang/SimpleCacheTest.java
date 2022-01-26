@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled // TODO: 这个测试类在 github/actions 上运行会出问题
+@Disabled // FIXME: 这个测试类在 github/actions 上运行会出问题
 public class SimpleCacheTest {
 
 	@Test
