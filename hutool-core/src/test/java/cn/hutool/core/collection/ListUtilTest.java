@@ -107,10 +107,6 @@ public class ListUtilTest {
 
 	@Test
 	public void pageTest(){
-		List<Integer> list = CollUtil.newArrayList(9, 8, 7, 6, 5, 4, 3, 2, 1);
-		list = ListUtil.page(1, 5, list);
-		Assert.assertEquals(CollUtil.newArrayList(4, 3, 2, 1), list);
-
 		List<Integer> a = ListUtil.toLinkedList(1, 2, 3,4,5);
 
 		PageUtil.setFirstPageNo(1);

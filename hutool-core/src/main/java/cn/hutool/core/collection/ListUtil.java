@@ -456,7 +456,6 @@ public class ListUtil {
 		for (int i = start; i < end; i += step) {
 			result.add(list.get(i));
 		}
-		System.out.println("__3: " + result);
 		return result;
 	}
 

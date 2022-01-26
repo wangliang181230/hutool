@@ -2399,7 +2399,6 @@ public class CollUtil {
 			list.sort(comparator);
 		}
 
-		System.out.println("__2: " + list);
 		return page(pageNo, pageSize, list);
 	}
 

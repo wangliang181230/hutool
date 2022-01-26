@@ -1,5 +1,15 @@
 package cn.hutool.core.collection;
 
+import cn.hutool.core.comparator.ComparableComparator;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Dict;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.junit.Assert;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,16 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
-
-import cn.hutool.core.comparator.ComparableComparator;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.Dict;
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.StrUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
 
 /**
  * 集合工具类单元测试
@@ -86,12 +86,12 @@ public class CollUtilTest {
 
 	@Test
 	public void isNotEmptyTest() {
-		Assert.assertFalse(CollUtil.isNotEmpty((Collection<?>)null));
+		Assert.assertFalse(CollUtil.isNotEmpty((Collection<?>) null));
 	}
 
 	@Test
 	public void newHashSetTest() {
-		Set<String> set = CollUtil.newHashSet((String[])null);
+		Set<String> set = CollUtil.newHashSet((String[]) null);
 		Assert.assertNotNull(set);
 	}
 
@@ -317,7 +317,7 @@ public class CollUtilTest {
 
 		List<String> removed = new ArrayList<>();
 		ArrayList<String> filtered = CollUtil.filter(list, t -> {
-			if ("a".equals(t)) {
+			if("a".equals(t)){
 				removed.add(t);
 				return false;
 			}
@@ -702,16 +702,10 @@ public class CollUtilTest {
 
 	@Test
 	public void sortPageAllTest() {
-		System.out.println("_______start");
-		try {
-			List<Integer> list = CollUtil.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9);
-			System.out.println("__1: " + list);
-			List<Integer> sortPageAll = CollUtil.sortPageAll(1, 5, Comparator.reverseOrder(), list);
+		List<Integer> list = CollUtil.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+		List<Integer> sortPageAll = CollUtil.sortPageAll(1, 5, Comparator.reverseOrder(), list);
 
-			Assert.assertEquals(CollUtil.newArrayList(4, 3, 2, 1), sortPageAll);
-		} finally {
-			System.out.println("_______end");
-		}
+		Assert.assertEquals(CollUtil.newArrayList(4, 3, 2, 1), sortPageAll);
 	}
 
 	@Test
@@ -767,7 +761,7 @@ public class CollUtilTest {
 	}
 
 	@Test
-	public void mapToMapTest() {
+	public void mapToMapTest(){
 		final HashMap<String, String> oldMap = new HashMap<>();
 		oldMap.put("a", "1");
 		oldMap.put("b", "12");
@@ -845,7 +839,7 @@ public class CollUtilTest {
 	}
 
 	@Test
-	public void setValueByMapTest() {
+	public void setValueByMapTest(){
 		// https://gitee.com/dromara/hutool/pulls/482
 		List<Person> people = Arrays.asList(
 				new Person("aa", 12, "man", 1),
