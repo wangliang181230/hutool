@@ -2,7 +2,7 @@ package cn.hutool.db.sql;
 
 import cn.hutool.core.collection.ListUtil;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ConditionGroupTest {
 	@Test
