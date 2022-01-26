@@ -702,11 +702,16 @@ public class CollUtilTest {
 
 	@Test
 	public void sortPageAllTest() {
-		List<Integer> list = CollUtil.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9);
-		System.out.println("__1: " + list);
-		List<Integer> sortPageAll = CollUtil.sortPageAll(1, 5, Comparator.reverseOrder(), list);
+		System.out.println("_______start");
+		try {
+			List<Integer> list = CollUtil.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+			System.out.println("__1: " + list);
+			List<Integer> sortPageAll = CollUtil.sortPageAll(1, 5, Comparator.reverseOrder(), list);
 
-		Assert.assertEquals(CollUtil.newArrayList(4, 3, 2, 1), sortPageAll);
+			Assert.assertEquals(CollUtil.newArrayList(4, 3, 2, 1), sortPageAll);
+		} finally {
+			System.out.println("_______end");
+		}
 	}
 
 	@Test
