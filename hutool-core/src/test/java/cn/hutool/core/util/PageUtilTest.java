@@ -5,14 +5,13 @@ import org.junit.jupiter.api.Test;
 
 /**
  * 分页单元测试
- * @author Looly
  *
+ * @author Looly
  */
 public class PageUtilTest {
 
 	@Test
-	public void transToStartEndTest(){
-		PageUtil.setFirstPageNo(0);
+	public void transToStartEndTest() {
 		int[] startEnd1 = PageUtil.transToStartEnd(0, 10);
 		Assert.assertEquals(0, startEnd1[0]);
 		Assert.assertEquals(10, startEnd1[1]);
@@ -23,7 +22,7 @@ public class PageUtilTest {
 	}
 
 	@Test
-	public void totalPage(){
+	public void totalPage() {
 		int totalPage = PageUtil.totalPage(20, 3);
 		Assert.assertEquals(7, totalPage);
 	}
@@ -31,6 +30,6 @@ public class PageUtilTest {
 	@Test
 	public void rainbowTest() {
 		int[] rainbow = PageUtil.rainbow(5, 20, 6);
-		Assert.assertArrayEquals(new int[] {3, 4, 5, 6, 7, 8}, rainbow);
+		Assert.assertArrayEquals(new int[]{3, 4, 5, 6, 7, 8}, rainbow);
 	}
 }
