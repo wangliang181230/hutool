@@ -44,8 +44,10 @@ public class MonthTest {
 		Assert.assertEquals(java.time.Month.AUGUST, month);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void toJdkMonthTest2(){
-		Month.UNDECIMBER.toJdkMonth();
+		Assert.assertThrows(IllegalArgumentException.class, () -> {
+			Month.UNDECIMBER.toJdkMonth();
+		});
 	}
 }
