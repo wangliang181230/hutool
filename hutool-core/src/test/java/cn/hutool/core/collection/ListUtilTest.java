@@ -169,6 +169,9 @@ public class ListUtilTest {
 		Assert.assertArrayEquals(new int[]{}, pageListData.get(0).stream().mapToInt(Integer::valueOf).toArray());
 		Assert.assertArrayEquals(new int[]{3, 4}, pageListData.get(1).stream().mapToInt(Integer::valueOf).toArray());
 		Assert.assertArrayEquals(new int[]{5}, pageListData.get(2).stream().mapToInt(Integer::valueOf).toArray());
+
+		// 恢复默认值
+		PageUtil.setFirstPageNo(0);
 	}
 
 	@Test
