@@ -19,7 +19,6 @@
 	<properties>
 		<!-- versions -->
 		<cglib.version>3.3.0</cglib.version>
-		<spring.version>5.3.16</spring.version>
 	</properties>
 
 	<dependencies>
@@ -38,7 +37,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
