@@ -386,7 +386,8 @@ public class ReflectUtil {
 	}
 
 	/**
-	 * 获得指定类过滤后的Public方法列表
+	 * 获得指定类过滤后的Public方法列表<br>
+	 * TODO 6.x此方法更改返回Method[]
 	 *
 	 * @param clazz  查找方法的类
 	 * @param filter 过滤器
@@ -848,7 +849,7 @@ public class ReflectUtil {
 	 *
 	 * @param <T>       对象类型
 	 * @param beanClass 被构造的类
-	 * @return 构造后的对象
+	 * @return 构造后的对象，构造失败返回{@code null}
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T newInstanceIfPossible(Class<T> beanClass) {
