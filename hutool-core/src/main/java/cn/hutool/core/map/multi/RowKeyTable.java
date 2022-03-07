@@ -3,7 +3,6 @@ package cn.hutool.core.map.multi;
 import cn.hutool.core.collection.IterUtil;
 import cn.hutool.core.collection.TransIter;
 import cn.hutool.core.util.ObjectUtil;
-import com.sun.istack.internal.Nullable;
 
 import java.io.Serializable;
 import java.util.AbstractCollection;
@@ -94,7 +93,7 @@ public class RowKeyTable<R, C, V> implements Table<R, C, V> {
 	}
 
 	@Override
-	public boolean equals(@Nullable Object obj) {
+	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
 		} else if (obj instanceof Table) {
@@ -161,7 +160,7 @@ public class RowKeyTable<R, C, V> implements Table<R, C, V> {
 		private final C columnKey;
 		private final V value;
 
-		SimpleCell(@Nullable R rowKey, @Nullable C columnKey, @Nullable V value) {
+		SimpleCell(R rowKey, C columnKey, V value) {
 			this.rowKey = rowKey;
 			this.columnKey = columnKey;
 			this.value = value;
