@@ -1,5 +1,6 @@
 package cn.hutool.extra.cglib;
 
+import cn.hutool.core.annotation.UnSupportedJava17;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ReflectUtil;
 import net.sf.cglib.beans.BeanCopier;
@@ -67,6 +68,10 @@ public class CglibUtil {
 	 * @param target    目标bean对象
 	 * @param converter 转换器，无需可传{@code null}
 	 */
+	@UnSupportedJava17(
+			reason = "cglib:cglib:3.3.0 不兼容java17",
+			temporaryRepair = "--add-opens java.base/java.lang=ALL-UNNAMED"
+	)
 	public static void copy(Object source, Object target, Converter converter) {
 		Assert.notNull(source, "Source bean must be not null.");
 		Assert.notNull(target, "Target bean must be not null.");

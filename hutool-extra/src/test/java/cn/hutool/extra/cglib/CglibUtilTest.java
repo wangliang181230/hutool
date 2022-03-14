@@ -2,11 +2,13 @@ package cn.hutool.extra.cglib;
 
 import lombok.Data;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class CglibUtilTest {
 
 	@Test
+	@Ignore("不兼容java17")
 	public void copyTest() {
 		SampleBean bean = new SampleBean();
 		bean.setValue("Hello world");
