@@ -2,6 +2,7 @@ package cn.hutool.aop.proxy;
 
 import cn.hutool.aop.aspects.Aspect;
 import cn.hutool.aop.interceptor.CglibInterceptor;
+import cn.hutool.core.annotation.UnSupportedJava17;
 import net.sf.cglib.proxy.Enhancer;
 
 /**
@@ -15,6 +16,10 @@ public class CglibProxyFactory extends ProxyFactory{
 
 	@Override
 	@SuppressWarnings("unchecked")
+	@UnSupportedJava17(
+			reason = "cglib:cglib:3.3.0 不兼容java17",
+			temporaryRepair = "--add-opens java.base/java.lang=ALL-UNNAMED"
+	)
 	public <T> T proxy(T target, Aspect aspect) {
 		final Enhancer enhancer = new Enhancer();
 		enhancer.setSuperclass(target.getClass());

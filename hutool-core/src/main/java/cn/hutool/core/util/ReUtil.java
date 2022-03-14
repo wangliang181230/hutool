@@ -1,5 +1,6 @@
 package cn.hutool.core.util;
 
+import cn.hutool.core.annotation.UnSupportedJava17;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.exceptions.UtilException;
@@ -235,6 +236,10 @@ public class ReUtil {
 	 * @return 命名捕获组，key为分组名，value为对应值
 	 * @since 5.7.15
 	 */
+	@UnSupportedJava17(
+			reason = "Method<Pattern.namedGroups()>.setAccessible(boolean) 抛出 InaccessibleObjectException 异常",
+			temporaryRepair = "--add-opens java.base/java.util.regex=ALL-UNNAMED"
+	)
 	public static Map<String, String> getAllGroupNames(Pattern pattern, CharSequence content) {
 		if (null == content || null == pattern) {
 			return null;

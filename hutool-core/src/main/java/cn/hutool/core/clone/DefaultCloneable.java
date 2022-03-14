@@ -1,6 +1,7 @@
 package cn.hutool.core.clone;
 
 
+import cn.hutool.core.annotation.UnSupportedJava17;
 import cn.hutool.core.util.ReflectUtil;
 
 /**
@@ -16,6 +17,10 @@ public interface DefaultCloneable<T> extends java.lang.Cloneable {
 	 *
 	 * @return obj
 	 */
+	@UnSupportedJava17(
+			reason = "Method<Object.clone()>.setAccessible(boolean) 抛出 InaccessibleObjectException 异常",
+			temporaryRepair = "--add-opens java.base/java.lang=ALL-UNNAMED"
+	)
 	default T clone0() {
 		try {
 			return ReflectUtil.invoke(this, "clone");
