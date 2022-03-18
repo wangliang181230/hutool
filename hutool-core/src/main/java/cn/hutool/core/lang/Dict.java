@@ -5,11 +5,14 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.getter.BasicTypeGetter;
+import cn.hutool.core.lang.func.Func0;
+import cn.hutool.core.lang.func.LambdaUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -523,7 +526,7 @@ public class Dict extends LinkedHashMap<String, Object> implements BasicTypeGett
 	 * person.friends[5].name
 	 * </pre>
 	 *
-	 * @param <T> 目标类型
+	 * @param <T>        目标类型
 	 * @param expression 表达式
 	 * @return 对象
 	 * @see BeanPath#get(Object)
@@ -595,5 +598,22 @@ public class Dict extends LinkedHashMap<String, Object> implements BasicTypeGett
 			key = key.toLowerCase();
 		}
 		return key;
+	}
+
+	/**
+	 * 通过lambda批量设置值<br>
+	 * 实际使用时，可以使用getXXX的方法引用来完成键值对的赋值：
+	 * <pre>
+	 *     User user = GenericBuilder.of(User::new).with(User::setUsername, "hutool").build();
+	 *     Dict.create().setFields(user::getNickname, user::getUsername);
+	 * </pre>
+	 *
+	 * @param fields lambda,不能为空
+	 * @return this
+	 * @since 5.7.23
+	 */
+	public Dict setFields(Func0<?>... fields) {
+		Arrays.stream(fields).forEach(f -> set(LambdaUtil.getFieldName(f), f.callWithRuntimeException()));
+		return this;
 	}
 }
