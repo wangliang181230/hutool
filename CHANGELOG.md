@@ -2,7 +2,20 @@
 # 🚀Changelog
 
 -------------------------------------------------------------------------------------------------------------
-# 5.8.0 (2022-03-24)
+# 5.8.0.M2 (2022-03-30)
+
+### ❌不兼容特性
+* 【extra  】     【可能兼容问题】BeanCopierCache的key结构变更
+
+### 🐣新特性
+* 【core   】     MapUtil增加entry、ofEntries方法
+
+### 🐞Bug修复
+* 【core   】     IdcardUtil#getCityCodeByIdCard位数问题（issue#2224@Github）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.0.M1 (2022-03-28)
 
 ### ❌不兼容特性
 * 【db     】     【不向下兼容  】增加MongoDB4.x支持返回MongoClient变更（pr#568@Gitee）
@@ -16,6 +29,8 @@
 * 【cron   】     【可能兼容问题】SimpleValueParser改名为AbsValueParser，改为abstract
 * 【poi    】     【可能兼容问题】ExcelUtil.getBigWriter返回值改为BigExcelWriter
 * 【core   】     【可能兼容问题】Opt.ofEmptyAble参数由List改为Collection子类（pr#580@Gitee）
+* 【json   】     【可能兼容问题】JSON转Bean时，使用JSON本身的相关设置，而非默认（issue#2212@Github）
+* 【json   】     【可能兼容问题】JSONConfig中isOrder废弃，默认全部有序
 
 ### 🐣新特性
 * 【http   】     HttpRequest.form采用TableMap方式（issue#I4W427@Gitee）
@@ -40,6 +55,13 @@
 * 【http   】     GlobalHeaders增加系统属性allowUnsafeServerCertChange、allowUnsafeRenegotiation
 * 【http   】     UserAgentUtil 解析，增加MiUI/XiaoMi浏览器判断逻辑（pr#581@Gitee）
 * 【core   】     FileAppender添加锁构造（pr#2211@Github）
+* 【poi    】     ExcelReader增加构造（pr#2213@Github）
+* 【core   】     MapUtil提供change函数，EnumUtil提供getBy函数，通过lambda进行枚举字段映射（pr#583@Gitee）
+* 【core   】     CompareUtil增加comparingIndexed（pr#585@Gitee）
+* 【db     】     DruidDataSource构建时支持自定义参数（issue#I4ZKCW@Gitee）
+* 【poi    】     ExcelWriter增加addImg重载（issue#2218@Github）
+* 【bloomFilter】 增加FuncFilter
+* 【http   】     增加GlobalInterceptor（issue#2217）
 
 ### 🐞Bug修复
 * 【core   】     修复ObjectUtil.hasNull传入null返回true的问题（pr#555@Gitee）
@@ -56,6 +78,9 @@
 * 【http   】     修复标签误删问题（issue#I4Z7BV@Gitee）
 * 【core   】     修复Win下文件名带*问题（pr#584@Gitee）
 * 【core   】     FileUtil.getMimeType增加rar、7z支持（issue#I4ZBN0@Gitee）
+* 【json   】     JSON修复transient设置无效问题（issue#2212@Github）
+* 【core   】     修复IterUtil.getElementType获取结果为null的问题（issue#2222@Github）
+* 【core   】     修复农历转公历在闰月时错误（issue#I4ZSGJ@Gitee）
 
 -------------------------------------------------------------------------------------------------------------
 # 5.7.22 (2022-03-01)

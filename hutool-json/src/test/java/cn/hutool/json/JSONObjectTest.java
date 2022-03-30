@@ -188,10 +188,11 @@ public class JSONObjectTest {
 		JSONObject json = JSONUtil.createObj()//
 				.set("strValue", "null")//
 				.set("intValue", 123)//
+				// 子对象对应"null"字符串，如果忽略错误，跳过，否则抛出转换异常
 				.set("beanValue", "null")//
 				.set("list", JSONUtil.createArray().set("a").set("b"));
 
-		TestBean bean = json.toBean(TestBean.class);
+		TestBean bean = json.toBean(TestBean.class, true);
 		// 当JSON中为字符串"null"时应被当作字符串处理
 		Assert.assertEquals("null", bean.getStrValue());
 		// 当JSON中为字符串"null"时Bean中的字段类型不匹配应在ignoreError模式下忽略注入
@@ -288,7 +289,7 @@ public class JSONObjectTest {
 		userA.setDate(new Date());
 		userA.setSqs(CollectionUtil.newArrayList(new Seq(null), new Seq("seq2")));
 
-		JSONObject json = JSONUtil.parseObj(userA, false, true);
+		JSONObject json = JSONUtil.parseObj(userA, false);
 
 		Assert.assertTrue(json.containsKey("a"));
 		Assert.assertTrue(json.getJSONArray("sqs").getJSONObject(0).containsKey("seq"));
@@ -421,7 +422,6 @@ public class JSONObjectTest {
 	public void setDateFormatTest() {
 		JSONConfig jsonConfig = JSONConfig.create();
 		jsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
-		jsonConfig.setOrder(true);
 
 		JSONObject json = new JSONObject(jsonConfig);
 		json.append("date", DateUtil.parse("2020-06-05 11:16:11"));
@@ -434,7 +434,6 @@ public class JSONObjectTest {
 	public void setDateFormatTest2() {
 		JSONConfig jsonConfig = JSONConfig.create();
 		jsonConfig.setDateFormat("yyyy#MM#dd");
-		jsonConfig.setOrder(true);
 
 		Date date = DateUtil.parse("2020-06-05 11:16:11");
 		JSONObject json = new JSONObject(jsonConfig);
@@ -455,7 +454,6 @@ public class JSONObjectTest {
 	public void setCustomDateFormatTest() {
 		JSONConfig jsonConfig = JSONConfig.create();
 		jsonConfig.setDateFormat("#sss");
-		jsonConfig.setOrder(true);
 
 		Date date = DateUtil.parse("2020-06-05 11:16:11");
 		JSONObject json = new JSONObject(jsonConfig);
@@ -615,7 +613,7 @@ public class JSONObjectTest {
 
 	@Test
 	public void filterIncludeTest() {
-		JSONObject json1 = JSONUtil.createObj(JSONConfig.create().setOrder(true))
+		JSONObject json1 = JSONUtil.createObj(JSONConfig.create())
 				.set("a", "value1")
 				.set("b", "value2")
 				.set("c", "value3")
@@ -627,7 +625,7 @@ public class JSONObjectTest {
 
 	@Test
 	public void filterExcludeTest() {
-		JSONObject json1 = JSONUtil.createObj(JSONConfig.create().setOrder(true))
+		JSONObject json1 = JSONUtil.createObj(JSONConfig.create())
 				.set("a", "value1")
 				.set("b", "value2")
 				.set("c", "value3")
@@ -639,7 +637,7 @@ public class JSONObjectTest {
 
 	@Test
 	public void editTest() {
-		JSONObject json1 = JSONUtil.createObj(JSONConfig.create().setOrder(true))
+		JSONObject json1 = JSONUtil.createObj(JSONConfig.create())
 				.set("a", "value1")
 				.set("b", "value2")
 				.set("c", "value3")
@@ -659,7 +657,7 @@ public class JSONObjectTest {
 
 	@Test
 	public void toUnderLineCaseTest() {
-		JSONObject json1 = JSONUtil.createObj(JSONConfig.create().setOrder(true))
+		JSONObject json1 = JSONUtil.createObj(JSONConfig.create())
 				.set("aKey", "value1")
 				.set("bJob", "value2")
 				.set("cGood", "value3")
@@ -674,7 +672,7 @@ public class JSONObjectTest {
 
 	@Test
 	public void nullToEmptyTest() {
-		JSONObject json1 = JSONUtil.createObj(JSONConfig.create().setOrder(true).setIgnoreNullValue(false))
+		JSONObject json1 = JSONUtil.createObj(JSONConfig.create().setIgnoreNullValue(false))
 				.set("a", null)
 				.set("b", "value2");
 

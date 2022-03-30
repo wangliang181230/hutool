@@ -167,4 +167,27 @@ public class HttpRequestTest {
 		execute = HttpRequest.get(url).setMaxRedirectCount(1).execute();
 		Console.log(execute.getStatus(), execute.header(Header.LOCATION));
 	}
+
+	@Test
+	@Ignore
+	public void addInterceptorTest() {
+		HttpUtil.createGet("https://hutool.cn").addInterceptor(Console::log).execute();
+	}
+
+	@Test
+	@Ignore
+	public void addGlobalInterceptorTest() {
+		GlobalInterceptor.INSTANCE.addInterceptor(Console::log);
+		HttpUtil.createGet("https://hutool.cn").execute();
+	}
+
+	@Test
+	@Ignore
+	public void getWithFormTest(){
+		String url = "https://postman-echo.com/get";
+		final Map<String, Object> map = new HashMap<>();
+		map.put("aaa", "application+1@qqq.com");
+		HttpRequest request =HttpUtil.createGet(url).form(map);
+		Console.log(request.execute().body());
+	}
 }

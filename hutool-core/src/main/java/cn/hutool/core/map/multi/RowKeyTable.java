@@ -5,7 +5,7 @@ import cn.hutool.core.collection.ComputeIter;
 import cn.hutool.core.collection.IterUtil;
 import cn.hutool.core.collection.TransIter;
 import cn.hutool.core.map.AbsEntry;
-import cn.hutool.core.map.SimpleEntry;
+import cn.hutool.core.map.MapUtil;
 
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -39,6 +39,16 @@ public class RowKeyTable<R, C, V> extends AbsTable<R, C, V> {
 	 */
 	public RowKeyTable() {
 		this(new HashMap<>());
+	}
+
+	/**
+	 * 构造
+	 *
+	 * @param isLinked 是否有序，有序则使用{@link java.util.LinkedHashMap}作为原始Map
+	 * @since 5.8.0
+	 */
+	public RowKeyTable(boolean isLinked) {
+		this(MapUtil.newHashMap(isLinked), () -> MapUtil.newHashMap(isLinked));
 	}
 
 	/**
@@ -130,7 +140,7 @@ public class RowKeyTable<R, C, V> extends AbsTable<R, C, V> {
 		@Override
 		public Iterator<Map.Entry<C, Map<R, V>>> iterator() {
 			return new TransIter<>(columnKeySet.iterator(),
-					c -> new SimpleEntry<>(c, getColumn(c)));
+					c -> MapUtil.entry(c, getColumn(c)));
 		}
 
 		@Override

@@ -136,7 +136,7 @@ public class CompareUtil {
 	}
 
 	/**
-	 * 中文比较器
+	 * 中文（拼音）比较器
 	 *
 	 * @param keyExtractor 从对象中提取中文(参与比较的内容)
 	 * @param reverse      是否反序
@@ -151,5 +151,40 @@ public class CompareUtil {
 			return (o1, o2) -> pinyinComparator.compare(keyExtractor.apply(o2), keyExtractor.apply(o1));
 		}
 		return (o1, o2) -> pinyinComparator.compare(keyExtractor.apply(o1), keyExtractor.apply(o2));
+	}
+
+	/**
+	 * 索引比较器<br>
+	 * 通过keyExtractor函数，提取对象的某个属性或规则，根据提供的排序数组，完成比较<br>
+	 *
+	 * @param keyExtractor 从对象中提取中文(参与比较的内容)
+	 * @param objs         参与排序的数组，数组的元素位置决定了对象的排序先后
+	 * @param <T>          对象类型
+	 * @param <U>          数组对象类型
+	 * @return 索引比较器
+	 * @since 5.8.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T, U> Comparator<T> comparingIndexed(Function<? super T, ? extends U> keyExtractor, U... objs) {
+		return comparingIndexed(keyExtractor, false, objs);
+	}
+
+	/**
+	 * 索引比较器<br>
+	 * 通过keyExtractor函数，提取对象的某个属性或规则，根据提供的排序数组，完成比较<br>
+	 *
+	 * @param keyExtractor 从对象中提取排序键的函数(参与比较的内容)
+	 * @param atEndIfMiss  如果不在列表中是否排在后边
+	 * @param objs         参与排序的数组，数组的元素位置决定了对象的排序先后
+	 * @param <T>          对象类型
+	 * @param <U>          数组对象类型
+	 * @return 索引比较器
+	 * @since 5.8.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T, U> Comparator<T> comparingIndexed(Function<? super T, ? extends U> keyExtractor, boolean atEndIfMiss, U... objs) {
+		Objects.requireNonNull(keyExtractor);
+		IndexedComparator<U> indexedComparator = new IndexedComparator<>(atEndIfMiss, objs);
+		return (o1, o2) -> indexedComparator.compare(keyExtractor.apply(o1), keyExtractor.apply(o2));
 	}
 }

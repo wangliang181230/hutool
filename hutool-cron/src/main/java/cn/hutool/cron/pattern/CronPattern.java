@@ -1,10 +1,13 @@
 package cn.hutool.cron.pattern;
 
-import cn.hutool.cron.pattern.matcher.MatcherTable;
-import cn.hutool.cron.pattern.parser.CronPatternParser;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.cron.pattern.matcher.PatternMatcher;
+import cn.hutool.cron.pattern.parser.PatternParser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -66,7 +69,18 @@ import java.util.TimeZone;
 public class CronPattern {
 
 	private final String pattern;
-	private final MatcherTable matcherTable;
+	private final List<PatternMatcher> matchers;
+
+	/**
+	 * 解析表达式为 CronPattern
+	 *
+	 * @param pattern 表达式
+	 * @return CronPattern
+	 * @since 5.8.0
+	 */
+	public static CronPattern of(String pattern) {
+		return new CronPattern(pattern);
+	}
 
 	/**
 	 * 构造
@@ -75,10 +89,8 @@ public class CronPattern {
 	 */
 	public CronPattern(String pattern) {
 		this.pattern = pattern;
-		this.matcherTable = CronPatternParser.parse(pattern);
+		this.matchers = PatternParser.parse(pattern);
 	}
-
-	// --------------------------------------------------------------------------------------- match start
 
 	/**
 	 * 给定时间是否匹配定时任务表达式
@@ -112,7 +124,74 @@ public class CronPattern {
 	 * @param isMatchSecond 是否匹配秒
 	 * @return 如果匹配返回 {@code true}, 否则返回 {@code false}
 	 */
-	public boolean match(GregorianCalendar calendar, boolean isMatchSecond) {
+	public boolean match(Calendar calendar, boolean isMatchSecond) {
+		final int[] fields = getFields(calendar, isMatchSecond);
+		return match(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6]);
+	}
+
+	/**
+	 * 返回匹配到的下一个时间<br>
+	 * TODO 周定义后，结果错误，需改进
+	 *
+	 * @param calendar 时间
+	 * @return 匹配到的下一个时间
+	 */
+	public Calendar nextMatchAfter(Calendar calendar) {
+		return nextMatchAfter(getFields(calendar, true), calendar.getTimeZone());
+	}
+
+	@Override
+	public String toString() {
+		return this.pattern;
+	}
+
+	/**
+	 * 给定时间是否匹配定时任务表达式
+	 *
+	 * @param second     秒数，-1表示不匹配此项
+	 * @param minute     分钟
+	 * @param hour       小时
+	 * @param dayOfMonth 天
+	 * @param month      月，从1开始
+	 * @param dayOfWeek  周，从0开始，0和7都表示周日
+	 * @param year       年
+	 * @return 如果匹配返回 {@code true}, 否则返回 {@code false}
+	 */
+	private boolean match(int second, int minute, int hour, int dayOfMonth, int month, int dayOfWeek, int year) {
+		for (PatternMatcher matcher : matchers) {
+			if (matcher.match(second, minute, hour, dayOfMonth, month, dayOfWeek, year)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 获取下一个最近的匹配日期时间
+	 *
+	 * @param values 时间字段值
+	 * @param zone   时区
+	 * @return {@link Calendar}
+	 */
+	private Calendar nextMatchAfter(int[] values, TimeZone zone) {
+		final List<Calendar> nextMatches = new ArrayList<>(matchers.size());
+		for (PatternMatcher matcher : matchers) {
+			nextMatches.add(matcher.nextMatchAfter(values, zone));
+		}
+		// 返回匹配到的最早日期
+		return CollUtil.min(nextMatches);
+	}
+
+	/**
+	 * 获取处理后的字段列表<br>
+	 * 月份从1开始，周从0开始
+	 *
+	 * @param calendar      {@link Calendar}
+	 * @param isMatchSecond 是否匹配秒，{@link false}则秒返回-1
+	 * @return 字段值列表
+	 * @since 5.8.0
+	 */
+	private int[] getFields(Calendar calendar, boolean isMatchSecond) {
 		final int second = isMatchSecond ? calendar.get(Calendar.SECOND) : -1;
 		final int minute = calendar.get(Calendar.MINUTE);
 		final int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -120,13 +199,6 @@ public class CronPattern {
 		final int month = calendar.get(Calendar.MONTH) + 1;// 月份从1开始
 		final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1; // 星期从0开始，0和7都表示周日
 		final int year = calendar.get(Calendar.YEAR);
-
-		return this.matcherTable.match(second, minute, hour, dayOfMonth, month, dayOfWeek, year);
-	}
-	// --------------------------------------------------------------------------------------- match end
-
-	@Override
-	public String toString() {
-		return this.pattern;
+		return new int[]{second, minute, hour, dayOfMonth, month, dayOfWeek, year};
 	}
 }
