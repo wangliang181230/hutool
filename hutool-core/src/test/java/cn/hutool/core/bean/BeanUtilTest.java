@@ -492,7 +492,7 @@ public class BeanUtilTest {
 	}
 
 	/**
-	 * <a href="https://github.com/looly/hutool/issues/1173">#1173</a>
+	 * <a href="https://github.com/dromara/hutool/issues/1173">#1173</a>
 	 */
 	@Test
 	public void beanToBeanOverlayFieldTest() {
@@ -560,6 +560,24 @@ public class BeanUtilTest {
 		BeanUtil.copyProperties(info, newFood, copyOptions);
 		Assert.assertEquals(info.getBookID(), newFood.getBookID());
 		Assert.assertNull(newFood.getCode());
+	}
+
+	@Test
+	public void copyBeanPropertiesFunctionFilterTest() {
+		//https://gitee.com/dromara/hutool/pulls/590
+		Person o = new Person();
+		o.setName("asd");
+		o.setAge(123);
+		o.setOpenid("asd");
+
+		@SuppressWarnings("unchecked")
+		CopyOptions copyOptions = CopyOptions.create().setIgnoreProperties(Person::getAge,Person::getOpenid);
+		Person n = new Person();
+		BeanUtil.copyProperties(o, n, copyOptions);
+
+		// 是否忽略拷贝属性
+		Assert.assertNotEquals(o.getAge(),n.getAge());
+		Assert.assertNotEquals(o.getOpenid(),n.getOpenid());
 	}
 
 	@Data

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -102,5 +103,45 @@ public class IterUtilTest {
 	public static class Car {
 		private String carNumber;
 		private String carName;
+	}
+
+	@Test
+	public void filterTest(){
+		List<String> obj2 = ListUtil.toList("3");
+		List<String> obj = ListUtil.toList("1", "3");
+
+		IterUtil.filter(obj.iterator(), obj2::contains);
+
+		Assert.assertEquals(1, obj.size());
+		Assert.assertEquals("3", obj.get(0));
+	}
+
+	@Test
+	public void filteredTest(){
+		List<String> obj2 = ListUtil.toList("3");
+		List<String> obj = ListUtil.toList("1", "3");
+
+		final FilterIter<String> filtered = IterUtil.filtered(obj.iterator(), obj2::contains);
+
+		Assert.assertEquals("3", filtered.next());
+		Assert.assertFalse(filtered.hasNext());
+	}
+
+	@Test
+	public void filterToListTest(){
+		List<String> obj2 = ListUtil.toList("3");
+		List<String> obj = ListUtil.toList("1", "3");
+
+		final List<String> filtered = IterUtil.filterToList(obj.iterator(), obj2::contains);
+
+		Assert.assertEquals(1, filtered.size());
+		Assert.assertEquals("3", filtered.get(0));
+	}
+
+	@Test
+	public void getTest() {
+		HashSet<String> set = CollUtil.set(true, "A", "B", "C", "D");
+		String str = IterUtil.get(set.iterator(), 2);
+		Assert.assertEquals("C", str);
 	}
 }

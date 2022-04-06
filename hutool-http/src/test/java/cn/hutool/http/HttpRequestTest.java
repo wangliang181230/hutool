@@ -171,13 +171,16 @@ public class HttpRequestTest {
 	@Test
 	@Ignore
 	public void addInterceptorTest() {
-		HttpUtil.createGet("https://hutool.cn").addInterceptor(Console::log).execute();
+		HttpUtil.createGet("https://hutool.cn")
+				.addInterceptor(Console::log)
+				.addResponseInterceptor((res)-> Console.log(res.getStatus()))
+				.execute();
 	}
 
 	@Test
 	@Ignore
 	public void addGlobalInterceptorTest() {
-		GlobalInterceptor.INSTANCE.addInterceptor(Console::log);
+		GlobalInterceptor.INSTANCE.addRequestInterceptor(Console::log);
 		HttpUtil.createGet("https://hutool.cn").execute();
 	}
 
@@ -189,5 +192,20 @@ public class HttpRequestTest {
 		map.put("aaa", "application+1@qqq.com");
 		HttpRequest request =HttpUtil.createGet(url).form(map);
 		Console.log(request.execute().body());
+	}
+
+	@Test
+	public void issueI50NHQTest(){
+		String url = "http://127.0.0.1/devicerecord/list";
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("start", "2022-03-31 00:00:00");
+		params.put("end", "2022-03-31 23:59:59");
+		params.put("page", 1);
+		params.put("limit", 10);
+
+		String result = HttpRequest.get(url)
+				.header("token", "123")
+				.form(params).toString();
+		Console.log(result);
 	}
 }

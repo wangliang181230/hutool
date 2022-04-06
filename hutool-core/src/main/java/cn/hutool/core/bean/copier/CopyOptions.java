@@ -1,11 +1,14 @@
 package cn.hutool.core.bean.copier;
 
 import cn.hutool.core.lang.Editor;
+import cn.hutool.core.lang.func.Func1;
+import cn.hutool.core.lang.func.LambdaUtil;
 import cn.hutool.core.util.ArrayUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
@@ -156,6 +159,19 @@ public class CopyOptions implements Serializable {
 	 */
 	public CopyOptions setIgnoreProperties(String... ignoreProperties) {
 		return setPropertiesFilter((field, o) -> false == ArrayUtil.contains(ignoreProperties, field.getName()));
+	}
+
+	/**
+	 * 设置忽略的目标对象中属性列表，设置一个属性列表，不拷贝这些属性值，Lambda方式
+	 *
+	 * @param funcs 忽略的目标对象中属性列表，设置一个属性列表，不拷贝这些属性值
+	 * @return CopyOptions
+	 * @since 5.8.0
+	 */
+	@SuppressWarnings("unchecked")
+	public <P, R> CopyOptions setIgnoreProperties(Func1<P, R>... funcs) {
+		final Set<String> ignoreProperties = ArrayUtil.mapToSet(funcs, LambdaUtil::getFieldName);
+		return setPropertiesFilter((field, o) -> false == ignoreProperties.contains(field.getName()));
 	}
 
 	/**

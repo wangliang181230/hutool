@@ -2,16 +2,43 @@
 # 🚀Changelog
 
 -------------------------------------------------------------------------------------------------------------
-# 5.8.0.M2 (2022-03-30)
+
+# 5.8.0.M3 (2022-04-06)
+
+### ❌不兼容特性
+
+### 🐣新特性
+* 【core   】     CopyOptions支持以Lambda方式设置忽略属性列表（pr#590@Gitee）
+
+### 🐞Bug修复
+* 【core   】     修复UserAgentUtil识别Linux出错（issue#I50YGY@Gitee）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.0.M2 (2022-04-02)
 
 ### ❌不兼容特性
 * 【extra  】     【可能兼容问题】BeanCopierCache的key结构变更
+* 【http   】     【可能兼容问题】HttpInterceptor增加泛型标识，HttpRequest中配置汇总于HttpConfig
+* 【core   】     【可能兼容问题】UrlQuery.addQuery参数2从String变更为Object
+* 【core   】     【可能兼容问题】WorkbookUtil.createBook实现改为WorkbookFactory.create
 
 ### 🐣新特性
 * 【core   】     MapUtil增加entry、ofEntries方法
+* 【core   】     ZipWriter增加add方法重载
+* 【core   】     IterUtil增加filtered，增加FilterIter（issue#2228）
+* 【core   】     增加NodeListIter、ResettableIter
+* 【crypto 】     HmacAlgorithm增加SM4CMAC（issue#2206@Github）
+* 【http   】     增加HttpConfig，响应支持拦截（issue#2217@Github）
+* 【core   】     增加BlockPolicy，ThreadUtil增加newFixedExecutor方法（pr#2231@Github）
+* 【crypto 】     BCMacEngine、Mac、CBCBlockCipherMacEngine、SM4MacEngine（issue#2206@Github）
 
 ### 🐞Bug修复
 * 【core   】     IdcardUtil#getCityCodeByIdCard位数问题（issue#2224@Github）
+* 【core   】     修复urlWithParamIfGet函数逻辑问题（issue#I50IUD@Gitee）
+* 【core   】     修复IoUtil.readBytes限制长度读取问题（issue#2230@Github）
+* 【http   】     修复HttpRequest中编码对URL无效的问题（issue#I50NHQ@Gitee）
+* 【poi    】     修复读取excel抛NPE错误（pr#2234@Github）
 
 -------------------------------------------------------------------------------------------------------------
 
