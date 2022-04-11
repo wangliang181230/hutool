@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.net.SSLProtocols;
+import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -195,17 +196,12 @@ public class HttpRequestTest {
 	}
 
 	@Test
-	public void issueI50NHQTest(){
-		String url = "http://127.0.0.1/devicerecord/list";
-		HashMap<String, Object> params = new HashMap<>();
-		params.put("start", "2022-03-31 00:00:00");
-		params.put("end", "2022-03-31 23:59:59");
-		params.put("page", 1);
-		params.put("limit", 10);
+	@Ignore
+	public void urlWithParamIfGetTest(){
+		UrlBuilder urlBuilder = new UrlBuilder();
+		urlBuilder.setScheme("https").setHost("hutool.cn");
 
-		String result = HttpRequest.get(url)
-				.header("token", "123")
-				.form(params).toString();
-		Console.log(result);
+		HttpRequest httpRequest = new HttpRequest(urlBuilder);
+		httpRequest.setMethod(Method.GET).execute();
 	}
 }

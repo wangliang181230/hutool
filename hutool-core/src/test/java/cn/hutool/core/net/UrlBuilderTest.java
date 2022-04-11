@@ -140,6 +140,13 @@ public class UrlBuilderTest {
 	}
 
 	@Test
+	public void ofNullQueryTest() {
+		final UrlBuilder builder = UrlBuilder.of("http://www.hutool.cn/aaa/bbb", CharsetUtil.CHARSET_UTF_8);
+		Assert.assertNotNull(builder.getQuery());
+		Assert.assertNull(builder.getQuery().get("a"));
+	}
+
+	@Test
 	public void ofWithChineseTest() {
 		final UrlBuilder builder = UrlBuilder.ofHttp("www.hutool.cn/aaa/bbb/?a=张三&b=%e6%9d%8e%e5%9b%9b#frag1", CharsetUtil.CHARSET_UTF_8);
 		Assert.assertEquals("http", builder.getScheme());
@@ -404,5 +411,19 @@ public class UrlBuilderTest {
 		final UrlBuilder builder = UrlBuilder.of(url);
 		params.forEach(builder::addQuery);
 		Assert.assertEquals("http://127.0.0.1/devicerecord/list?start=2022-03-31%2000:00:00&end=2022-03-31%2023:59:59&page=1&limit=10", builder.toString());
+	}
+
+	@Test
+	public void issue2242Test(){
+
+	}
+
+	@Test
+	public void issue2243Test(){
+		// https://github.com/dromara/hutool/issues/2243
+		// 如果用户已经做了%编码，不应该重复编码
+		String url = "https://hutool.cn/v1.0?privateNum=%2B8616512884988";
+		final String s = UrlBuilder.of(url, null).setCharset(CharsetUtil.CHARSET_UTF_8).toString();
+		Assert.assertEquals(url, s);
 	}
 }
