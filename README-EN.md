@@ -144,18 +144,18 @@ We provide the T-Shirt and Sweater with Hutool Logo, please visit the shop：
 <dependency>
     <groupId>cn.hutool</groupId>
     <artifactId>hutool-all</artifactId>
-    <version>5.8.0.M3</version>
+    <version>5.8.0.M4</version>
 </dependency>
 ```
 
 ### 🍐Gradle
 ```
-implementation 'cn.hutool:hutool-all:5.8.0.M3'
+implementation 'cn.hutool:hutool-all:5.8.0.M4'
 ```
 
 ## 📥Download
 
-- [Maven Repo](https://repo1.maven.org/maven2/cn/hutool/hutool-all/5.8.0.M3/)
+- [Maven Repo](https://repo1.maven.org/maven2/cn/hutool/hutool-all/5.8.0.M4/)
 
 > 🔔️note:
 > Hutool 5.x supports JDK8+ and is not tested on Android platforms, and cannot guarantee that all tool classes or tool methods are available.
@@ -206,8 +206,6 @@ Hutool welcomes anyone to contribute code to Hutool, but the author suffers from
 -------------------------------------------------------------------------------
 
 ## ⭐Star Hutool
-
-[![Giteye chart](https://chart.giteye.net/gitee/dromara/hutool/GMSL7VDA.png)](https://giteye.net/chart/GMSL7VDA)
 
 [![Stargazers over time](https://starchart.cc/dromara/hutool.svg)](https://starchart.cc/dromara/hutool)
 

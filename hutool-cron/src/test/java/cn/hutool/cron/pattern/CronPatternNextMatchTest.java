@@ -87,4 +87,14 @@ public class CronPatternNextMatchTest {
 		Assert.assertTrue(pattern.match(calendar, true));
 		Assert.assertEquals("2022-01-12 00:12:23", DateUtil.date(calendar).toString());
 	}
+
+	@Test
+	public void nextMatchAfterByWeekTest(){
+		CronPattern pattern = new CronPattern("1 1 1 * * Sat *");
+		// 周日，下个周六在4月9日
+		final DateTime time = DateUtil.parse("2022-04-03");
+		assert time != null;
+		final Calendar calendar = pattern.nextMatchAfter(time.toCalendar());
+		Assert.assertEquals("2022-04-09 01:01:01", DateUtil.date(calendar).toString());
+	}
 }

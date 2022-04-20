@@ -65,6 +65,27 @@ public class PatternMatcher {
 	/**
 	 * 给定时间是否匹配定时任务表达式
 	 *
+	 * @param fields 时间字段值，{second, minute, hour, dayOfMonth, month, dayOfWeek, year}
+	 * @return 如果匹配返回 {@code true}, 否则返回 {@code false}
+	 */
+	public boolean match(int[] fields) {
+		return match(fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6]);
+	}
+
+	/**
+	 * 给定周的值是否匹配定时任务表达式对应部分
+	 *
+	 * @param dayOfWeekValue dayOfMonth值，星期从0开始，0和7都表示周日
+	 * @return 如果匹配返回 {@code true}, 否则返回 {@code false}
+	 * @since 5.8.0
+	 */
+	public boolean matchWeek(int dayOfWeekValue) {
+		return matchers[5].match(dayOfWeekValue);
+	}
+
+	/**
+	 * 给定时间是否匹配定时任务表达式
+	 *
 	 * @param second     秒数，-1表示不匹配此项
 	 * @param minute     分钟
 	 * @param hour       小时
@@ -74,11 +95,11 @@ public class PatternMatcher {
 	 * @param year       年
 	 * @return 如果匹配返回 {@code true}, 否则返回 {@code false}
 	 */
-	public boolean match(int second, int minute, int hour, int dayOfMonth, int month, int dayOfWeek, int year) {
+	private boolean match(int second, int minute, int hour, int dayOfMonth, int month, int dayOfWeek, int year) {
 		return ((second < 0) || matchers[0].match(second)) // 匹配秒（非秒匹配模式下始终返回true）
 				&& matchers[1].match(minute)// 匹配分
 				&& matchers[2].match(hour)// 匹配时
-				&& isMatchDayOfMonth(matchers[3], dayOfMonth, month, Year.isLeap(year))// 匹配日
+				&& matchDayOfMonth(matchers[3], dayOfMonth, month, Year.isLeap(year))// 匹配日
 				&& matchers[4].match(month) // 匹配月
 				&& matchers[5].match(dayOfWeek)// 匹配周
 				&& matchers[6].match(year);// 匹配年
@@ -93,7 +114,7 @@ public class PatternMatcher {
 	 * @param isLeapYear 是否闰年
 	 * @return 是否匹配
 	 */
-	private static boolean isMatchDayOfMonth(PartMatcher matcher, int dayOfMonth, int month, boolean isLeapYear) {
+	private static boolean matchDayOfMonth(PartMatcher matcher, int dayOfMonth, int month, boolean isLeapYear) {
 		return ((matcher instanceof DayOfMonthMatcher) //
 				? ((DayOfMonthMatcher) matcher).match(dayOfMonth, month, isLeapYear) //
 				: matcher.match(dayOfMonth));
@@ -124,14 +145,50 @@ public class PatternMatcher {
 		final Calendar calendar = Calendar.getInstance(zone);
 		calendar.set(Calendar.MILLISECOND, 0);
 
+		final int[] newValues = nextMatchValuesAfter(values);
+		for (int i = 0; i < newValues.length; i++) {
+			// 周无需设置
+			if (i != Part.DAY_OF_WEEK.ordinal()) {
+				setValue(calendar, Part.of(i), newValues[i]);
+			}
+		}
+
+		return calendar;
+	}
+
+	/**
+	 * 获取下一个匹配日期时间<br>
+	 * 获取方法是，先从年开始查找对应部分的下一个值：
+	 * <ul>
+	 *     <li>如果此部分下个值不变，获取下一个部分</li>
+	 *     <li>如果此部分下个值大于给定值，以下所有值置为最小值</li>
+	 *     <li>如果此部分下个值小于给定值，回退到上一个值获取下一个新值，之后的值置为最小值</li>
+	 * </ul>
+	 *
+	 * <pre>
+	 *        秒 分 时 日 月 周 年
+	 *     下 &lt;-----------------&gt; 上
+	 * </pre>
+	 *
+	 * @param values 时间字段值，{second, minute, hour, dayOfMonth, month, dayOfWeek, year}
+	 * @return {@link Calendar}，毫秒数为0
+	 */
+	private int[] nextMatchValuesAfter(int[] values) {
+		final int[] newValues = values.clone();
+
 		int i = Part.YEAR.ordinal();
 		// 新值，-1表示标识为回退
 		int nextValue = 0;
 		while (i >= 0) {
+			if (i == Part.DAY_OF_WEEK.ordinal()) {
+				// 周不参与计算
+				i--;
+				continue;
+			}
 			nextValue = matchers[i].nextAfter(values[i]);
 			if (nextValue > values[i]) {
 				// 此部分正常获取新值，结束循环，后续的部分置最小值
-				setValue(calendar, Part.of(i), nextValue);
+				newValues[i] = nextValue;
 				i--;
 				break;
 			} else if (nextValue < values[i]) {
@@ -140,17 +197,21 @@ public class PatternMatcher {
 				nextValue = -1;// 标记回退查找
 				break;
 			}
-			// 值不变，设置后检查下一个部分
-			setValue(calendar, Part.of(i), nextValue);
+			// 值不变，检查下一个部分
 			i--;
 		}
 
 		// 值产生回退，向上查找变更值
 		if (-1 == nextValue) {
 			while (i <= Part.YEAR.ordinal()) {
+				if (i == Part.DAY_OF_WEEK.ordinal()) {
+					// 周不参与计算
+					i++;
+					continue;
+				}
 				nextValue = matchers[i].nextAfter(values[i] + 1);
 				if (nextValue > values[i]) {
-					setValue(calendar, Part.of(i), nextValue);
+					newValues[i] = nextValue;
 					i--;
 					break;
 				}
@@ -159,25 +220,22 @@ public class PatternMatcher {
 		}
 
 		// 修改值以下的字段全部归最小值
-		setToMin(calendar, i);
-
-		return calendar;
+		setToMin(newValues, i);
+		return newValues;
 	}
 
 	/**
 	 * 设置从{@link Part#SECOND}到指定部分，全部设置为最小值
 	 *
-	 * @param calendar {@link Calendar}
-	 * @param toPart   截止的部分
-	 * @return {@link Calendar}
+	 * @param values 值数组
+	 * @param toPart 截止的部分
 	 */
-	private Calendar setToMin(Calendar calendar, int toPart) {
+	private void setToMin(int[] values, int toPart) {
 		Part part;
 		for (int i = 0; i <= toPart; i++) {
 			part = Part.of(i);
-			setValue(calendar, part, getMin(part));
+			values[i] = getMin(part);
 		}
-		return calendar;
 	}
 
 	/**
@@ -224,6 +282,7 @@ public class PatternMatcher {
 		}
 		//noinspection MagicConstant
 		calendar.set(part.getCalendarField(), value);
+		//Console.log("Set [{}] as [{}]", part, value);
 		return calendar;
 	}
 }

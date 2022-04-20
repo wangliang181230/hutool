@@ -52,6 +52,21 @@ public class ImgTest {
 				.write(FileUtil.file("d:/test/test2_result.png"));
 	}
 
+
+	@Test
+	@Ignore
+	public void pressTextFullScreenTest() {
+		Img.from(FileUtil.file("d:/test/1435859438434136064.jpg"))
+				.setTargetImageType(ImgUtil.IMAGE_TYPE_PNG)
+				.pressTextFull("版权所有     ", Color.LIGHT_GRAY,
+						new Font("黑体", Font.PLAIN, 30),
+						4,
+						30,
+						0.8f)
+				.write(FileUtil.file("d:/test/2_result.png"));
+
+	}
+
 	@Test
 	@Ignore
 	public void pressImgTest() {

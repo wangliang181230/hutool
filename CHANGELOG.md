@@ -3,18 +3,46 @@
 
 -------------------------------------------------------------------------------------------------------------
 
-# 5.8.0.M3 (2022-04-10)
+# 5.8.0.M4 (2022-04-19)
+
+### ❌不兼容特性
+* 【json   】     【可能兼容问题】JSONArray删除部分构造
+* 【json   】     【可能兼容问题】JSONTokener使用InputStream作为源时，由系统编码变更为UTF-8
+
+### 🐣新特性
+* 【core   】     BeanUtil增加toBean重载（pr#598@Gitee）
+* 【json   】     新增JSONParser
+* 【json   】     JSON新增在解析时的过滤方法（issue#I52O85@Gitee）
+* 【core   】     添加ArrayUtil.distinct、CollUtil.distinct重载（issue#2256@Github）
+* 【core   】     添加TransMap、FuncMap、ReferenceConcurrentMap、WeakConcurrentMap
+* 【json   】     添加ObjectMapper
+
+### 🐞Bug修复
+* 【core   】     修复StrUtil.firstNonX非static问题（issue#2257@Github）
+* 【core   】     修复SimpleCache线程安全问题
+* 【core   】     修复ClassLoaderUtil中可能的关联ClassLoader错位问题
+* 【extra  】     修复Sftp错误内容解析大小写问题（issue#I53GPI@Gitee）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.0.M3 (2022-04-14)
 
 ### ❌不兼容特性
 * 【core   】     StreamProgress#progress方法参数变更为2个（pr#594@Gitee）
 * 【core   】     SimpleCache的raw key使用Mutable
 * 【core   】     ArrayUtil.join删除已经弃用的无用原始类型重载
+* 【core   】     删除Holder类，ReUtil.extractMultiAndDelPre方法参数改为Mutable
 
 ### 🐣新特性
 * 【core   】     CopyOptions支持以Lambda方式设置忽略属性列表（pr#590@Gitee）
 * 【core   】     增加中文姓名正则及其校验（pr#592@Gitee）
 * 【core   】     Snowflake支持sequence使用随机数（issue#I51EJY@Gitee）
 * 【core   】     JarClassLoader增加构造（pr#593@Gitee）
+* 【core   】     增加Pid，以便获取单例pid
+* 【core   】     Img增加全覆盖水印pressTextFull（pr#595@Gitee）
+* 【core   】     ByteUtil.numberToBytes增加Byte判断（issue#2252@Github）
+* 【core   】     CopyOptions添加converter，可以自定义非全局类型转换
+* 【core   】     添加了设置从绝对路径加载数据库配置文件的功能（pr#2253@Github）
 
 ### 🐞Bug修复
 * 【core   】     修复UserAgentUtil识别Linux出错（issue#I50YGY@Gitee）
@@ -22,6 +50,7 @@
 * 【core   】     修复UrlBuilder重复编码的问题（issue#2243@Github）
 * 【http   】     修复HttpRequest中urlQuery，处理get请求参数的时候会导致空指针异常（pr#2248@Github）
 * 【core   】     修复SimpleCache在get时未使用读锁可能导致的问题
+* 【aop    】     修复JdkInterceptor before 方法拦截 return false 仍然执行了 after 的拦截问题（issue#I5237G@Gitee）
 
 -------------------------------------------------------------------------------------------------------------
 
