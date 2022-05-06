@@ -104,6 +104,13 @@ public class RedisDS implements Closeable, Serializable {
 			setting.toBean(group, config);
 		}
 
+		//issue#I54TZ9
+		final Long maxWaitMillis = setting.getLong("maxWaitMillis");
+		if(null != maxWaitMillis){
+			//noinspection deprecation
+			config.setMaxWaitMillis(maxWaitMillis);
+		}
+
 		this.pool = new JedisPool(config,
 				// 地址
 				setting.getStr("host", group, Protocol.DEFAULT_HOST),

@@ -3,6 +3,24 @@
 
 -------------------------------------------------------------------------------------------------------------
 
+# 5.8.0 (2022-05-06)
+
+### ❌不兼容特性
+* 【extra  】     升级jakarta.validation-api到3.x，包名变更导致不能向下兼容
+* 【core   】     BeanUtil删除了beanToMap(Object)方法，因为有可变参数的方法，这个删除可能导致直接升级找不到方法，重新编译项目即可。
+
+### 🐣新特性
+* 【core   】     Singleton增加部分方法（pr#609@Gitee）
+* 【core   】     BeanUtil增加beanToMap重载（pr#2292@Github）
+* 【core   】     Assert增加对应的equals及notEquals方法（pr#612@Gitee）
+* 【core   】     Assert增加对应的equals及notEquals方法（pr#612@Gitee）
+* 【core   】     DigestUtil增加sha512方法（issue#2298@Github）
+
+### 🐞Bug修复
+* 【db     】     修复RedisDS无法设置maxWaitMillis问题（issue#I54TZ9@Gitee）
+
+-------------------------------------------------------------------------------------------------------------
+
 # 5.8.0.M4 (2022-04-27)
 
 ### ❌不兼容特性
@@ -23,6 +41,8 @@
 * 【core   】     ReflectUtil.newInstanceIfPossible添加枚举、数组等类型的默认实现
 * 【core   】     CombinationAnnotationElement增加过滤（pr#605@Gitee）
 * 【all    】     精简CHANGELOG
+* 【core   】     新增AnsiEncoder
+* 【log    】     新增彩色日式输出风格ConsoleColorLog（pr#607@Gitee）
 
 ### 🐞Bug修复
 * 【core   】     修复StrUtil.firstNonX非static问题（issue#2257@Github）
