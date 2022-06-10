@@ -83,6 +83,8 @@ public class FileTypeUtil {
 		FILE_TYPE_MAP.put("AC9EBD8F", "qdf"); // Quicken (qdf)
 		FILE_TYPE_MAP.put("E3828596", "pwl"); // Windows Password (pwl)
 		FILE_TYPE_MAP.put("2E7261FD", "ram"); // Real Audio (ram)
+		// https://stackoverflow.com/questions/45321665/magic-number-for-google-image-format
+		FILE_TYPE_MAP.put("52494646", "webp");
 	}
 
 	/**
@@ -190,6 +192,9 @@ public class FileTypeUtil {
 			} else if ("docx".equalsIgnoreCase(extName)) {
 				// issue#I47JGH
 				typeName = "docx";
+			} else if ("pptx".equalsIgnoreCase(extName)) {
+				// issue#I5A0GO
+				typeName = "pptx";
 			}
 		}
 		return typeName;

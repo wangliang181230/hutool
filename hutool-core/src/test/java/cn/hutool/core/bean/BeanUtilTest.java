@@ -192,6 +192,23 @@ public class BeanUtilTest {
 	}
 
 	@Test
+	public void beanToMapNullPropertiesTest() {
+		SubPerson person = new SubPerson();
+		person.setAge(14);
+		person.setOpenid("11213232");
+		person.setName("测试A11");
+		person.setSubName("sub名字");
+
+		Map<String, Object> map = BeanUtil.beanToMap(person, null);
+
+		Assert.assertEquals("测试A11", map.get("name"));
+		Assert.assertEquals(14, map.get("age"));
+		Assert.assertEquals("11213232", map.get("openid"));
+		// static属性应被忽略
+		Assert.assertFalse(map.containsKey("SUBNAME"));
+	}
+
+	@Test
 	public void beanToMapTest2() {
 		SubPerson person = new SubPerson();
 		person.setAge(14);
@@ -548,6 +565,11 @@ public class BeanUtilTest {
 		Food newFood = BeanUtil.copyProperties(info, Food.class, "code");
 		Assert.assertEquals(info.getBookID(), newFood.getBookID());
 		Assert.assertNull(newFood.getCode());
+	}
+
+	@Test
+	public void copyNullTest() {
+		Assert.assertNull(BeanUtil.copyProperties(null, Food.class));
 	}
 
 	@Test

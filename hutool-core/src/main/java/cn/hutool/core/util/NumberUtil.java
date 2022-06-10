@@ -719,7 +719,7 @@ public class NumberUtil {
 		if (v1 instanceof BigDecimal && v2 instanceof BigDecimal) {
 			return div((BigDecimal) v1, (BigDecimal) v2, scale, roundingMode);
 		}
-		return div(v1.toString(), v2.toString(), scale, roundingMode);
+		return div(StrUtil.toStringOrNull(v1), StrUtil.toStringOrNull(v2), scale, roundingMode);
 	}
 
 	/**
@@ -1238,6 +1238,9 @@ public class NumberUtil {
 	 * @return 是否为整数
 	 */
 	public static boolean isInteger(String s) {
+		if(StrUtil.isBlank(s)) {
+			return false;
+		}
 		try {
 			Integer.parseInt(s);
 		} catch (NumberFormatException e) {
@@ -1255,6 +1258,9 @@ public class NumberUtil {
 	 * @since 4.0.0
 	 */
 	public static boolean isLong(String s) {
+		if(StrUtil.isBlank(s)) {
+			return false;
+		}
 		try {
 			Long.parseLong(s);
 		} catch (NumberFormatException e) {
@@ -1270,13 +1276,16 @@ public class NumberUtil {
 	 * @return 是否为{@link Double}类型
 	 */
 	public static boolean isDouble(String s) {
+		if(StrUtil.isBlank(s)) {
+			return false;
+		}
 		try {
 			Double.parseDouble(s);
 			return s.contains(".");
 		} catch (NumberFormatException ignore) {
 			// ignore
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -2524,6 +2533,11 @@ public class NumberUtil {
 	 * @since 4.1.15
 	 */
 	public static Number parseNumber(String numberStr) throws NumberFormatException {
+		if(StrUtil.startWithIgnoreCase(numberStr, "0x")){
+			// 0x04表示16进制数
+			return Long.parseLong(numberStr.substring(2), 16);
+		}
+
 		try {
 			final NumberFormat format = NumberFormat.getInstance();
 			if (format instanceof DecimalFormat) {
