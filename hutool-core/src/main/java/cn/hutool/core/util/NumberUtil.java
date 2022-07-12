@@ -1238,7 +1238,7 @@ public class NumberUtil {
 	 * @return 是否为整数
 	 */
 	public static boolean isInteger(String s) {
-		if(StrUtil.isBlank(s)) {
+		if (StrUtil.isBlank(s)) {
 			return false;
 		}
 		try {
@@ -1258,7 +1258,7 @@ public class NumberUtil {
 	 * @since 4.0.0
 	 */
 	public static boolean isLong(String s) {
-		if(StrUtil.isBlank(s)) {
+		if (StrUtil.isBlank(s)) {
 			return false;
 		}
 		try {
@@ -1276,16 +1276,15 @@ public class NumberUtil {
 	 * @return 是否为{@link Double}类型
 	 */
 	public static boolean isDouble(String s) {
-		if(StrUtil.isBlank(s)) {
+		if (StrUtil.isBlank(s)) {
 			return false;
 		}
 		try {
 			Double.parseDouble(s);
-			return s.contains(".");
 		} catch (NumberFormatException ignore) {
-			// ignore
+			return false;
 		}
-		return true;
+		return s.contains(".");
 	}
 
 	/**
@@ -1812,6 +1811,22 @@ public class NumberUtil {
 		Assert.notNull(bigNum1);
 		Assert.notNull(bigNum2);
 		return bigNum1.compareTo(bigNum2) <= 0;
+	}
+
+	/**
+	 * 检查值是否在指定范围内
+	 *
+	 * @param value      值
+	 * @param minInclude 最小值（包含）
+	 * @param maxInclude 最大值（包含）
+	 * @return 经过检查后的值
+	 * @since 5.8.5
+	 */
+	public static boolean isIn(final BigDecimal value, final BigDecimal minInclude, final BigDecimal maxInclude) {
+		Assert.notNull(value);
+		Assert.notNull(minInclude);
+		Assert.notNull(maxInclude);
+		return isGreaterOrEqual(value, minInclude) && isLessOrEqual(value, maxInclude);
 	}
 
 	/**
@@ -2533,7 +2548,7 @@ public class NumberUtil {
 	 * @since 4.1.15
 	 */
 	public static Number parseNumber(String numberStr) throws NumberFormatException {
-		if(StrUtil.startWithIgnoreCase(numberStr, "0x")){
+		if (StrUtil.startWithIgnoreCase(numberStr, "0x")) {
 			// 0x04表示16进制数
 			return Long.parseLong(numberStr.substring(2), 16);
 		}
@@ -2671,6 +2686,9 @@ public class NumberUtil {
 	 * @since 4.6.7
 	 */
 	public static boolean isValidNumber(Number number) {
+		if (null == number) {
+			return false;
+		}
 		if (number instanceof Double) {
 			return (false == ((Double) number).isInfinite()) && (false == ((Double) number).isNaN());
 		} else if (number instanceof Float) {

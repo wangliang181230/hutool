@@ -3,7 +3,52 @@
 
 -------------------------------------------------------------------------------------------------------------
 
-# 5.8.3.M1 (2022-06-09)
+# 5.8.5.M1 (2022-07-11)
+
+### 🐣新特性
+* 【core   】     NumberUtil新增isIn方法（pr#669@Gitee）
+* 【core   】     修复注解工具类getAnnotations的NPE问题，注解扫描器添新功能（pr#671@Gitee）
+* 【core   】     合成注解SyntheticAnnotation提取为接口，并为实现类添加注解选择器和属性处理器（pr#678@Gitee）
+* 【core   】     增加BeanValueProvider（issue#I5FBHV@Gitee）
+* 【core   】     Convert工具类中，新增中文大写数字金额转换为数字工具方法（pr#674@Gitee）
+* 【core   】     新增CollectorUtil.reduceListMap()（pr#676@Gitee）
+* 【core   】     CollStreamUtil为空返回空的集合变为可编辑（pr#681@Gitee）
+* 【core   】     增加StrUtil.containsAll（pr#2437@Github）
+* 
+### 🐞Bug修复
+* 【core   】     修复CollUtil里面关于可变参数传null造成的crash问题（pr#2428@Github）
+* 【socket 】     修复异常socket没有关闭问题（pr#690@Gitee）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.4 (2022-06-27)
+
+### 🐣新特性
+* 【extra  】     Sftp增加构造重载，支持超时（pr#653@Gitee）
+* 【core   】     BeanUtil增加isCommonFieldsEqual（pr#653@Gitee）
+* 【json   】     修改byte[]统一转换为数组形式（issue#2377@Github）
+* 【http   】     HttpResponse增加body方法，支持自定义返回内容（pr#655@Gitee）
+* 【core   】     修改ObjectUtil.isNull逻辑（issue#I5COJF@Gitee）
+* 【core   】     BlockPolicy增加线程池关闭后的逻辑（pr#660@Gitee）
+* 【core   】     Ipv4Util增加ipv4ToLong重载（pr#661@Gitee）
+* 【core   】     LocalDateTimeUtil.parse改为blank检查（issue#I5CZJ9@Gitee）
+* 【core   】     BeanPath在空元素时默认加入map，修改根据下标类型赋值List or map（issue#2362@Github）
+* 【core   】     localAddressList 添加重构方法（pr#665@Gitee）
+* 【cron   】     从配置文件加载任务时，自定义ID避免重复从配置文件加载（issue#I5E7BM@Gitee）
+* 【core   】     新增注解扫描器和合成注解（pr#654@Gitee）
+* 
+### 🐞Bug修复
+* 【extra  】     修复createExtractor中抛出异常后流未关闭问题（pr#2384@Github）
+* 【core   】     修复CsvData.getHeader没有判空导致空指针问题（issue#I5CK7Q@Gitee）
+* 【core   】     修复单字母转换为数字的问题（issue#I5C4K1@Gitee）
+* 【core   】     修复IterUtil.filter无效问题
+* 【core   】     修复NumberUtil传入null，返回了true(issue#I5DTSL@Gitee)
+* 【core   】     修复NumberUtil.isDouble问题(pr#2400@Github)
+* 【core   】     修复ZipUtil使用append替换文件时，父目录存在报错问题(issue#I5DRU0@Gitee)
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.3 (2022-06-10)
 
 ### 🐣新特性
 * 【extra  】     mail增加writeTimeout参数支持（issue#2355@Github）
@@ -16,6 +61,8 @@
 * 【json   】     修复Bean中存在bytes，无法转换问题（issue#2365@Github）
 * 【core   】     ArrayUtil.setOrAppend()传入空数组时，抛出异常（issue#I5APJE@Gitee）
 * 【extra  】     JschSessionPool修复空指针检查问题（issue#I5BK4D@Gitee）
+* 【core   】     修复使用ValueProvider中setFieldMapping无效问题（issue#I5B4R7@Gitee）
+* 【json   】     修复byte[]作为JSONArray构造问题（issue#2369@Github）
 
 -------------------------------------------------------------------------------------------------------------
 

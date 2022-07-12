@@ -86,8 +86,7 @@ public class CharSequenceUtil {
 	 * @see #isEmpty(CharSequence)
 	 */
 	public static boolean isBlank(CharSequence str) {
-		int length;
-
+		final int length;
 		if ((str == null) || ((length = str.length()) == 0)) {
 			return true;
 		}
@@ -1002,6 +1001,26 @@ public class CharSequenceUtil {
 				if (false == ArrayUtil.contains(testChars, str.charAt(i))) {
 					return false;
 				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 检查指定字符串中是否含给定的所有字符串
+	 *
+	 * @param str       字符串
+	 * @param testChars 检查的字符
+	 * @return 字符串含有非检查的字符，返回false
+	 * @since 4.4.1
+	 */
+	public static boolean containsAll(CharSequence str, CharSequence... testChars) {
+		if (isBlank(str) || ArrayUtil.isEmpty(testChars)) {
+			return false;
+		}
+		for (CharSequence testChar : testChars) {
+			if (false == contains(str, testChar)) {
+				return false;
 			}
 		}
 		return true;

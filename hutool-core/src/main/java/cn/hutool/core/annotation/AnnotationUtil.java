@@ -1,22 +1,24 @@
 package cn.hutool.core.annotation;
 
+import cn.hutool.core.annotation.scanner.*;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.exceptions.UtilException;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 注解工具类<br>
@@ -26,6 +28,58 @@ import java.util.function.Predicate;
  * @since 4.0.9
  */
 public class AnnotationUtil {
+
+	/**
+	 * 元注解
+	 */
+	static final Set<Class<? extends Annotation>> META_ANNOTATIONS = CollUtil.newHashSet(Target.class, //
+			Retention.class, //
+			Inherited.class, //
+			Documented.class, //
+			SuppressWarnings.class, //
+			Override.class, //
+			Deprecated.class//
+	);
+
+	/**
+	 * 是否为Jdk自带的元注解。<br>
+	 * 包括：
+	 * <ul>
+	 *     <li>{@link Target}</li>
+	 *     <li>{@link Retention}</li>
+	 *     <li>{@link Inherited}</li>
+	 *     <li>{@link Documented}</li>
+	 *     <li>{@link SuppressWarnings}</li>
+	 *     <li>{@link Override}</li>
+	 *     <li>{@link Deprecated}</li>
+	 * </ul>
+	 *
+	 * @param annotationType 注解类型
+	 * @return 是否为Jdk自带的元注解
+	 */
+	public static boolean isJdkMetaAnnotation(Class<? extends Annotation> annotationType) {
+		return META_ANNOTATIONS.contains(annotationType);
+	}
+
+	/**
+	 * 是否不为Jdk自带的元注解。<br>
+	 * 包括：
+	 * <ul>
+	 *     <li>{@link Target}</li>
+	 *     <li>{@link Retention}</li>
+	 *     <li>{@link Inherited}</li>
+	 *     <li>{@link Documented}</li>
+	 *     <li>{@link SuppressWarnings}</li>
+	 *     <li>{@link Override}</li>
+	 *     <li>{@link Deprecated}</li>
+	 * </ul>
+	 *
+	 * @param annotationType 注解类型
+	 * @return 是否为Jdk自带的元注解
+	 */
+	public static boolean isNotJdkMateAnnotation(Class<? extends Annotation> annotationType) {
+		return false == isJdkMetaAnnotation(annotationType);
+	}
 
 	/**
 	 * 将指定的被注解的元素转换为组合注解元素
@@ -92,7 +146,7 @@ public class AnnotationUtil {
 	 * @param annotationEle   {@link AnnotatedElement}，可以是Class、Method、Field、Constructor、ReflectPermission
 	 * @param isToCombination 是否为转换为组合注解，组合注解可以递归获取注解的注解
 	 * @param predicate       过滤器，{@link Predicate#test(Object)}返回{@code true}保留，否则不保留
-	 * @return 注解对象
+	 * @return 注解对象，如果提供的{@link AnnotatedElement}为{@code null}，返回{@code null}
 	 * @since 5.8.0
 	 */
 	public static Annotation[] getAnnotations(AnnotatedElement annotationEle, boolean isToCombination, Predicate<Annotation> predicate) {
@@ -293,5 +347,135 @@ public class AnnotationUtil {
 	public static <T extends Annotation> T getAnnotationAlias(AnnotatedElement annotationEle, Class<T> annotationType) {
 		final T annotation = getAnnotation(annotationEle, annotationType);
 		return (T) Proxy.newProxyInstance(annotationType.getClassLoader(), new Class[]{annotationType}, new AnnotationProxy<>(annotation));
+	}
+
+	/**
+	 * 将指定注解实例与其元注解转为合成注解
+	 *
+	 * @param annotation     注解对象
+	 * @param annotationType 注解类
+	 * @param <T>            注解类型
+	 * @return 合成注解
+	 * @see SyntheticAnnotation
+	 */
+	public static <T extends Annotation> T getSynthesisAnnotation(Annotation annotation, Class<T> annotationType) {
+		return SyntheticAnnotation.of(annotation).getAnnotation(annotationType);
+	}
+
+	/**
+	 * 获取元素上所有指定注解
+	 * <ul>
+	 *     <li>若元素是类，则递归解析全部父类和全部父接口上的注解;</li>
+	 *     <li>若元素是方法、属性或注解，则只解析其直接声明的注解;</li>
+	 * </ul>
+	 *
+	 * @param annotatedEle   {@link AnnotatedElement}，可以是Class、Method、Field、Constructor、ReflectPermission
+	 * @param annotationType 注解类
+	 * @param <T>            注解类型
+	 * @return 合成注解
+	 * @see SyntheticAnnotation
+	 */
+	public static <T extends Annotation> List<T> getAllSynthesisAnnotations(AnnotatedElement annotatedEle, Class<T> annotationType) {
+		AnnotationScanner[] scanners = new AnnotationScanner[]{
+				new MetaAnnotationScanner(), new TypeAnnotationScanner(), new MethodAnnotationScanner(), new FieldAnnotationScanner()
+		};
+		return AnnotationScanner.scanByAnySupported(annotatedEle, scanners).stream()
+				.map(annotation -> getSynthesisAnnotation(annotation, annotationType))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * 扫描注解类，以及注解类的{@link Class}层级结构中的注解，将返回除了{@link #META_ANNOTATIONS}中指定的JDK默认注解外，
+	 * 按元注解对象与{@code annotationType}的距离和{@link Class#getAnnotations()}顺序排序的注解对象集合
+	 *
+	 * @param annotationType 注解类
+	 * @return 注解对象集合
+	 * @see MetaAnnotationScanner
+	 */
+	public static List<Annotation> scanMetaAnnotation(Class<? extends Annotation> annotationType) {
+		return new MetaAnnotationScanner().getIfSupport(annotationType);
+	}
+
+	/**
+	 * <p>扫描类以及类的{@link Class}层级结构中的注解，将返回除了{@link #META_ANNOTATIONS}中指定的JDK默认元注解外,
+	 * 全部类/接口的{@link Class#getAnnotations()}方法返回的注解对象。<br>
+	 * 层级结构将按广度优先递归，遵循规则如下：
+	 * <ul>
+	 *     <li>同一层级中，优先处理父类，然后再处理父接口；</li>
+	 *     <li>同一个接口在不同层级出现，优先选择层级距离{@code targetClass}更近的接口；</li>
+	 *     <li>同一个接口在相同层级出现，优先选择其子类/子接口被先解析的那个；</li>
+	 * </ul>
+	 * 注解根据其声明类/接口被扫描的顺序排序，若注解都在同一个{@link Class}中被声明，则还会遵循{@link Class#getAnnotations()}的顺序。
+	 *
+	 * @param targetClass 类
+	 * @return 注解对象集合
+	 * @see TypeAnnotationScanner
+	 */
+	public static List<Annotation> scanClass(Class<?> targetClass) {
+		return new TypeAnnotationScanner().getIfSupport(targetClass);
+	}
+
+	/**
+	 * <p>扫描方法，以及该方法所在类的{@link Class}层级结构中的具有相同方法签名的方法，
+	 * 将返回除了{@link #META_ANNOTATIONS}中指定的JDK默认元注解外,
+	 * 全部匹配方法上{@link Method#getAnnotations()}方法返回的注解对象。<br>
+	 * 方法所在类的层级结构将按广度优先递归，遵循规则如下：
+	 * <ul>
+	 *     <li>同一层级中，优先处理父类，然后再处理父接口；</li>
+	 *     <li>同一个接口在不同层级出现，优先选择层级距离{@code targetClass}更近的接口；</li>
+	 *     <li>同一个接口在相同层级出现，优先选择其子类/子接口被先解析的那个；</li>
+	 * </ul>
+	 * 方法上的注解根据方法的声明类/接口被扫描的顺序排序，若注解都在同一个类的同一个方法中被声明，则还会遵循{@link Method#getAnnotations()}的顺序。
+	 *
+	 * @param method 方法
+	 * @return 注解对象集合
+	 * @see MethodAnnotationScanner
+	 */
+	public static List<Annotation> scanMethod(Method method) {
+		return new MethodAnnotationScanner(true).getIfSupport(method);
+	}
+
+	/**
+	 * 方法是否为注解属性方法。 <br>
+	 * 方法无参数，且有返回值的方法认为是注解属性的方法。
+	 *
+	 * @param method 方法
+	 */
+	static boolean isAttributeMethod(Method method) {
+		return method.getParameterCount() == 0 && method.getReturnType() != void.class;
+	}
+
+	/**
+	 * 获取注解的全部属性值获取方法
+	 *
+	 * @param annotationType 注解
+	 * @return 注解的全部属性值
+	 * @throws IllegalArgumentException 当别名属性在注解中不存在，或别名属性的值与原属性的值类型不一致时抛出
+	 */
+	static Map<String, Method> getAttributeMethods(Class<? extends Annotation> annotationType) {
+		// 获取全部注解属性值
+		Map<String, Method> attributeMethods = Stream.of(annotationType.getDeclaredMethods())
+				.filter(AnnotationUtil::isAttributeMethod)
+				.collect(Collectors.toMap(Method::getName, Function.identity()));
+		// 处理别名
+		attributeMethods.forEach((methodName, method) -> {
+			String alias = Opt.ofNullable(method.getAnnotation(Alias.class))
+					.map(Alias::value)
+					.orElse(null);
+			if (ObjectUtil.isNull(alias)) {
+				return;
+			}
+			// 存在别名，则将原本的值替换为别名对应的值
+			Assert.isTrue(attributeMethods.containsKey(alias), "No method for alias: [{}]", alias);
+			Method aliasAttributeMethod = attributeMethods.get(alias);
+			Assert.isTrue(
+					ObjectUtil.isNull(aliasAttributeMethod) || ClassUtil.isAssignable(method.getReturnType(), aliasAttributeMethod.getReturnType()),
+					"Return type of the alias method [{}] is inconsistent with the original [{}]",
+					aliasAttributeMethod.getClass(), method.getParameterTypes()
+			);
+			attributeMethods.put(methodName, aliasAttributeMethod);
+		});
+		return attributeMethods;
 	}
 }

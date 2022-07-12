@@ -108,6 +108,9 @@ public class CollUtil {
 	 * @return 并集的集合，返回 {@link ArrayList}
 	 */
 	public static <T> Collection<T> union(Collection<T> coll1, Collection<T> coll2) {
+		if (isEmpty(coll1) && isEmpty(coll2)) {
+			return new ArrayList<>();
+		}
 		if (isEmpty(coll1)) {
 			return new ArrayList<>(coll2);
 		} else if (isEmpty(coll2)) {
@@ -145,6 +148,9 @@ public class CollUtil {
 	public static <T> Collection<T> union(Collection<T> coll1, Collection<T> coll2, Collection<T>... otherColls) {
 		Collection<T> union = union(coll1, coll2);
 		for (Collection<T> coll : otherColls) {
+			if (isEmpty(coll)) {
+				continue;
+			}
 			union = union(union, coll);
 		}
 		return union;
@@ -177,6 +183,9 @@ public class CollUtil {
 
 		if (ArrayUtil.isNotEmpty(otherColls)) {
 			for (Collection<T> otherColl : otherColls) {
+				if (isEmpty(otherColl)) {
+					continue;
+				}
 				result.addAll(otherColl);
 			}
 		}
@@ -211,6 +220,9 @@ public class CollUtil {
 
 		if (ArrayUtil.isNotEmpty(otherColls)) {
 			for (Collection<T> otherColl : otherColls) {
+				if (isEmpty(otherColl)) {
+					continue;
+				}
 				result.addAll(otherColl);
 			}
 		}
@@ -1055,10 +1067,11 @@ public class CollUtil {
 	 * 根据函数生成的KEY去重集合，如根据Bean的某个或者某些字段完成去重。<br>
 	 * 去重可选是保留最先加入的值还是后加入的值
 	 *
-	 * @param <T>        集合元素类型
-	 * @param <K>        唯一键类型
-	 * @param collection 集合
-	 * @param override   是否覆盖模式，如果为{@code true}，加入的新值会覆盖相同key的旧值，否则会忽略新加值
+	 * @param <T>             集合元素类型
+	 * @param <K>             唯一键类型
+	 * @param collection      集合
+	 * @param uniqueGenerator 唯一键生成器
+	 * @param override        是否覆盖模式，如果为{@code true}，加入的新值会覆盖相同key的旧值，否则会忽略新加值
 	 * @return {@link ArrayList}
 	 * @since 5.8.0
 	 */
