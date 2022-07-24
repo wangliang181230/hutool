@@ -42,8 +42,4 @@ jobs:
       # step 3
       - name: "Run Test With Maven"
         run: |
-          if [ "${{ matrix.java }}" == "8" ]; then
-            mvn clean install -e -B -Dspring-boot.version=${{ matrix.springboot }} -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
-          else
-            mvn clean install -e -B -Dspring-boot.version=${{ matrix.springboot }} -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
-          fi
+          mvn clean install -Dspring-boot.version=${{ matrix.springboot }} -e -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn;
