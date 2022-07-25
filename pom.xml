@@ -35,10 +35,23 @@
 		<project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 
 		<!-- versions -->
+		<spring-boot.version>2.7.2</spring-boot.version>
 		<compile.version>8</compile.version>
 		<junit.version>5.8.2</junit.version>
 		<lombok.version>1.18.24</lombok.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<!-- 全局单元测试 -->
@@ -83,6 +96,7 @@
 
 	<build>
 		<plugins>
+			<!-- Compiler -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -91,6 +105,7 @@
 					<source>${compile.version}</source>
 					<target>${compile.version}</target>
 					<compilerArgument>-Xlint:unchecked</compilerArgument>
+					<parameters>true</parameters>
 				</configuration>
 			</plugin>
 			<!-- Javadoc -->
@@ -98,6 +113,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.1.1</version>
+				<configuration>
+					<failOnError>false</failOnError>
+					<failOnWarnings>false</failOnWarnings>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -107,7 +126,18 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<!-- SureFire -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<argLine>${maven.surefire.argLine}</argLine>
+					<systemProperties>
+						<user.timezone>Asia/Shanghai</user.timezone>
+					</systemProperties>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

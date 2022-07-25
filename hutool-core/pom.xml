@@ -16,4 +16,20 @@
 	<name>${project.artifactId}</name>
 	<description>Hutool核心，包括集合、字符串、Bean等工具</description>
 
+	<profiles>
+		<profile>
+			<id>args-for-test-by-jdk17</id>
+			<activation>
+				<jdk>17</jdk>
+			</activation>
+			<properties>
+				<maven.surefire.argLine>
+					--add-opens java.base/java.lang=ALL-UNNAMED
+					--add-opens java.base/java.util.regex=ALL-UNNAMED
+					--illegal-access=permit
+					-Dillegal-access=permit
+				</maven.surefire.argLine>
+			</properties>
+		</profile>
+	</profiles>
 </project>
