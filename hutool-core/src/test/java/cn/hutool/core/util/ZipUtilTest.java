@@ -16,6 +16,9 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
+
+import static cn.hutool.core.util.ZipUtil.unzip;
 
 /**
  * {@link ZipUtil}单元测试
@@ -153,6 +156,7 @@ public class ZipUtilTest {
 		//https://github.com/dromara/hutool/issues/944
 		String dir = "d:/test";
 		String zip = "d:/test.zip";
+		//noinspection IOStreamConstructor
 		try (OutputStream out = new FileOutputStream(zip)){
 			//实际应用中, out 为 HttpServletResponse.getOutputStream
 			ZipUtil.zip(out, Charset.defaultCharset(), false, null, new File(dir));
@@ -194,5 +198,20 @@ public class ZipUtilTest {
 				,FileUtil.file("d:\\test\\qr_b.jpg")};
 
 		ZipUtil.zip(FileUtil.file("d:\\test\\qr.zip"),false,dd);
+	}
+
+	@Test
+	@Ignore
+	public void sizeUnzipTest() throws IOException {
+		String zipPath = "e:\\hutool\\demo.zip";
+		String outPath = "e:\\hutool\\test";
+		ZipFile zipFile = new ZipFile(zipPath, Charset.forName("GBK"));
+		File file = new File(outPath);
+		// 限制解压文件大小为637KB
+		long size = 637*1024L;
+
+		// 限制解压文件大小为636KB
+		// long size = 636*1024L;
+		unzip(zipFile, file, size);
 	}
 }

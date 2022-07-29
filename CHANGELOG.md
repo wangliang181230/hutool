@@ -3,7 +3,7 @@
 
 -------------------------------------------------------------------------------------------------------------
 
-# 5.8.5.M1 (2022-07-22)
+# 5.8.5 (2022-07-29)
 
 ### ❌不兼容特性
 * 【core   】     合成注解相关功能重构，增加@Link及其子注解（pr#702@Gitee）
@@ -29,6 +29,9 @@
 * 【json   】     JSONConfig增加允许重复key配置，解决不规整json序列化的问题（pr#720@Github）
 * 【core   】     完善了codec包下一些方法的入参空校验（pr#719@Gitee）
 * 【extra  】     完善QrCodeUtil对于DATA_MATRIX生成的形状随机不可指定的功能（pr#722@Gitee）
+* 【core   】     修改NetUtil.ipv6ToBigInteger，原方法标记为过期（pr#2485@Github）
+* 【core   】     ZipUtil新增zip文件解压大小限制，防止zip炸弹（pr#726@Gitee）
+* 【core   】     CompressUtil增加压缩和解压tgz（.tar.gz）文件（issue#I5J33E@Gitee）
 * 
 ### 🐞Bug修复
 * 【core   】     修复CollUtil里面关于可变参数传null造成的crash问题（pr#2428@Github）
@@ -40,6 +43,8 @@
 * 【core   】     修复Console.log应该把异常信息输出位置错误问题（pr#716@Gitee）
 * 【core   】     修复UrlBuilder无法配置末尾追加“/”问题（issue#2459@Github）
 * 【core   】     修复SystemPropsUtil.getBoolean方法应该只有值为true时才返回true，其他情况都应该返回false（pr#717@Gitee）
+* 【core   】     修复isBase64判断不准确的问题（pr#727@Gitee）
+* 【core   】     修复Convert#toMap默认转成HashMap的问题（pr#729@Gitee）
 
 -------------------------------------------------------------------------------------------------------------
 
