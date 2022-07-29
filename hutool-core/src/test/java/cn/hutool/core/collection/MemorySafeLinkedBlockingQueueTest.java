@@ -2,8 +2,10 @@ package cn.hutool.core.collection;
 
 import cn.hutool.core.util.RandomUtil;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class MemorySafeLinkedBlockingQueueTest {
 
 	@Test
