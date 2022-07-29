@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.Serializable;
@@ -88,6 +89,7 @@ public class LambdaUtilTest {
 	}
 
 	@Test
+	@Ignore
 	public void getRealClassTest() {
 		final MyTeacher myTeacher = new MyTeacher();
 		Stream.<Runnable>of(() -> {
