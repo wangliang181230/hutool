@@ -551,7 +551,7 @@ public class JSONUtil {
 	}
 
 	/**
-	 * 将JSON字符串转换为Map，默认为HashMap
+	 * 将JSONObject转换为Map，默认为HashMap
 	 *
 	 * @param <K>       键类型
 	 * @param <V>       值类型
@@ -581,7 +581,7 @@ public class JSONUtil {
 	}
 
 	/**
-	 * 将JSON字符串转换为Map，默认为HashMap
+	 * 将JSONObject转换为Map，默认为HashMap
 	 *
 	 * @param <V>       值类型
 	 * @param json      JSONObject
