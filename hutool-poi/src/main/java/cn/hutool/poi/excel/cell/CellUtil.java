@@ -7,7 +7,7 @@ import cn.hutool.poi.excel.StyleSet;
 import cn.hutool.poi.excel.cell.setters.CellSetterFactory;
 import cn.hutool.poi.excel.cell.values.ErrorCellValue;
 import cn.hutool.poi.excel.cell.values.NumericCellValue;
-import cn.hutool.poi.excel.editors.TrimEditor;
+import cn.hutool.poi.excel.cell.editors.TrimEditor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -449,7 +449,7 @@ public class CellUtil {
 		}
 		final Comment comment = drawing.createCellComment(anchor);
 		comment.setString(factory.createRichTextString(commentText));
-		comment.setAuthor(StrUtil.nullToEmpty(commentAuthor));
+		comment.setAuthor(StrUtil.emptyIfNull(commentAuthor));
 		cell.setCellComment(comment);
 	}
 
@@ -466,10 +466,7 @@ public class CellUtil {
 	 * @since 5.4.5
 	 */
 	private static Cell getCellIfMergedRegion(final Sheet sheet, final int x, final int y) {
-		final int sheetMergeCount = sheet.getNumMergedRegions();
-		CellRangeAddress ca;
-		for (int i = 0; i < sheetMergeCount; i++) {
-			ca = sheet.getMergedRegion(i);
+		for (final CellRangeAddress ca : sheet.getMergedRegions()) {
 			if (ca.isInRange(y, x)) {
 				return SheetUtil.getCell(sheet, ca.getFirstRow(), ca.getFirstColumn());
 			}

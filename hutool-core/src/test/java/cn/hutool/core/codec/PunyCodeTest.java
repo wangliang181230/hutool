@@ -6,7 +6,7 @@ import org.junit.Test;
 public class PunyCodeTest {
 
 	@Test
-	public void encodeDecodeTest(){
+	public void encodeDecodeTest() {
 		final String text = "Hutool编码器";
 		final String strPunyCode = PunyCode.encode(text);
 		Assert.assertEquals("Hutool-ux9js33tgln", strPunyCode);
@@ -14,5 +14,55 @@ public class PunyCodeTest {
 		Assert.assertEquals(text, decode);
 		decode = PunyCode.decode("xn--Hutool-ux9js33tgln");
 		Assert.assertEquals(text, decode);
+	}
+
+	@Test
+	public void encodeDecodeTest2(){
+		// 无需编码和解码
+		String text = "Hutool";
+		String strPunyCode = PunyCode.encode(text);
+		Assert.assertEquals("Hutool", strPunyCode);
+	}
+
+	@Test
+	public void encodeDecodeDomainTest() {
+		// 全中文
+		final String text = "百度.中国";
+		final String strPunyCode = PunyCode.encodeDomain(text);
+		Assert.assertEquals("xn--wxtr44c.xn--fiqs8s", strPunyCode);
+
+		final String decode = PunyCode.decodeDomain(strPunyCode);
+		Assert.assertEquals(text, decode);
+	}
+
+	@Test
+	public void encodeDecodeDomainTest2() {
+		// 中英文分段
+		final String text = "hutool.中国";
+		final String strPunyCode = PunyCode.encodeDomain(text);
+		Assert.assertEquals("hutool.xn--fiqs8s", strPunyCode);
+
+		final String decode = PunyCode.decodeDomain(strPunyCode);
+		Assert.assertEquals(text, decode);
+	}
+
+	@Test
+	public void encodeDecodeDomainTest3() {
+		// 中英文混合
+		final String text = "hutool工具.中国";
+		final String strPunyCode = PunyCode.encodeDomain(text);
+		Assert.assertEquals("xn--hutool-up2j943f.xn--fiqs8s", strPunyCode);
+
+		final String decode = PunyCode.decodeDomain(strPunyCode);
+		Assert.assertEquals(text, decode);
+	}
+
+	@Test
+	public void encodeEncodeDomainTest2(){
+		String domain = "赵新虎.com";
+		String strPunyCode = PunyCode.encodeDomain(domain);
+		Assert.assertEquals("xn--efvz93e52e.com", strPunyCode);
+		String decode = PunyCode.decodeDomain(strPunyCode);
+		Assert.assertEquals(domain, decode);
 	}
 }

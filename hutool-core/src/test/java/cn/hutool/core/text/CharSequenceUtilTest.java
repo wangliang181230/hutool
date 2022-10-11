@@ -1,9 +1,12 @@
 package cn.hutool.core.text;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.CharsetUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.util.regex.Pattern;
 
 public class CharSequenceUtilTest {
@@ -27,6 +30,9 @@ public class CharSequenceUtilTest {
 		final String replace = "SSM15930297701BeryAllen";
 		final String result = CharSequenceUtil.replace(replace, 5, 12, "***");
 		Assert.assertEquals("SSM15***01BeryAllen", result);
+
+		final String emoji = StrUtil.replace("\uD83D\uDE00aabb\uD83D\uDE00ccdd", 2, 6, "***");
+		Assert.assertEquals("\uD83D\uDE00a***ccdd", emoji);
 	}
 
 	@Test
@@ -165,5 +171,45 @@ public class CharSequenceUtilTest {
 	public void containsAllTest() {
 		final String a = "2142342422423423";
 		Assert.assertTrue(StrUtil.containsAll(a, "214", "234"));
+	}
+
+	@Test
+	public void defaultIfEmptyTest() {
+		final String emptyValue = "";
+		final Instant result1 = CharSequenceUtil.defaultIfEmpty(emptyValue,
+				(v) -> DateUtil.parse(v, DatePattern.NORM_DATETIME_PATTERN).toInstant(), Instant::now);
+		Assert.assertNotNull(result1);
+
+		final String dateStr = "2020-10-23 15:12:30";
+		final Instant result2 = CharSequenceUtil.defaultIfEmpty(dateStr,
+				(v) -> DateUtil.parse(v, DatePattern.NORM_DATETIME_PATTERN).toInstant(), Instant::now);
+		Assert.assertNotNull(result2);
+	}
+
+	@Test
+	public void defaultIfBlankTest() {
+		final String emptyValue = " ";
+		final Instant result1 = CharSequenceUtil.defaultIfBlank(emptyValue,
+				(v) -> DateUtil.parse(v, DatePattern.NORM_DATETIME_PATTERN).toInstant(), Instant::now);
+		Assert.assertNotNull(result1);
+
+		final String dateStr = "2020-10-23 15:12:30";
+		final Instant result2 = CharSequenceUtil.defaultIfBlank(dateStr,
+				(v) -> DateUtil.parse(v, DatePattern.NORM_DATETIME_PATTERN).toInstant(), Instant::now);
+		Assert.assertNotNull(result2);
+	}
+
+	@Test
+	public void replaceLastTest() {
+		final String str = "i am jack and jack";
+		final String result = StrUtil.replaceLast(str, "JACK", null, true);
+		Assert.assertEquals(result, "i am jack and ");
+	}
+
+	@Test
+	public void replaceFirstTest() {
+		final String str = "yes and yes i do";
+		final String result = StrUtil.replaceFirst(str, "YES", "", true);
+		Assert.assertEquals(result, " and yes i do");
 	}
 }

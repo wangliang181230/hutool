@@ -2,6 +2,7 @@ package cn.hutool.db.ds;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.map.SafeConcurrentHashMap;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.db.DbRuntimeException;
 import cn.hutool.db.DbUtil;
@@ -12,7 +13,6 @@ import cn.hutool.setting.Setting;
 import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 抽象数据源工厂<br>
@@ -54,7 +54,7 @@ public abstract class AbstractDSFactory extends DSFactory {
 		DbUtil.setShowSqlGlobal(setting);
 
 		this.setting = setting;
-		this.dsMap = new ConcurrentHashMap<>();
+		this.dsMap = new SafeConcurrentHashMap<>();
 	}
 
 	/**
@@ -102,7 +102,7 @@ public abstract class AbstractDSFactory extends DSFactory {
 		}
 
 		// 基本信息
-		final String url = config.getAndRemoveStr(KEY_ALIAS_URL);
+		final String url = config.getAndRemove(KEY_ALIAS_URL);
 		if (StrUtil.isBlank(url)) {
 			throw new DbRuntimeException("No JDBC URL for group: [{}]", group);
 		}
@@ -112,12 +112,12 @@ public abstract class AbstractDSFactory extends DSFactory {
 		DbUtil.removeShowSqlParams(config);
 
 		// 自动识别Driver
-		String driver = config.getAndRemoveStr(KEY_ALIAS_DRIVER);
+		String driver = config.getAndRemove(KEY_ALIAS_DRIVER);
 		if (StrUtil.isBlank(driver)) {
 			driver = DriverUtil.identifyDriver(url);
 		}
-		final String user = config.getAndRemoveStr(KEY_ALIAS_USER);
-		final String pass = config.getAndRemoveStr(KEY_ALIAS_PASSWORD);
+		final String user = config.getAndRemove(KEY_ALIAS_USER);
+		final String pass = config.getAndRemove(KEY_ALIAS_PASSWORD);
 
 		return DataSourceWrapper.wrap(createDataSource(url, driver, user, pass, config), driver);
 	}

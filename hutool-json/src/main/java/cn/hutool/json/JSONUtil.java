@@ -10,12 +10,11 @@ import cn.hutool.json.serialize.GlobalSerializeMapping;
 import cn.hutool.json.serialize.JSONArraySerializer;
 import cn.hutool.json.serialize.JSONDeserializer;
 import cn.hutool.json.serialize.JSONObjectSerializer;
+import cn.hutool.json.writer.JSONValueWriter;
+import cn.hutool.json.writer.JSONWriter;
 import cn.hutool.json.xml.JSONXMLUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -141,7 +140,7 @@ public class JSONUtil {
 	 * @return JSON
 	 */
 	public static JSON parse(final Object obj) {
-		return JSONConverter.INSTANCE.convert(obj);
+		return JSONConverter.INSTANCE.toJSON(obj);
 	}
 
 	/**
@@ -159,7 +158,7 @@ public class JSONUtil {
 	 * @since 5.3.1
 	 */
 	public static JSON parse(final Object obj, final JSONConfig config) {
-		return JSONConverter.of(config).convert(obj);
+		return JSONConverter.of(config).toJSON(obj);
 	}
 
 	/**
@@ -296,7 +295,18 @@ public class JSONUtil {
 	 * @return JSON字符串
 	 * @since 5.7.12
 	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static String toJsonStr(final Object obj, final JSONConfig jsonConfig) {
+		// 自定义规则，优先级高于全局规则
+		final JSONValueWriter valueWriter = InternalJSONUtil.getValueWriter(obj);
+		if(null != valueWriter){
+			final StringWriter stringWriter = new StringWriter();
+			final JSONWriter jsonWriter = JSONWriter.of(stringWriter, 0, 0, null);
+			// 用户对象自定义实现了JSONValueWriter接口，理解为需要自定义输出
+			valueWriter.write(jsonWriter, obj);
+			return stringWriter.toString();
+		}
+
 		if (null == obj) {
 			return null;
 		}
@@ -531,32 +541,6 @@ public class JSONUtil {
 	}
 
 	/**
-	 * 设置表达式指定位置（或filed对应）的值<br>
-	 * 若表达式指向一个JSONArray则设置其坐标对应位置的值，若指向JSONObject则put对应key的值<br>
-	 * 注意：如果为JSONArray，则设置值得下标不能大于已有JSONArray的长度<br>
-	 * <ol>
-	 * <li>.表达式，可以获取Bean对象中的属性（字段）值或者Map中key对应的值</li>
-	 * <li>[]表达式，可以获取集合等对象中对应index的值</li>
-	 * </ol>
-	 * <p>
-	 * 表达式栗子：
-	 *
-	 * <pre>
-	 * persion
-	 * persion.name
-	 * persons[3]
-	 * person.friends[5].name
-	 * </pre>
-	 *
-	 * @param json       JSON，可以为JSONObject或JSONArray
-	 * @param expression 表达式
-	 * @param value      值
-	 */
-	public static void putByPath(final JSON json, final String expression, final Object value) {
-		json.putByPath(expression, value);
-	}
-
-	/**
 	 * 格式化JSON字符串，此方法并不严格检查JSON的格式正确与否
 	 *
 	 * @param jsonStr JSON字符串
@@ -565,6 +549,29 @@ public class JSONUtil {
 	 */
 	public static String formatJsonStr(final String jsonStr) {
 		return JSONStrFormatter.format(jsonStr);
+	}
+
+	/**
+	 * JSON对象是否为空，以下情况返回true<br>
+	 * <ul>
+	 *     <li>null</li>
+	 *     <li>{@link JSONArray#isEmpty()}</li>
+	 *     <li>{@link JSONObject#isEmpty()}</li>
+	 * </ul>
+	 *
+	 * @param json JSONObject或JSONArray
+	 * @return 是否为空
+	 */
+	public static boolean isEmpty(final JSON json){
+		if(null == json){
+			return true;
+		}
+		if(json instanceof JSONObject){
+			return ((JSONObject) json).isEmpty();
+		} else if(json instanceof JSONArray){
+			return ((JSONArray) json).isEmpty();
+		}
+		return false;
 	}
 
 	/**

@@ -3,7 +3,7 @@ package cn.hutool.core.lang.mutable;
 import cn.hutool.core.comparator.CompareUtil;
 
 /**
- * 可变 <code>int</code> 类型
+ * 可变 {@code int} 类型
  *
  * @see Integer
  * @since 3.0.1
@@ -79,6 +79,47 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
 	public MutableInt decrement() {
 		value--;
 		return this;
+	}
+
+	// -----------------------------------------------------------------------
+	/**
+	 * 先加1, 再获取值
+	 *
+	 * @return +1后的值
+	 * @since 6.0.0
+	 */
+	public int incrementAndGet() {
+		return ++value;
+	}
+
+	/**
+	 * 先获取原来的值, 再加1
+	 *
+	 * @return 原始值
+	 * @since 6.0.0
+	 */
+	public int getAndIncrement() {
+		return value++;
+	}
+
+	/**
+	 * 先减1, 再获取值
+	 *
+	 * @return -1后的值
+	 * @since 6.0.0
+	 */
+	public int decrementAndGet() {
+		return --value;
+	}
+
+	/**
+	 * 先获取原来的值, 再减1
+	 *
+	 * @return 原始值
+	 * @since 6.0.0
+	 */
+	public int getAndDecrement() {
+		return value--;
 	}
 
 	// -----------------------------------------------------------------------

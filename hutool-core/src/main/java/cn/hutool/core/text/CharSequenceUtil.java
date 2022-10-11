@@ -4,16 +4,18 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.comparator.VersionComparator;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.lang.func.Func1;
+import cn.hutool.core.lang.func.SerFunction;
 import cn.hutool.core.math.NumberUtil;
 import cn.hutool.core.regex.ReUtil;
 import cn.hutool.core.text.finder.CharFinder;
+import cn.hutool.core.text.finder.CharMatcherFinder;
 import cn.hutool.core.text.finder.Finder;
 import cn.hutool.core.text.finder.StrFinder;
 import cn.hutool.core.text.split.SplitUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.ObjUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * {@link CharSequence} 相关工具类封装
@@ -32,8 +35,12 @@ import java.util.function.Predicate;
  * @author looly
  * @since 5.5.3
  */
-public class CharSequenceUtil extends StrChecker{
+public class CharSequenceUtil extends StrChecker {
 
+	/**
+	 * 未找到的的位置表示，用-1表示
+	 * @see Finder#INDEX_NOT_FOUND
+	 */
 	public static final int INDEX_NOT_FOUND = Finder.INDEX_NOT_FOUND;
 
 	/**
@@ -44,89 +51,100 @@ public class CharSequenceUtil extends StrChecker{
 	/**
 	 * 当给定字符串为null时，转换为Empty
 	 *
-	 * @param str 被检查的字符串
-	 * @return 原字符串或者空串
-	 * @see #nullToEmpty(CharSequence)
-	 * @since 4.6.3
-	 */
-	public static String emptyIfNull(final CharSequence str) {
-		return nullToEmpty(str);
-	}
-
-	/**
-	 * 当给定字符串为null时，转换为Empty
-	 *
 	 * @param str 被转换的字符串
 	 * @return 转换后的字符串
 	 */
-	public static String nullToEmpty(final CharSequence str) {
-		return nullToDefault(str, EMPTY);
-	}
-
-	/**
-	 * 如果字符串是 {@code null}，则返回指定默认字符串，否则返回字符串本身。
-	 *
-	 * <pre>
-	 * nullToDefault(null, &quot;default&quot;)  = &quot;default&quot;
-	 * nullToDefault(&quot;&quot;, &quot;default&quot;)    = &quot;&quot;
-	 * nullToDefault(&quot;  &quot;, &quot;default&quot;)  = &quot;  &quot;
-	 * nullToDefault(&quot;bat&quot;, &quot;default&quot;) = &quot;bat&quot;
-	 * </pre>
-	 *
-	 * @param str        要转换的字符串
-	 * @param defaultStr 默认字符串
-	 * @return 字符串本身或指定的默认字符串
-	 */
-	public static String nullToDefault(final CharSequence str, final String defaultStr) {
-		return (str == null) ? defaultStr : str.toString();
-	}
-
-	/**
-	 * 如果字符串是{@code null}或者&quot;&quot;，则返回指定默认字符串，否则返回字符串本身。
-	 *
-	 * <pre>
-	 * emptyToDefault(null, &quot;default&quot;)  = &quot;default&quot;
-	 * emptyToDefault(&quot;&quot;, &quot;default&quot;)    = &quot;default&quot;
-	 * emptyToDefault(&quot;  &quot;, &quot;default&quot;)  = &quot;  &quot;
-	 * emptyToDefault(&quot;bat&quot;, &quot;default&quot;) = &quot;bat&quot;
-	 * </pre>
-	 *
-	 * @param str        要转换的字符串
-	 * @param defaultStr 默认字符串
-	 * @return 字符串本身或指定的默认字符串
-	 * @since 4.1.0
-	 */
-	public static String emptyToDefault(final CharSequence str, final String defaultStr) {
-		return isEmpty(str) ? defaultStr : str.toString();
-	}
-
-	/**
-	 * 如果字符串是{@code null}或者&quot;&quot;或者空白，则返回指定默认字符串，否则返回字符串本身。
-	 *
-	 * <pre>
-	 * blankToDefault(null, &quot;default&quot;)  = &quot;default&quot;
-	 * blankToDefault(&quot;&quot;, &quot;default&quot;)    = &quot;default&quot;
-	 * blankToDefault(&quot;  &quot;, &quot;default&quot;)  = &quot;default&quot;
-	 * blankToDefault(&quot;bat&quot;, &quot;default&quot;) = &quot;bat&quot;
-	 * </pre>
-	 *
-	 * @param str        要转换的字符串
-	 * @param defaultStr 默认字符串
-	 * @return 字符串本身或指定的默认字符串
-	 * @since 4.1.0
-	 */
-	public static String blankToDefault(final CharSequence str, final String defaultStr) {
-		return isBlank(str) ? defaultStr : str.toString();
+	public static String emptyIfNull(final CharSequence str) {
+		return ObjUtil.defaultIfNull(str, EMPTY).toString();
 	}
 
 	/**
 	 * 当给定字符串为空字符串时，转换为{@code null}
 	 *
+	 * @param <T> 字符串类型
 	 * @param str 被转换的字符串
 	 * @return 转换后的字符串
 	 */
-	public static String emptyToNull(final CharSequence str) {
-		return isEmpty(str) ? null : str.toString();
+	public static <T extends CharSequence> T nullIfEmpty(final T str) {
+		return isEmpty(str) ? null : str;
+	}
+
+	/**
+	 * 如果给定对象为{@code null}或者 "" 返回默认值
+	 *
+	 * <pre>
+	 *   defaultIfEmpty(null, null)      = null
+	 *   defaultIfEmpty(null, "")        = ""
+	 *   defaultIfEmpty("", "zz")      = "zz"
+	 *   defaultIfEmpty(" ", "zz")      = " "
+	 *   defaultIfEmpty("abc", *)        = "abc"
+	 * </pre>
+	 *
+	 * @param <T>          对象类型（必须实现CharSequence接口）
+	 * @param str          被检查对象，可能为{@code null}
+	 * @param defaultValue 被检查对象为{@code null}或者 ""返回的默认值，可以为{@code null}或者 ""
+	 * @return 被检查对象为{@code null}或者 ""返回默认值，否则返回原值
+	 * @since 5.0.4
+	 */
+	public static <T extends CharSequence> T defaultIfEmpty(final T str, final T defaultValue) {
+		return StrUtil.isEmpty(str) ? defaultValue : str;
+	}
+
+	/**
+	 * 如果给定对象为{@code null}或者{@code ""}返回defaultHandler处理的结果, 否则返回自定义handler处理后的返回值
+	 *
+	 * @param <T>             被检查对象类型
+	 * @param <V>             结果类型
+	 * @param str             String 类型
+	 * @param handler         非empty的处理方法
+	 * @param defaultSupplier empty时的处理方法
+	 * @return 处理后的返回值
+	 */
+	public static <T extends CharSequence, V> V defaultIfEmpty(final T str, final Function<T, V> handler, final Supplier<? extends V> defaultSupplier) {
+		if (isNotEmpty(str)) {
+			return handler.apply(str);
+		}
+		return defaultSupplier.get();
+	}
+
+	/**
+	 * 如果给定对象为{@code null}或者""或者空白符返回默认值
+	 *
+	 * <pre>
+	 *   defaultIfBlank(null, null)      = null
+	 *   defaultIfBlank(null, "")        = ""
+	 *   defaultIfBlank("", "zz")      = "zz"
+	 *   defaultIfBlank(" ", "zz")      = "zz"
+	 *   defaultIfBlank("abc", *)        = "abc"
+	 * </pre>
+	 *
+	 * @param <T>          对象类型（必须实现CharSequence接口）
+	 * @param str          被检查对象，可能为{@code null}
+	 * @param defaultValue 被检查对象为{@code null}或者 ""或者空白符返回的默认值，可以为{@code null}或者 ""或者空白符
+	 * @return 被检查对象为{@code null}或者 ""或者空白符返回默认值，否则返回原值
+	 * @since 5.0.4
+	 */
+	public static <T extends CharSequence> T defaultIfBlank(final T str, final T defaultValue) {
+		return StrUtil.isBlank(str) ? defaultValue : str;
+	}
+
+	/**
+	 * 如果被检查对象为 {@code null} 或 "" 或 空白字符串时，返回默认值（由 defaultValueSupplier 提供）；否则直接返回
+	 *
+	 * @param str             被检查对象
+	 * @param handler         非blank的处理方法
+	 * @param defaultSupplier 默认值提供者
+	 * @param <T>             对象类型（必须实现CharSequence接口）
+	 * @param <V>             结果类型
+	 * @return 被检查对象为{@code null}返回默认值，否则返回自定义handle处理后的返回值
+	 * @throws NullPointerException {@code defaultValueSupplier == null} 时，抛出
+	 * @since 5.7.20
+	 */
+	public static <T extends CharSequence, V> V defaultIfBlank(final T str, final Function<T, V> handler, final Supplier<? extends V> defaultSupplier) {
+		if (StrUtil.isBlank(str)) {
+			return defaultSupplier.get();
+		}
+		return handler.apply(str);
 	}
 
 	// ------------------------------------------------------------------------ Trim
@@ -609,7 +627,12 @@ public class CharSequenceUtil extends StrChecker{
 	}
 
 	/**
-	 * 检查指定字符串中是否只包含给定的字符
+	 * 检查指定字符串中是否只包含给定的字符<br>
+	 * <ul>
+	 *     <li>str 是 null，testChars 也是 null，直接返回 true</li>
+	 *     <li>str 是 null，testChars 不是 null，直接返回 true</li>
+	 *     <li>str 不是 null，testChars 是 null，直接返回 false</li>
+	 * </ul>
 	 *
 	 * @param str       字符串
 	 * @param testChars 检查的字符
@@ -730,11 +753,11 @@ public class CharSequenceUtil extends StrChecker{
 	 * @return 字符串含有非检查的字符，返回false
 	 * @since 4.4.1
 	 */
-	public static boolean containsAll(CharSequence str, CharSequence... testChars) {
+	public static boolean containsAll(final CharSequence str, final CharSequence... testChars) {
 		if (isBlank(str) || ArrayUtil.isEmpty(testChars)) {
 			return false;
 		}
-		for (CharSequence testChar : testChars) {
+		for (final CharSequence testChar : testChars) {
 			if (false == contains(str, testChar)) {
 				return false;
 			}
@@ -785,6 +808,23 @@ public class CharSequenceUtil extends StrChecker{
 			return INDEX_NOT_FOUND;
 		}
 		return new CharFinder(searchChar).setText(text).setEndIndex(end).start(start);
+	}
+
+	/**
+	 * 指定范围内查找指定字符
+	 *
+	 * @param text    字符串
+	 * @param matcher 被查找的字符匹配器
+	 * @param start   起始位置，如果小于0，从0开始查找
+	 * @param end     终止位置，如果超过str.length()则默认查找到字符串末尾
+	 * @return 位置
+	 * @since 6.0.0
+	 */
+	public static int indexOf(final CharSequence text, final Predicate<Character> matcher, final int start, final int end) {
+		if (isEmpty(text)) {
+			return INDEX_NOT_FOUND;
+		}
+		return new CharMatcherFinder(matcher).setText(text).setEndIndex(end).start(start);
 	}
 
 	/**
@@ -1701,6 +1741,15 @@ public class CharSequenceUtil extends StrChecker{
 
 	/**
 	 * 切割指定位置之前部分的字符串
+	 * <p>安全的subString,允许：string为null，允许string长度小于toIndexExclude长度</p>
+	 * <pre>{@code
+	 *      Assert.assertEquals(StrUtil.subPre(null, 3), null);
+	 * 		Assert.assertEquals(StrUtil.subPre("ab", 3), "ab");
+	 * 		Assert.assertEquals(StrUtil.subPre("abc", 3), "abc");
+	 * 		Assert.assertEquals(StrUtil.subPre("abcd", 3), "abc");
+	 * 		Assert.assertEquals(StrUtil.subPre("abcd", -3), "a");
+	 * 		Assert.assertEquals(StrUtil.subPre("ab", 3), "ab");
+	 * }</pre>
 	 *
 	 * @param string         字符串
 	 * @param toIndexExclude 切割到的位置（不包括）
@@ -2485,7 +2534,7 @@ public class CharSequenceUtil extends StrChecker{
 	 * @return 包装后的字符串
 	 */
 	public static String wrap(final CharSequence str, final CharSequence prefix, final CharSequence suffix) {
-		return nullToEmpty(prefix).concat(nullToEmpty(str)).concat(nullToEmpty(suffix));
+		return emptyIfNull(prefix).concat(emptyIfNull(str)).concat(emptyIfNull(suffix));
 	}
 
 	/**
@@ -3170,6 +3219,46 @@ public class CharSequenceUtil extends StrChecker{
 	// ------------------------------------------------------------------------ replace
 
 	/**
+	 * 替换字符串中第一个指定字符串
+	 *
+	 * @param str         字符串
+	 * @param searchStr   被查找的字符串
+	 * @param replacedStr 被替换的字符串
+	 * @param ignoreCase  是否忽略大小写
+	 * @return 替换后的字符串
+	 */
+	public static String replaceFirst(final CharSequence str, final CharSequence searchStr, final CharSequence replacedStr, final boolean ignoreCase) {
+		if (isEmpty(str)) {
+			return str(str);
+		}
+		final int startInclude = indexOf(str, searchStr, 0, ignoreCase);
+		if (INDEX_NOT_FOUND == startInclude) {
+			return str(str);
+		}
+		return replace(str, startInclude, startInclude + searchStr.length(), replacedStr);
+	}
+
+	/**
+	 * 替换字符串中最后一个指定字符串
+	 *
+	 * @param str         字符串
+	 * @param searchStr   被查找的字符串
+	 * @param replacedStr 被替换的字符串
+	 * @param ignoreCase  是否忽略大小写
+	 * @return 替换后的字符串
+	 */
+	public static String replaceLast(final CharSequence str, final CharSequence searchStr, final CharSequence replacedStr, final boolean ignoreCase) {
+		if (isEmpty(str)) {
+			return str(str);
+		}
+		final int lastIndex = lastIndexOf(str, searchStr, str.length(), ignoreCase);
+		if (INDEX_NOT_FOUND == lastIndex) {
+			return str(str);
+		}
+		return replace(str, lastIndex, searchStr, replacedStr, ignoreCase);
+	}
+
+	/**
 	 * 替换字符串中的指定字符串，忽略大小写
 	 *
 	 * @param str         字符串
@@ -3290,12 +3379,12 @@ public class CharSequenceUtil extends StrChecker{
 			return originalStr;
 		}
 
-		final StringBuilder stringBuilder = new StringBuilder();
+		final StringBuilder stringBuilder = new StringBuilder(originalStr.length());
 		for (int i = 0; i < strLength; i++) {
 			if (i >= startInclude && i < endExclude) {
 				stringBuilder.append(replacedChar);
 			} else {
-				stringBuilder.append(new String(strCodePoints, i, 1));
+				stringBuilder.appendCodePoint(strCodePoints[i]);
 			}
 		}
 		return stringBuilder.toString();
@@ -3330,13 +3419,14 @@ public class CharSequenceUtil extends StrChecker{
 			return originalStr;
 		}
 
-		final StringBuilder stringBuilder = new StringBuilder();
+		// 新字符串长度 <= 旧长度 - (被替换区间codePoints数量) + 替换字符串长度
+		final StringBuilder stringBuilder = new StringBuilder(originalStr.length() - (endExclude - startInclude) + replacedStr.length());
 		for (int i = 0; i < startInclude; i++) {
-			stringBuilder.append(new String(strCodePoints, i, 1));
+			stringBuilder.appendCodePoint(strCodePoints[i]);
 		}
 		stringBuilder.append(replacedStr);
 		for (int i = endExclude; i < strLength; i++) {
-			stringBuilder.append(new String(strCodePoints, i, 1));
+			stringBuilder.appendCodePoint(strCodePoints[i]);
 		}
 		return stringBuilder.toString();
 	}
@@ -3344,7 +3434,6 @@ public class CharSequenceUtil extends StrChecker{
 	/**
 	 * 替换所有正则匹配的文本，并使用自定义函数决定如何替换<br>
 	 * replaceFun可以提取出匹配到的内容的不同部分，然后经过重新处理、组装变成新的内容放回原位。
-	 *
 	 * <pre class="code">
 	 *     replace(this.content, "(\\d+)", parameters -&gt; "-" + parameters.group(1) + "-")
 	 *     // 结果为："ZZZaaabbbccc中文-1234-"
@@ -3354,10 +3443,10 @@ public class CharSequenceUtil extends StrChecker{
 	 * @param pattern    用于匹配的正则式
 	 * @param replaceFun 决定如何替换的函数
 	 * @return 替换后的字符串
-	 * @see ReUtil#replaceAll(CharSequence, java.util.regex.Pattern, Func1)
+	 * @see ReUtil#replaceAll(CharSequence, java.util.regex.Pattern, SerFunction)
 	 * @since 4.2.2
 	 */
-	public static String replace(final CharSequence str, final java.util.regex.Pattern pattern, final Func1<java.util.regex.Matcher, String> replaceFun) {
+	public static String replace(final CharSequence str, final java.util.regex.Pattern pattern, final SerFunction<java.util.regex.Matcher, String> replaceFun) {
 		return ReUtil.replaceAll(str, pattern, replaceFun);
 	}
 
@@ -3368,10 +3457,10 @@ public class CharSequenceUtil extends StrChecker{
 	 * @param regex      用于匹配的正则式
 	 * @param replaceFun 决定如何替换的函数
 	 * @return 替换后的字符串
-	 * @see ReUtil#replaceAll(CharSequence, String, Func1)
+	 * @see ReUtil#replaceAll(CharSequence, String, SerFunction)
 	 * @since 4.2.2
 	 */
-	public static String replace(final CharSequence str, final String regex, final Func1<java.util.regex.Matcher, String> replaceFun) {
+	public static String replace(final CharSequence str, final String regex, final SerFunction<java.util.regex.Matcher, String> replaceFun) {
 		return ReUtil.replaceAll(str, regex, replaceFun);
 	}
 
@@ -3914,7 +4003,7 @@ public class CharSequenceUtil extends StrChecker{
 	public static String concat(final boolean isNullToEmpty, final CharSequence... strs) {
 		final StringBuilder sb = new StringBuilder();
 		for (final CharSequence str : strs) {
-			sb.append(isNullToEmpty ? nullToEmpty(str) : str);
+			sb.append(isNullToEmpty ? emptyIfNull(str) : str);
 		}
 		return sb.toString();
 	}

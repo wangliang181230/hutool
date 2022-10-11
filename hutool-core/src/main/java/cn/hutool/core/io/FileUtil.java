@@ -13,6 +13,7 @@ import cn.hutool.core.io.file.Tailer;
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.io.unit.DataSizeUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.func.SerConsumer;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.CharUtil;
@@ -20,7 +21,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.reflect.ClassUtil;
 import cn.hutool.core.regex.ReUtil;
 import cn.hutool.core.text.StrUtil;
-import cn.hutool.core.net.URLUtil;
+import cn.hutool.core.net.url.URLUtil;
 import cn.hutool.core.compress.ZipUtil;
 
 import java.io.BufferedInputStream;
@@ -69,22 +70,6 @@ import java.util.zip.Checksum;
 public class FileUtil extends PathUtil {
 
 	/**
-	 * Class文件扩展名
-	 */
-	public static final String CLASS_EXT = FileNameUtil.EXT_CLASS;
-	/**
-	 * Jar文件扩展名
-	 */
-	public static final String JAR_FILE_EXT = FileNameUtil.EXT_JAR;
-	/**
-	 * 在Jar中的路径jar的扩展名形式
-	 */
-	public static final String JAR_PATH_EXT = ".jar!";
-	/**
-	 * 当Path为文件形式时, path会加入一个表示文件的前缀
-	 */
-	public static final String PATH_FILE_PRE = URLUtil.FILE_URL_PREFIX;
-	/**
 	 * 文件路径分隔符<br>
 	 * 在Unix和Linux下 是{@code '/'}; 在Windows下是 {@code '\'}
 	 */
@@ -94,6 +79,7 @@ public class FileUtil extends PathUtil {
 	 * 在Unix和Linux下 是{@code ':'}; 在Windows下是 {@code ';'}
 	 */
 	public static final String PATH_SEPARATOR = File.pathSeparator;
+
 	/**
 	 * 绝对路径判断正则
 	 */
@@ -271,7 +257,7 @@ public class FileUtil extends PathUtil {
 		if (path == null) {
 			return new ArrayList<>(0);
 		}
-		int index = path.lastIndexOf(FileUtil.JAR_PATH_EXT);
+		int index = path.lastIndexOf(FileNameUtil.EXT_JAR_PATH);
 		if (index < 0) {
 			// 普通目录
 			final List<String> paths = new ArrayList<>();
@@ -287,7 +273,7 @@ public class FileUtil extends PathUtil {
 		// jar文件
 		path = getAbsolutePath(path);
 		// jar文件中的路径
-		index = index + FileUtil.JAR_FILE_EXT.length();
+		index = index + FileNameUtil.EXT_JAR.length();
 		JarFile jarFile = null;
 		try {
 			jarFile = new JarFile(path.substring(0, index));
@@ -1321,7 +1307,7 @@ public class FileUtil extends PathUtil {
 		}
 
 		// 给定的路径已经是绝对路径了
-		return StrUtil.C_SLASH == path.charAt(0) || ReUtil.isMatch(PATTERN_PATH_ABSOLUTE, path);
+		return CharUtil.SLASH == path.charAt(0) || ReUtil.isMatch(PATTERN_PATH_ABSOLUTE, path);
 	}
 
 	/**
@@ -1615,7 +1601,7 @@ public class FileUtil extends PathUtil {
 		if (prefixIndex > -1) {
 			// 可能Windows风格路径
 			prefix = pathToUse.substring(0, prefixIndex + 1);
-			if (StrUtil.startWith(prefix, StrUtil.C_SLASH)) {
+			if (StrUtil.startWith(prefix, CharUtil.SLASH)) {
 				// 去除类似于/C:这类路径开头的斜杠
 				prefix = prefix.substring(1);
 			}
@@ -1631,7 +1617,7 @@ public class FileUtil extends PathUtil {
 			pathToUse = pathToUse.substring(1);
 		}
 
-		final List<String> pathList = StrUtil.split(pathToUse, StrUtil.C_SLASH);
+		final List<String> pathList = StrUtil.split(pathToUse, CharUtil.SLASH);
 
 		final List<String> pathElements = new LinkedList<>();
 		int tops = 0;
@@ -1902,6 +1888,7 @@ public class FileUtil extends PathUtil {
 	 */
 	public static BOMInputStream getBOMInputStream(final File file) throws IORuntimeException {
 		try {
+			//noinspection IOStreamConstructor
 			return new BOMInputStream(new FileInputStream(file));
 		} catch (final IOException e) {
 			throw new IORuntimeException(e);
@@ -2283,10 +2270,10 @@ public class FileUtil extends PathUtil {
 	 * 按行处理文件内容，编码为UTF-8
 	 *
 	 * @param file        文件
-	 * @param lineHandler {@link LineHandler}行处理器
+	 * @param lineHandler {@link SerConsumer}行处理器
 	 * @throws IORuntimeException IO异常
 	 */
-	public static void readUtf8Lines(final File file, final LineHandler lineHandler) throws IORuntimeException {
+	public static void readUtf8Lines(final File file, final SerConsumer<String> lineHandler) throws IORuntimeException {
 		readLines(file, CharsetUtil.UTF_8, lineHandler);
 	}
 
@@ -2295,10 +2282,10 @@ public class FileUtil extends PathUtil {
 	 *
 	 * @param file        文件
 	 * @param charset     编码
-	 * @param lineHandler {@link LineHandler}行处理器
+	 * @param lineHandler {@link SerConsumer}行处理器
 	 * @throws IORuntimeException IO异常
 	 */
-	public static void readLines(final File file, final Charset charset, final LineHandler lineHandler) throws IORuntimeException {
+	public static void readLines(final File file, final Charset charset, final SerConsumer<String> lineHandler) throws IORuntimeException {
 		FileReader.of(file, charset).readLines(lineHandler);
 	}
 
@@ -2307,15 +2294,15 @@ public class FileUtil extends PathUtil {
 	 *
 	 * @param file        {@link RandomAccessFile}文件
 	 * @param charset     编码
-	 * @param lineHandler {@link LineHandler}行处理器
+	 * @param lineHandler {@link SerConsumer}行处理器
 	 * @throws IORuntimeException IO异常
 	 * @since 4.5.2
 	 */
-	public static void readLines(final RandomAccessFile file, final Charset charset, final LineHandler lineHandler) {
+	public static void readLines(final RandomAccessFile file, final Charset charset, final SerConsumer<String> lineHandler) {
 		String line;
 		try {
 			while ((line = file.readLine()) != null) {
-				lineHandler.handle(CharsetUtil.convert(line, CharsetUtil.ISO_8859_1, charset));
+				lineHandler.accept(CharsetUtil.convert(line, CharsetUtil.ISO_8859_1, charset));
 			}
 		} catch (final IOException e) {
 			throw new IORuntimeException(e);
@@ -2327,14 +2314,14 @@ public class FileUtil extends PathUtil {
 	 *
 	 * @param file        {@link RandomAccessFile}文件
 	 * @param charset     编码
-	 * @param lineHandler {@link LineHandler}行处理器
+	 * @param lineHandler {@link SerConsumer}行处理器
 	 * @throws IORuntimeException IO异常
 	 * @since 4.5.2
 	 */
-	public static void readLine(final RandomAccessFile file, final Charset charset, final LineHandler lineHandler) {
+	public static void readLine(final RandomAccessFile file, final Charset charset, final SerConsumer<String> lineHandler) {
 		final String line = readLine(file, charset);
 		if (null != line) {
-			lineHandler.handle(line);
+			lineHandler.accept(line);
 		}
 	}
 
@@ -2446,6 +2433,7 @@ public class FileUtil extends PathUtil {
 	public static BufferedOutputStream getOutputStream(final File file) throws IORuntimeException {
 		final OutputStream out;
 		try {
+			//noinspection IOStreamConstructor
 			out = new FileOutputStream(touch(file));
 		} catch (final IOException e) {
 			throw new IORuntimeException(e);
@@ -3290,6 +3278,8 @@ public class FileUtil extends PathUtil {
 			return "application/x-rar-compressed";
 		} else if (StrUtil.endWithIgnoreCase(filePath, ".7z")) {
 			return "application/x-7z-compressed";
+		} else if (StrUtil.endWithIgnoreCase(filePath, ".wgt")) {
+			return "application/widget";
 		}
 
 		final String contentType = URLConnection.getFileNameMap().getContentTypeFor(filePath);
@@ -3360,7 +3350,7 @@ public class FileUtil extends PathUtil {
 	 * @param file    文件
 	 * @param handler 行处理器
 	 */
-	public static void tail(final File file, final LineHandler handler) {
+	public static void tail(final File file, final SerConsumer<String> handler) {
 		tail(file, CharsetUtil.UTF_8, handler);
 	}
 
@@ -3372,7 +3362,7 @@ public class FileUtil extends PathUtil {
 	 * @param charset 编码
 	 * @param handler 行处理器
 	 */
-	public static void tail(final File file, final Charset charset, final LineHandler handler) {
+	public static void tail(final File file, final Charset charset, final SerConsumer<String> handler) {
 		new Tailer(file, charset, handler).start();
 	}
 

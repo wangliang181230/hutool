@@ -1,16 +1,14 @@
 package cn.hutool.core.map;
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.func.Wrapper;
 import cn.hutool.core.util.ObjUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -24,7 +22,7 @@ import java.util.function.Supplier;
  * @author looly
  * @since 4.3.3
  */
-public class MapWrapper<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, Serializable, Cloneable {
+public class MapWrapper<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, Wrapper<Map<K, V>>, Serializable, Cloneable {
 	private static final long serialVersionUID = -7524578042008586382L;
 
 	/**
@@ -35,7 +33,9 @@ public class MapWrapper<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, S
 	 * 默认初始大小
 	 */
 	protected static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
-
+	/**
+	 * 原始集合
+	 */
 	private Map<K, V> raw;
 
 	/**
@@ -52,9 +52,11 @@ public class MapWrapper<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, S
 	/**
 	 * 构造
 	 *
-	 * @param raw 被包装的Map
+	 * @param raw 被包装的Map，不允许为{@code null}
+	 * @throws NullPointerException 当被包装的集合为{@code null}时抛出
 	 */
 	public MapWrapper(final Map<K, V> raw) {
+		Assert.notNull(raw, "raw must not null");
 		this.raw = raw;
 	}
 
@@ -63,6 +65,7 @@ public class MapWrapper<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, S
 	 *
 	 * @return Map
 	 */
+	@Override
 	public Map<K, V> getRaw() {
 		return this.raw;
 	}

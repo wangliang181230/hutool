@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @param <T> 可变的类型
  * @since 3.0.1
  */
-public class MutableObj<T> implements Mutable<T>, Serializable {
+public class MutableObj<T> implements Mutable<T>, Serializable{
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -472,7 +472,7 @@ public class JSONObjectTest {
 
 	@Test
 	public void setDateFormatTest3() {
-		// 自定义格式为只有秒的时间戳，一版用于JWT
+		// 自定义格式为只有秒的时间戳，一般用于JWT
 		final JSONConfig jsonConfig = JSONConfig.of().setDateFormat("#sss");
 
 		final Date date = DateUtil.parse("2020-06-05 11:16:11");
@@ -700,7 +700,7 @@ public class JSONObjectTest {
 				.set("d", true);
 
 		final String s = json1.toJSONString(0, (pair) -> {
-			pair.setKey(StrUtil.toUnderlineCase(pair.getKey()));
+			pair.setKey(StrUtil.toUnderlineCase((String)pair.getKey()));
 			return true;
 		});
 		Assert.assertEquals("{\"a_key\":\"value1\",\"b_job\":\"value2\",\"c_good\":\"value3\",\"d\":true}", s);

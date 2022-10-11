@@ -8,13 +8,11 @@ import cn.hutool.core.lang.mutable.MutableEntry;
 import cn.hutool.core.lang.mutable.MutableObj;
 import cn.hutool.core.text.StrJoiner;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.json.convert.JSONConverterOld;
 import cn.hutool.json.mapper.ArrayMapper;
-import cn.hutool.json.serialize.JSONWriter;
+import cn.hutool.json.writer.JSONWriter;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -193,11 +191,6 @@ public class JSONArray implements JSON, JSONGetter<Integer>, List<Object>, Rando
 		return (index < 0 || index >= this.size()) ? defaultValue : this.rawList.get(index);
 	}
 
-	@Override
-	public <T> T getByPath(final String expression, final Class<T> resultType) {
-		return JSONConverterOld.jsonConvert(resultType, getByPath(expression), getConfig());
-	}
-
 	/**
 	 * Append an object value. This increases the array's length by one. <br>
 	 * 加入元素，数组长度+1，等同于 {@link JSONArray#add(Object)}
@@ -235,11 +228,6 @@ public class JSONArray implements JSON, JSONGetter<Integer>, List<Object>, Rando
 	public JSONArray put(final int index, final Object value) throws JSONException {
 		this.set(index, value);
 		return this;
-	}
-
-	@Override
-	public <T> T toBean(final Type type) {
-		return JSON.super.toBean(type);
 	}
 
 	/**
@@ -533,7 +521,7 @@ public class JSONArray implements JSON, JSONGetter<Integer>, List<Object>, Rando
 	 * @return JSON字符串
 	 * @since 5.7.15
 	 */
-	public String toJSONString(final int indentFactor, final Predicate<MutableEntry<Integer, Object>> predicate) {
+	public String toJSONString(final int indentFactor, final Predicate<MutableEntry<Object, Object>> predicate) {
 		final StringWriter sw = new StringWriter();
 		synchronized (sw.getBuffer()) {
 			return this.write(sw, indentFactor, 0, predicate).toString();
@@ -541,32 +529,10 @@ public class JSONArray implements JSON, JSONGetter<Integer>, List<Object>, Rando
 	}
 
 	@Override
-	public Writer write(final Writer writer, final int indentFactor, final int indent) throws JSONException {
-		return write(writer, indentFactor, indent, null);
-	}
+	public Writer write(final Writer writer, final int indentFactor, final int indent, final Predicate<MutableEntry<Object, Object>> predicate) throws JSONException {
+		final JSONWriter jsonWriter = JSONWriter.of(writer, indentFactor, indent, config).beginArray();
 
-	/**
-	 * 将JSON内容写入Writer<br>
-	 * 支持过滤器，即选择哪些字段或值不写出
-	 *
-	 * @param writer       writer
-	 * @param indentFactor 缩进因子，定义每一级别增加的缩进量
-	 * @param indent       本级别缩进量
-	 * @param predicate    过滤器，可以修改值，key（index）无法修改，{@link Predicate#test(Object)}为{@code true}保留
-	 * @return Writer
-	 * @throws JSONException JSON相关异常
-	 * @since 5.7.15
-	 */
-	public Writer write(final Writer writer, final int indentFactor, final int indent, final Predicate<MutableEntry<Integer, Object>> predicate) throws JSONException {
-		final JSONWriter jsonWriter = JSONWriter.of(writer, indentFactor, indent, config)
-				.beginArray();
-
-		CollUtil.forEach(this, (value, index) -> {
-			final MutableEntry<Integer, Object> pair = new MutableEntry<>(index, value);
-			if (null == predicate || predicate.test(pair)) {
-				jsonWriter.writeValue(pair.getValue());
-			}
-		});
+		CollUtil.forEach(this, (value, index) -> jsonWriter.writeField(new MutableEntry<>(index, value), predicate));
 		jsonWriter.end();
 		// 此处不关闭Writer，考虑writer后续还需要填内容
 		return writer;

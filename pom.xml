@@ -37,7 +37,7 @@
 		<!-- versions -->
 		<spring-boot.version>2.7.2</spring-boot.version>
 		<compile.version>8</compile.version>
-		<junit.version>5.8.2</junit.version>
+		<junit.version>5.9.0</junit.version>
 		<lombok.version>1.18.24</lombok.version>
 	</properties>
 

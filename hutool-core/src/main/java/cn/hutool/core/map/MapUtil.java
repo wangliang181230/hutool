@@ -7,7 +7,6 @@ import cn.hutool.core.collection.iter.IterUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.reflect.ConstructorUtil;
-import cn.hutool.core.reflect.TypeReference;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
@@ -16,7 +15,6 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,7 +38,7 @@ import java.util.stream.Collectors;
  * @author Looly
  * @since 3.1.1
  */
-public class MapUtil {
+public class MapUtil extends MapGetUtil {
 
 	/**
 	 * 默认初始大小
@@ -198,42 +195,42 @@ public class MapUtil {
 	}
 
 	/**
-	 * 新建一个初始容量为{@link MapUtil#DEFAULT_INITIAL_CAPACITY} 的ConcurrentHashMap
+	 * 新建一个初始容量为{@link MapUtil#DEFAULT_INITIAL_CAPACITY} 的{@link SafeConcurrentHashMap}
 	 *
 	 * @param <K> key的类型
 	 * @param <V> value的类型
-	 * @return ConcurrentHashMap
+	 * @return {@link SafeConcurrentHashMap}
 	 */
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-		return new ConcurrentHashMap<>(DEFAULT_INITIAL_CAPACITY);
+	public static <K, V> ConcurrentHashMap<K, V> newSafeConcurrentHashMap() {
+		return new SafeConcurrentHashMap<>(DEFAULT_INITIAL_CAPACITY);
 	}
 
 	/**
-	 * 新建一个ConcurrentHashMap
+	 * 新建一个{@link SafeConcurrentHashMap}
 	 *
 	 * @param size 初始容量，当传入的容量小于等于0时，容量为{@link MapUtil#DEFAULT_INITIAL_CAPACITY}
 	 * @param <K>  key的类型
 	 * @param <V>  value的类型
-	 * @return ConcurrentHashMap
+	 * @return {@link SafeConcurrentHashMap}
 	 */
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(final int size) {
+	public static <K, V> ConcurrentHashMap<K, V> newSafeConcurrentHashMap(final int size) {
 		final int initCapacity = size <= 0 ? DEFAULT_INITIAL_CAPACITY : size;
-		return new ConcurrentHashMap<>(initCapacity);
+		return new SafeConcurrentHashMap<>(initCapacity);
 	}
 
 	/**
-	 * 传入一个Map将其转化为ConcurrentHashMap类型
+	 * 传入一个Map将其转化为{@link SafeConcurrentHashMap}类型
 	 *
 	 * @param map map
 	 * @param <K> key的类型
 	 * @param <V> value的类型
-	 * @return ConcurrentHashMap
+	 * @return {@link SafeConcurrentHashMap}
 	 */
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(final Map<K, V> map) {
+	public static <K, V> ConcurrentHashMap<K, V> newSafeConcurrentHashMap(final Map<K, V> map) {
 		if (isEmpty(map)) {
 			return new ConcurrentHashMap<>(DEFAULT_INITIAL_CAPACITY);
 		}
-		return new ConcurrentHashMap<>(map);
+		return new SafeConcurrentHashMap<>(map);
 	}
 
 	/**
@@ -250,9 +247,9 @@ public class MapUtil {
 		if (null == mapType || mapType.isAssignableFrom(AbstractMap.class)) {
 			return new HashMap<>();
 		} else {
-			try{
+			try {
 				return (Map<K, V>) ConstructorUtil.newInstance(mapType);
-			}catch (UtilException e){
+			} catch (final UtilException e) {
 				// 不支持的map类型，返回默认的HashMap
 				return new HashMap<>();
 			}
@@ -433,25 +430,15 @@ public class MapUtil {
 	 * @return Map
 	 */
 	public static <K, V> Map<K, List<V>> toListMap(final Iterable<? extends Map<K, V>> mapList) {
-		final HashMap<K, List<V>> resultMap = new HashMap<>();
+		final Map<K, List<V>> resultMap = new HashMap<>();
 		if (CollUtil.isEmpty(mapList)) {
 			return resultMap;
 		}
 
-		Set<Entry<K, V>> entrySet;
 		for (final Map<K, V> map : mapList) {
-			entrySet = map.entrySet();
-			K key;
-			List<V> valueList;
-			for (final Entry<K, V> entry : entrySet) {
-				key = entry.getKey();
-				valueList = resultMap.get(key);
-				if (null == valueList) {
-					valueList = ListUtil.of(entry.getValue());
-					resultMap.put(key, valueList);
-				} else {
-					valueList.add(entry.getValue());
-				}
+			for (final Entry<K, V> entry : map.entrySet()) {
+				resultMap.computeIfAbsent(entry.getKey(), k -> new ArrayList<>())
+						.add(entry.getValue());
 			}
 		}
 
@@ -488,35 +475,31 @@ public class MapUtil {
 	 * @return Map列表
 	 */
 	public static <K, V> List<Map<K, V>> toMapList(final Map<K, ? extends Iterable<V>> listMap) {
-		final List<Map<K, V>> resultList = new ArrayList<>();
 		if (isEmpty(listMap)) {
-			return resultList;
+			return ListUtil.zero();
 		}
 
-		boolean isEnd;// 是否结束。标准是元素列表已耗尽
-		int index = 0;// 值索引
-		Map<K, V> map;
-		do {
-			isEnd = true;
-			map = new HashMap<>();
-			List<V> vList;
-			int vListSize;
-			for (final Entry<K, ? extends Iterable<V>> entry : listMap.entrySet()) {
-				vList = ListUtil.of(entry.getValue());
-				vListSize = vList.size();
-				if (index < vListSize) {
-					map.put(entry.getKey(), vList.get(index));
-					if (index != vListSize - 1) {
-						// 当值列表中还有更多值（非最后一个），继续循环
-						isEnd = false;
-					}
+		final List<Map<K, V>> resultList = new ArrayList<>();
+		for (final Entry<K, ? extends Iterable<V>> entry : listMap.entrySet()) {
+			final Iterator<V> iterator = IterUtil.getIter(entry.getValue());
+			if (IterUtil.isEmpty(iterator)) {
+				continue;
+			}
+			final K key = entry.getKey();
+			// 对已经存在的map添加元素
+			for (final Map<K, V> map : resultList) {
+				// 还可以继续添加元素
+				if (iterator.hasNext()) {
+					map.put(key, iterator.next());
+				} else {
+					break;
 				}
 			}
-			if (false == map.isEmpty()) {
-				resultList.add(map);
+			// entry的value的个数 大于 当前列表的size, 直接新增map
+			while (iterator.hasNext()) {
+				resultList.add(MapUtil.of(key, iterator.next()));
 			}
-			index++;
-		} while (false == isEnd);
+		}
 
 		return resultList;
 	}
@@ -905,7 +888,7 @@ public class MapUtil {
 	 * @return 不修改Map
 	 * @since 5.2.6
 	 */
-	public static <K, V> Map<K, V> unmodifiable(final Map<K, V> map) {
+	public static <K, V> Map<K, V> view(final Map<K, V> map) {
 		return Collections.unmodifiableMap(map);
 	}
 
@@ -978,319 +961,6 @@ public class MapUtil {
 			map.remove(key);
 		}
 		return map;
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为字符串
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static String getStr(final Map<?, ?> map, final Object key) {
-		return get(map, key, String.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为字符串
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static String getStr(final Map<?, ?> map, final Object key, final String defaultValue) {
-		return get(map, key, String.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Integer
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Integer getInt(final Map<?, ?> map, final Object key) {
-		return get(map, key, Integer.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Integer
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Integer getInt(final Map<?, ?> map, final Object key, final Integer defaultValue) {
-		return get(map, key, Integer.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Double
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Double getDouble(final Map<?, ?> map, final Object key) {
-		return get(map, key, Double.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Double
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Double getDouble(final Map<?, ?> map, final Object key, final Double defaultValue) {
-		return get(map, key, Double.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Float
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Float getFloat(final Map<?, ?> map, final Object key) {
-		return get(map, key, Float.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Float
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Float getFloat(final Map<?, ?> map, final Object key, final Float defaultValue) {
-		return get(map, key, Float.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Short
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Short getShort(final Map<?, ?> map, final Object key) {
-		return get(map, key, Short.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Short
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Short getShort(final Map<?, ?> map, final Object key, final Short defaultValue) {
-		return get(map, key, Short.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Bool
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Boolean getBool(final Map<?, ?> map, final Object key) {
-		return get(map, key, Boolean.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Bool
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Boolean getBool(final Map<?, ?> map, final Object key, final Boolean defaultValue) {
-		return get(map, key, Boolean.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Character
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Character getChar(final Map<?, ?> map, final Object key) {
-		return get(map, key, Character.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Character
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Character getChar(final Map<?, ?> map, final Object key, final Character defaultValue) {
-		return get(map, key, Character.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Long
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static Long getLong(final Map<?, ?> map, final Object key) {
-		return get(map, key, Long.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为Long
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static Long getLong(final Map<?, ?> map, final Object key, final Long defaultValue) {
-		return get(map, key, Long.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为{@link Date}
-	 *
-	 * @param map Map
-	 * @param key 键
-	 * @return 值
-	 * @since 4.1.2
-	 */
-	public static Date getDate(final Map<?, ?> map, final Object key) {
-		return get(map, key, Date.class);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为{@link Date}
-	 *
-	 * @param map          Map
-	 * @param key          键
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 4.1.2
-	 */
-	public static Date getDate(final Map<?, ?> map, final Object key, final Date defaultValue) {
-		return get(map, key, Date.class, defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为指定类型
-	 *
-	 * @param <T>  目标值类型
-	 * @param map  Map
-	 * @param key  键
-	 * @param type 值类型
-	 * @return 值
-	 * @since 4.0.6
-	 */
-	public static <T> T get(final Map<?, ?> map, final Object key, final Class<T> type) {
-		return get(map, key, type, null);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为指定类型
-	 *
-	 * @param <T>          目标值类型
-	 * @param map          Map
-	 * @param key          键
-	 * @param type         值类型
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static <T> T get(final Map<?, ?> map, final Object key, final Class<T> type, final T defaultValue) {
-		return null == map ? defaultValue : Convert.convert(type, map.get(key), defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为指定类型，此方法在转换失败后不抛异常，返回null。
-	 *
-	 * @param <T>          目标值类型
-	 * @param map          Map
-	 * @param key          键
-	 * @param type         值类型
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.5.3
-	 */
-	public static <T> T getQuietly(final Map<?, ?> map, final Object key, final Class<T> type, final T defaultValue) {
-		return null == map ? defaultValue : Convert.convertQuietly(type, map.get(key), defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为指定类型
-	 *
-	 * @param <T>  目标值类型
-	 * @param map  Map
-	 * @param key  键
-	 * @param type 值类型
-	 * @return 值
-	 * @since 4.5.12
-	 */
-	public static <T> T get(final Map<?, ?> map, final Object key, final TypeReference<T> type) {
-		return get(map, key, type, null);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为指定类型
-	 *
-	 * @param <T>          目标值类型
-	 * @param map          Map
-	 * @param key          键
-	 * @param type         值类型
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.3.11
-	 */
-	public static <T> T get(final Map<?, ?> map, final Object key, final TypeReference<T> type, final T defaultValue) {
-		return null == map ? defaultValue : Convert.convert(type, map.get(key), defaultValue);
-	}
-
-	/**
-	 * 获取Map指定key的值，并转换为指定类型，转换失败后返回null，不抛异常
-	 *
-	 * @param <T>          目标值类型
-	 * @param map          Map
-	 * @param key          键
-	 * @param type         值类型
-	 * @param defaultValue 默认值
-	 * @return 值
-	 * @since 5.5.3
-	 */
-	public static <T> T getQuietly(final Map<?, ?> map, final Object key, final TypeReference<T> type, final T defaultValue) {
-		return null == map ? defaultValue : Convert.convertQuietly(type, map.get(key), defaultValue);
 	}
 
 	/**
@@ -1570,5 +1240,50 @@ public class MapUtil {
 			resultMap.put(keyMapper.apply(value), valueMapper.apply(value));
 		}
 		return resultMap;
+	}
+
+	/**
+	 * 根据给定的entry列表，根据entry的key进行分组;
+	 *
+	 * @param <K>     键类型
+	 * @param <V>     值类型
+	 * @param entries entry列表
+	 * @return entries
+	 * @since 5.8.6
+	 */
+	public static <K, V> Map<K, List<V>> grouping(final Iterable<Map.Entry<K, V>> entries) {
+		if (CollUtil.isEmpty(entries)) {
+			return zero();
+		}
+
+		final Map<K, List<V>> map = new HashMap<>();
+		for (final Map.Entry<K, V> pair : entries) {
+			final List<V> values = map.computeIfAbsent(pair.getKey(), k -> new ArrayList<>());
+			values.add(pair.getValue());
+		}
+		return map;
+	}
+
+	/**
+	 * 如果 key 对应的 value 不存在，则使用获取 mappingFunction 重新计算后的值，并保存为该 key 的 value，否则返回 value。<br>
+	 * 方法来自Dubbo，解决使用ConcurrentHashMap.computeIfAbsent导致的死循环问题。（issues#2349）<br>
+	 * A temporary workaround for Java 8 specific performance issue JDK-8161372 .<br>
+	 * This class should be removed once we drop Java 8 support.
+	 *
+	 * @param <K>             键类型
+	 * @param <V>             值类型
+	 * @param map             Map，一般用于线程安全的Map
+	 * @param key             键
+	 * @param mappingFunction 值计算函数
+	 * @return 值
+	 * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8161372">https://bugs.openjdk.java.net/browse/JDK-8161372</a>
+	 */
+	public static <K, V> V computeIfAbsent(final Map<K, V> map, final K key, final Function<? super K, ? extends V> mappingFunction) {
+		V value = map.get(key);
+		if (null == value) {
+			map.putIfAbsent(key, mappingFunction.apply(key));
+			value = map.get(key);
+		}
+		return value;
 	}
 }

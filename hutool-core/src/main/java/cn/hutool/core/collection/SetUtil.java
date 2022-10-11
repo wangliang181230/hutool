@@ -187,11 +187,23 @@ public class SetUtil {
 	}
 
 	/**
+	 * 获取一个初始大小为0的LinkedHashSet，这个空Set可变
+	 *
+	 * @param <T> 元素类型
+	 * @return 空的List
+	 * @since 6.0.0
+	 */
+	public static <T> Set<T> zeroLinked() {
+		return new LinkedHashSet<>(0, 1);
+	}
+
+	/**
 	 * 转为只读Set
 	 *
 	 * @param <T> 元素类型
 	 * @param c   集合
 	 * @return 只读集合
+	 * @see Collections#unmodifiableSet(Set)
 	 * @since 6.0.0
 	 */
 	public static <T> Set<T> unmodifiable(final Set<? extends T> c) {

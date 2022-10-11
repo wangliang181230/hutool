@@ -12,7 +12,6 @@ import java.math.RoundingMode;
  * {@link NumberUtil} 单元测试类
  *
  * @author Looly
- *
  */
 public class NumberUtilTest {
 
@@ -21,15 +20,15 @@ public class NumberUtilTest {
 		final Float a = 3.15f;
 		final Double b = 4.22;
 		final double result = NumberUtil.add(a, b).doubleValue();
-		Assert.assertEquals(7.37, result, 2);
+		Assert.assertEquals(7.37, result, 0);
 	}
 
 	@Test
 	public void addTest2() {
-		final double a = 3.15f;
+		final double a = 3.15f;// 转换丢失精度
 		final double b = 4.22;
 		final double result = NumberUtil.add(a, b).doubleValue();
-		Assert.assertEquals(7.37, result, 2);
+		Assert.assertEquals(7.37, result, 0.0001);
 	}
 
 	@Test
@@ -37,7 +36,7 @@ public class NumberUtilTest {
 		final float a = 3.15f;
 		final double b = 4.22;
 		final double result = NumberUtil.add(a, b, a, b).doubleValue();
-		Assert.assertEquals(14.74, result, 2);
+		Assert.assertEquals(14.74, result, 0);
 	}
 
 	@Test
@@ -50,7 +49,7 @@ public class NumberUtilTest {
 	}
 
 	@Test
-	public void addBlankTest(){
+	public void addBlankTest() {
 		final BigDecimal result = NumberUtil.add("123", " ");
 		Assert.assertEquals(new BigDecimal("123"), result);
 	}
@@ -74,7 +73,7 @@ public class NumberUtilTest {
 	}
 
 	@Test
-	public void mulNullTest(){
+	public void mulNullTest() {
 		final BigDecimal mul = NumberUtil.mul(new BigDecimal("10"), null);
 		Assert.assertEquals(BigDecimal.ZERO, mul);
 	}
@@ -162,6 +161,9 @@ public class NumberUtilTest {
 	public void roundStrTest() {
 		final String roundStr = NumberUtil.roundStr(2.647, 2);
 		Assert.assertEquals(roundStr, "2.65");
+
+		final String roundStr1 = NumberUtil.roundStr(0, 10);
+		Assert.assertEquals(roundStr1, "0.0000000000");
 	}
 
 	@Test
@@ -206,7 +208,7 @@ public class NumberUtilTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void decimalFormatNaNTest(){
+	public void decimalFormatNaNTest() {
 		final Double a = 0D;
 		final Double b = 0D;
 
@@ -215,7 +217,7 @@ public class NumberUtilTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void decimalFormatNaNTest2(){
+	public void decimalFormatNaNTest2() {
 		final Double a = 0D;
 		final Double b = 0D;
 
@@ -300,6 +302,20 @@ public class NumberUtilTest {
 		Assert.assertEquals(1482, v1);
 	}
 
+	@Test(expected = NumberFormatException.class)
+	public void parseIntTest3() {
+		final int v1 = NumberUtil.parseInt("d");
+		Assert.assertEquals(0, v1);
+	}
+
+	@Test(expected = NumberFormatException.class)
+	public void parseIntTest4() {
+		// issue#I5M55F
+		// 科学计数法忽略支持，科学计数法一般用于表示非常小和非常大的数字，这类数字转换为int后精度丢失，没有意义。
+		final String numberStr = "429900013E20220812163344551";
+		NumberUtil.parseInt(numberStr);
+	}
+
 	@Test
 	public void parseNumberTest() {
 		// from 5.4.8 issue#I23ORQ@Gitee
@@ -309,6 +325,15 @@ public class NumberUtilTest {
 
 		final Number v2 = NumberUtil.parseNumber("1,482.00D");
 		Assert.assertEquals(1482L, v2.longValue());
+	}
+
+	@Test
+	public void parseNumberTest2() {
+		// issue#I5M55F
+		final String numberStr = "429900013E20220812163344551";
+		final Number number = NumberUtil.parseNumber(numberStr);
+		Assert.assertNotNull(number);
+		Assert.assertTrue(number instanceof BigDecimal);
 	}
 
 	@Test
@@ -359,7 +384,7 @@ public class NumberUtilTest {
 	}
 
 	@Test
-	public void toStrTest(){
+	public void toStrTest() {
 		Assert.assertEquals("1", NumberUtil.toStr(new BigDecimal("1.0000000000")));
 		Assert.assertEquals("0", NumberUtil.toStr(NumberUtil.sub(new BigDecimal("9600.00000"), new BigDecimal("9600.00000"))));
 		Assert.assertEquals("0", NumberUtil.toStr(NumberUtil.sub(new BigDecimal("9600.0000000000"), new BigDecimal("9600.000000"))));
@@ -367,15 +392,15 @@ public class NumberUtilTest {
 	}
 
 	@Test
-	public void toPlainNumberTest(){
+	public void toPlainNumberTest() {
 		final String num = "5344.34234e3";
 		final String s = new BigDecimal(num).toPlainString();
 		Assert.assertEquals("5344342.34", s);
 	}
 
 	@Test
-	public void isOddOrEvenTest(){
-		final int[] a = { 0, 32, -32, 123, -123 };
+	public void isOddOrEvenTest() {
+		final int[] a = {0, 32, -32, 123, -123};
 		Assert.assertFalse(NumberUtil.isOdd(a[0]));
 		Assert.assertTrue(NumberUtil.isEven(a[0]));
 
@@ -393,21 +418,21 @@ public class NumberUtilTest {
 	}
 
 	@Test
-	public void toBigIntegerTest(){
-		final Number number=1123123;
-		final Number number2=1123123.123;
+	public void toBigIntegerTest() {
+		final Number number = 1123123;
+		final Number number2 = 1123123.123;
 		Assert.assertNotNull(NumberUtil.toBigInteger(number));
 		Assert.assertNotNull(NumberUtil.toBigInteger(number2));
 	}
 
 	@Test
-	public void divIntegerTest(){
+	public void divIntegerTest() {
 		final BigDecimal div = NumberUtil.div(100101300, 100);
 		Assert.assertEquals(1001013, div.intValue());
 	}
 
 	@Test
-	public void isDoubleTest(){
+	public void isDoubleTest() {
 		Assert.assertFalse(NumberUtil.isDouble(null));
 		Assert.assertFalse(NumberUtil.isDouble(""));
 		Assert.assertFalse(NumberUtil.isDouble("  "));
@@ -433,11 +458,5 @@ public class NumberUtilTest {
 	public void rangeMinTest() {
 		//noinspection ResultOfMethodCallIgnored
 		NumberUtil.range(0, Integer.MIN_VALUE);
-	}
-
-	@Test(expected = NumberFormatException.class)
-	public void parseIntTest3() {
-		int v1 = NumberUtil.parseInt("d");
-		Assert.assertEquals(0, v1);
 	}
 }

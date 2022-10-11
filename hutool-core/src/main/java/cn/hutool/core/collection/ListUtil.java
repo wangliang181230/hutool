@@ -13,6 +13,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.PageUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -176,7 +177,8 @@ public class ListUtil {
 
 	/**
 	 * 数组转为一个不可变List<br>
-	 * 类似于Java9中的List.of
+	 * 类似于Java9中的List.of<br>
+	 * 不同于Arrays.asList，此方法的原数组修改时，并不会影响List。
 	 *
 	 * @param ts  对象
 	 * @param <T> 对象类型
@@ -524,7 +526,7 @@ public class ListUtil {
 	 * @return 最后一个位置
 	 * @since 5.6.6
 	 */
-	public static <T> int lastIndexOf(final List<T> list, final Predicate<T> matcher) {
+	public static <T> int lastIndexOf(final List<T> list, final Predicate<? super T> matcher) {
 		if (null != list) {
 			final int size = list.size();
 			if (size > 0) {
@@ -684,6 +686,7 @@ public class ListUtil {
 	 * @param otherList 其它列表
 	 * @return 此列表
 	 */
+	@SuppressWarnings("UnusedReturnValue")
 	public static <T> List<T> addAllIfNotContains(final List<T> list, final List<T> otherList) {
 		for (final T t : otherList) {
 			if (false == list.contains(t)) {
@@ -691,5 +694,55 @@ public class ListUtil {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * 通过删除或替换现有元素或者原地添加新的元素来修改列表，并以列表形式返回被修改的内容。此方法不会改变原列表。
+	 * 类似js的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/splice">splice</a>函数
+	 *
+	 * @param <T> 元素类型
+	 * @param list 列表
+	 * @param start       指定修改的开始位置（从 0 计数）, 可以为负数, -1代表最后一个元素
+	 * @param deleteCount 删除个数，必须是正整数
+	 * @param items       放入的元素
+	 * @return 结果列表
+	 * @since 6.0.0
+	 */
+	@SafeVarargs
+	public static <T> List<T> splice(final List<T> list, int start, int deleteCount, final T... items) {
+		if (CollUtil.isEmpty(list)) {
+			return zero();
+		}
+		final int size = list.size();
+		// 从后往前查找
+		if (start < 0) {
+			start += size;
+		} else if (start >= size) {
+			// 直接在尾部追加，不删除
+			start = size;
+			deleteCount = 0;
+		}
+		// 起始位置 加上 删除的数量 超过 数据长度，需要重新计算需要删除的数量
+		if (start + deleteCount > size) {
+			deleteCount = size - start;
+		}
+
+		// 新列表的长度
+		final int newSize = size - deleteCount + items.length;
+		List<T> resList = list;
+		// 新列表的长度 大于 旧列表，创建新列表
+		if (newSize > size) {
+			resList = new ArrayList<>(newSize);
+			resList.addAll(list);
+		}
+		// 需要删除的部分
+		if (deleteCount > 0) {
+			resList.subList(start, start + deleteCount).clear();
+		}
+		// 新增的部分
+		if (ArrayUtil.isNotEmpty(items)) {
+			resList.addAll(start, Arrays.asList(items));
+		}
+		return resList;
 	}
 }

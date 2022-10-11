@@ -2,6 +2,7 @@ package cn.hutool.swing.img;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IORuntimeException;
+import cn.hutool.swing.img.color.ColorUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -89,7 +90,7 @@ public class ImgUtilTest {
 	@Test
 	@Ignore
 	public void sliceByRowsAndColsTest() {
-		ImgUtil.sliceByRowsAndCols(FileUtil.file("d:/test/logo.jpg"), FileUtil.file("d:/test/dest"), 1, 5);
+		ImgUtil.sliceByRowsAndCols(FileUtil.file("d:/test/logo.jpg"), FileUtil.file("d:/test/dest"), ImgUtil.IMAGE_TYPE_JPEG, 1, 5);
 	}
 
 	@Test
@@ -121,7 +122,7 @@ public class ImgUtilTest {
 
 	@Test
 	public void toHexTest(){
-		final String s = ImgUtil.toHex(Color.RED);
+		final String s = ColorUtil.toHex(Color.RED);
 		Assert.assertEquals("#FF0000", s);
 	}
 
@@ -143,7 +144,7 @@ public class ImgUtilTest {
 	@Test
 	public void getMainColor() throws MalformedURLException {
 		final BufferedImage read = ImgUtil.read(new URL("https://pic2.zhimg.com/v2-94f5552f2b142ff575306850c5bab65d_b.png"));
-		final String mainColor = ImgUtil.getMainColor(read, new int[]{64,84,116});
+		final String mainColor = ColorUtil.getMainColor(read, new int[]{64,84,116});
 		System.out.println(mainColor);
 	}
 

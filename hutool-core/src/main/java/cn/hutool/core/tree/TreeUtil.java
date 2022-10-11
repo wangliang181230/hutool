@@ -8,6 +8,7 @@ import cn.hutool.core.util.ObjUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 树工具类
@@ -20,10 +21,10 @@ public class TreeUtil {
 	 * 构建单root节点树
 	 *
 	 * @param list 源数据集合
-	 * @return {@link Tree}
+	 * @return {@link MapTree}
 	 * @since 5.7.2
 	 */
-	public static Tree<Integer> buildSingle(final List<TreeNode<Integer>> list) {
+	public static MapTree<Integer> buildSingle(final List<TreeNode<Integer>> list) {
 		return buildSingle(list, 0);
 	}
 
@@ -33,7 +34,7 @@ public class TreeUtil {
 	 * @param list 源数据集合
 	 * @return List
 	 */
-	public static List<Tree<Integer>> build(final List<TreeNode<Integer>> list) {
+	public static List<MapTree<Integer>> build(final List<TreeNode<Integer>> list) {
 		return build(list, 0);
 	}
 
@@ -44,10 +45,10 @@ public class TreeUtil {
 	 * @param <E>      ID类型
 	 * @param list     源数据集合
 	 * @param parentId 最顶层父id值 一般为 0 之类
-	 * @return {@link Tree}
+	 * @return {@link MapTree}
 	 * @since 5.7.2
 	 */
-	public static <E> Tree<E> buildSingle(final List<TreeNode<E>> list, final E parentId) {
+	public static <E> MapTree<E> buildSingle(final List<TreeNode<E>> list, final E parentId) {
 		return buildSingle(list, parentId, TreeNodeConfig.DEFAULT_CONFIG, new DefaultNodeParser<>());
 	}
 
@@ -59,7 +60,7 @@ public class TreeUtil {
 	 * @param parentId 最顶层父id值 一般为 0 之类
 	 * @return List
 	 */
-	public static <E> List<Tree<E>> build(final List<TreeNode<E>> list, final E parentId) {
+	public static <E> List<MapTree<E>> build(final List<TreeNode<E>> list, final E parentId) {
 		return build(list, parentId, TreeNodeConfig.DEFAULT_CONFIG, new DefaultNodeParser<>());
 	}
 
@@ -72,10 +73,10 @@ public class TreeUtil {
 	 * @param list       源数据集合
 	 * @param parentId   最顶层父id值 一般为 0 之类
 	 * @param nodeParser 转换器
-	 * @return {@link Tree}
+	 * @return {@link MapTree}
 	 * @since 5.7.2
 	 */
-	public static <T, E> Tree<E> buildSingle(final List<T> list, final E parentId, final NodeParser<T, E> nodeParser) {
+	public static <T, E> MapTree<E> buildSingle(final List<T> list, final E parentId, final NodeParser<T, E> nodeParser) {
 		return buildSingle(list, parentId, TreeNodeConfig.DEFAULT_CONFIG, nodeParser);
 	}
 
@@ -89,7 +90,7 @@ public class TreeUtil {
 	 * @param nodeParser 转换器
 	 * @return List
 	 */
-	public static <T, E> List<Tree<E>> build(final List<T> list, final E parentId, final NodeParser<T, E> nodeParser) {
+	public static <T, E> List<MapTree<E>> build(final List<T> list, final E parentId, final NodeParser<T, E> nodeParser) {
 		return build(list, parentId, TreeNodeConfig.DEFAULT_CONFIG, nodeParser);
 	}
 
@@ -104,7 +105,7 @@ public class TreeUtil {
 	 * @param nodeParser     转换器
 	 * @return List
 	 */
-	public static <T, E> List<Tree<E>> build(final List<T> list, final E rootId, final TreeNodeConfig treeNodeConfig, final NodeParser<T, E> nodeParser) {
+	public static <T, E> List<MapTree<E>> build(final List<T> list, final E rootId, final TreeNodeConfig treeNodeConfig, final NodeParser<T, E> nodeParser) {
 		return buildSingle(list, rootId, treeNodeConfig, nodeParser).getChildren();
 	}
 
@@ -118,10 +119,10 @@ public class TreeUtil {
 	 * @param rootId         最顶层父id值 一般为 0 之类
 	 * @param treeNodeConfig 配置
 	 * @param nodeParser     转换器
-	 * @return {@link Tree}
+	 * @return {@link MapTree}
 	 * @since 5.7.2
 	 */
-	public static <T, E> Tree<E> buildSingle(final List<T> list, final E rootId, final TreeNodeConfig treeNodeConfig, final NodeParser<T, E> nodeParser) {
+	public static <T, E> MapTree<E> buildSingle(final List<T> list, final E rootId, final TreeNodeConfig treeNodeConfig, final NodeParser<T, E> nodeParser) {
 		return TreeBuilder.of(rootId, treeNodeConfig)
 				.append(list, nodeParser).build();
 	}
@@ -135,7 +136,7 @@ public class TreeUtil {
 	 * @return List
 	 * @since 5.6.7
 	 */
-	public static <E> List<Tree<E>> build(final Map<E, Tree<E>> map, final E rootId) {
+	public static <E> List<MapTree<E>> build(final Map<E, MapTree<E>> map, final E rootId) {
 		return buildSingle(map, rootId).getChildren();
 	}
 
@@ -146,11 +147,11 @@ public class TreeUtil {
 	 * @param <E>    ID类型
 	 * @param map    源数据Map
 	 * @param rootId 根节点id值 一般为 0 之类
-	 * @return {@link Tree}
+	 * @return {@link MapTree}
 	 * @since 5.7.2
 	 */
-	public static <E> Tree<E> buildSingle(final Map<E, Tree<E>> map, final E rootId) {
-		final Tree<E> tree = CollUtil.getFirstNoneNull(map.values());
+	public static <E> MapTree<E> buildSingle(final Map<E, MapTree<E>> map, final E rootId) {
+		final MapTree<E> tree = CollUtil.getFirstNoneNull(map.values());
 		if (null != tree) {
 			final TreeNodeConfig config = tree.getConfig();
 			return TreeBuilder.of(rootId, config)
@@ -171,19 +172,19 @@ public class TreeUtil {
 	 * @return 节点
 	 * @since 5.2.4
 	 */
-	public static <T> Tree<T> getNode(final Tree<T> node, final T id) {
+	public static <T> MapTree<T> getNode(final MapTree<T> node, final T id) {
 		if (ObjUtil.equals(id, node.getId())) {
 			return node;
 		}
 
-		final List<Tree<T>> children = node.getChildren();
+		final List<MapTree<T>> children = node.getChildren();
 		if (null == children) {
 			return null;
 		}
 
 		// 查找子节点
-		Tree<T> childNode;
-		for (final Tree<T> child : children) {
+		MapTree<T> childNode;
+		for (final MapTree<T> child : children) {
 			childNode = child.getNode(id);
 			if (null != childNode) {
 				return childNode;
@@ -207,7 +208,7 @@ public class TreeUtil {
 	 * @return 所有父节点名称列表，node为null返回空List
 	 * @since 5.2.4
 	 */
-	public static <T> List<CharSequence> getParentsName(final Tree<T> node, final boolean includeCurrentNode) {
+	public static <T> List<CharSequence> getParentsName(final MapTree<T> node, final boolean includeCurrentNode) {
 		final List<CharSequence> result = new ArrayList<>();
 		if (null == node) {
 			return result;
@@ -217,7 +218,7 @@ public class TreeUtil {
 			result.add(node.getName());
 		}
 
-		Tree<T> parent = node.getParent();
+		MapTree<T> parent = node.getParent();
 		while (null != parent) {
 			result.add(parent.getName());
 			parent = parent.getParent();
@@ -230,10 +231,28 @@ public class TreeUtil {
 	 *
 	 * @param id  节点ID
 	 * @param <E> 节点ID类型
-	 * @return {@link Tree}
+	 * @return {@link MapTree}
 	 * @since 5.7.2
 	 */
-	public static <E> Tree<E> createEmptyNode(final E id) {
-		return new Tree<E>().setId(id);
+	public static <E> MapTree<E> createEmptyNode(final E id) {
+		return new MapTree<E>().setId(id);
+	}
+
+	/**
+	 * 深度优先,遍历树,将树换为数组
+	 *
+	 * @param root       树的根节点
+	 * @param broadFirst 是否广度优先遍历
+	 * @param <E>        节点ID类型
+	 * @return 树所有节点列表
+	 */
+	public static <E> List<MapTree<E>> toList(final MapTree<E> root, final boolean broadFirst) {
+		if (Objects.isNull(root)) {
+			return null;
+		}
+		final List<MapTree<E>> list = new ArrayList<>();
+		root.walk(list::add, broadFirst);
+
+		return list;
 	}
 }

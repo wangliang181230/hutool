@@ -6,9 +6,8 @@ import cn.hutool.core.convert.BasicType;
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ResourceUtil;
-import cn.hutool.core.lang.ClassScanner;
-import cn.hutool.core.net.URLDecoder;
-import cn.hutool.core.net.URLUtil;
+import cn.hutool.core.net.url.URLDecoder;
+import cn.hutool.core.net.url.URLUtil;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.CharUtil;
@@ -363,10 +362,7 @@ public class ClassUtil {
 	 * @return 是否为包装类型
 	 */
 	public static boolean isPrimitiveWrapper(final Class<?> clazz) {
-		if (null == clazz) {
-			return false;
-		}
-		return BasicType.WRAPPER_PRIMITIVE_MAP.containsKey(clazz);
+		return BasicType.isPrimitiveWrapper(clazz);
 	}
 
 	/**
@@ -450,12 +446,11 @@ public class ClassUtil {
 
 		// 基本类型
 		if (targetType.isPrimitive()) {
-			// 原始类型
-			final Class<?> resolvedPrimitive = BasicType.WRAPPER_PRIMITIVE_MAP.get(sourceType);
-			return targetType.equals(resolvedPrimitive);
+			// 目标为原始类型
+			return targetType.equals(BasicType.unWrap(sourceType));
 		} else {
-			// 包装类型
-			final Class<?> resolvedWrapper = BasicType.PRIMITIVE_WRAPPER_MAP.get(sourceType);
+			// 目标为包装类型
+			final Class<?> resolvedWrapper = BasicType.wrap(sourceType, true);
 			return resolvedWrapper != null && targetType.isAssignableFrom(resolvedWrapper);
 		}
 	}
@@ -549,7 +544,7 @@ public class ClassUtil {
 	 * @return 包名
 	 */
 	public static String getPackagePath(final Class<?> clazz) {
-		return getPackage(clazz).replace(StrUtil.C_DOT, StrUtil.C_SLASH);
+		return getPackage(clazz).replace(CharUtil.DOT, CharUtil.SLASH);
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class FtpTest {
 	public void uploadTest() {
 		final Ftp ftp = new Ftp("localhost");
 
-		final boolean upload = ftp.upload("/temp", FileUtil.file("d:/test/test.zip"));
+		final boolean upload = ftp.uploadFile("/temp", FileUtil.file("d:/test/test.zip"));
 		Console.log(upload);
 
 		IoUtil.close(ftp);
@@ -88,6 +88,67 @@ public class FtpTest {
 			ftp.download("",
 					name,
 					FileUtil.file("d:/test/download/" + name));
+		}
+
+		IoUtil.close(ftp);
+	}
+
+	@Test
+	@Ignore
+	public void isDirTest() throws Exception {
+		try (final Ftp ftp = new Ftp("127.0.0.1", 21)) {
+			Console.log(ftp.pwd());
+			ftp.isDir("/test");
+			Console.log(ftp.pwd());
+		}
+	}
+
+	@Test
+	@Ignore
+	public void existSftpTest() throws Exception {
+		try (final Sftp ftp = new Sftp("127.0.0.1", 22, "test", "test")) {
+			Console.log(ftp.pwd());
+			Console.log(ftp.exist(null));
+			Console.log(ftp.exist(""));
+			Console.log(ftp.exist("."));
+			Console.log(ftp.exist(".."));
+			Console.log(ftp.exist("/"));
+			Console.log(ftp.exist("a"));
+			Console.log(ftp.exist("/home/test"));
+			Console.log(ftp.exist("/home/test/"));
+			Console.log(ftp.exist("/home/test//////"));
+			Console.log(ftp.exist("/home/test/file1"));
+			Console.log(ftp.exist("/home/test/file1/"));
+			Console.log(ftp.exist("///////////"));
+			Console.log(ftp.exist("./"));
+			Console.log(ftp.exist("./file1"));
+			Console.log(ftp.pwd());
+		}
+	}
+
+	@Test
+	@Ignore
+	public void existFtpTest() throws Exception {
+		try (final Ftp ftp = new Ftp("127.0.0.1", 21)) {
+			Console.log(ftp.pwd());
+			Console.log(ftp.exist(null));
+			Console.log(ftp.exist(""));
+			Console.log(ftp.exist("."));
+			Console.log(ftp.exist(".."));
+			Console.log(ftp.exist("/"));
+			Console.log(ftp.exist("a"));
+			Console.log(ftp.exist("/test"));
+			Console.log(ftp.exist("/test/"));
+			Console.log(ftp.exist("/test//////"));
+			Console.log(ftp.exist("/test/.."));
+			Console.log(ftp.exist("/test/."));
+			Console.log(ftp.exist("/file1"));
+			Console.log(ftp.exist("/file1/"));
+			Console.log(ftp.exist("///////////"));
+			Console.log(ftp.exist("./"));
+			Console.log(ftp.exist("./file1"));
+			Console.log(ftp.exist("./2/3/4/.."));
+			Console.log(ftp.pwd());
 		}
 	}
 }

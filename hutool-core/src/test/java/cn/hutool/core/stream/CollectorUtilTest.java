@@ -4,11 +4,10 @@ import cn.hutool.core.map.MapUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * CollectorUtilTest
@@ -33,5 +32,50 @@ public class CollectorUtilTest {
 		Assert.assertEquals(MapUtil.builder("苏格拉底", Arrays.asList(1, 2))
 						.put("特拉叙马霍斯", Arrays.asList(3, 1, 2)).build(),
 				nameScoresMap);
+	}
+
+	@Test
+	public void testTransform() {
+		Stream<Integer> stream = Stream.of(1, 2, 3, 4)
+				.collect(CollectorUtil.transform(EasyStream::of));
+		Assert.assertEquals(EasyStream.class, stream.getClass());
+
+		stream = Stream.of(1, 2, 3, 4)
+				.collect(CollectorUtil.transform(HashSet::new, EasyStream::of));
+		Assert.assertEquals(EasyStream.class, stream.getClass());
+	}
+
+	@Test
+	public void testToEasyStream() {
+		final Stream<Integer> stream = Stream.of(1, 2, 3, 4)
+				.collect(CollectorUtil.toEasyStream());
+		Assert.assertEquals(EasyStream.class, stream.getClass());
+	}
+
+	@Test
+	public void testToEntryStream() {
+		final Map<String, Integer> map = Stream.of(1, 2, 3, 4, 5)
+				// 转为EntryStream
+				.collect(CollectorUtil.toEntryStream(Function.identity(), String::valueOf))
+				// 过滤偶数
+				.filterByKey(k -> (k & 1) == 1)
+				.inverse()
+				.toMap();
+		Assert.assertEquals((Integer) 1, map.get("1"));
+		Assert.assertEquals((Integer) 3, map.get("3"));
+		Assert.assertEquals((Integer) 5, map.get("5"));
+	}
+
+	@Test
+	public void testFiltering() {
+		final Map<Integer, Long> map = Stream.of(1, 2, 3)
+				.collect(Collectors.groupingBy(Function.identity(),
+						CollectorUtil.filtering(i -> i > 1, Collectors.counting())
+				));
+		Assert.assertEquals(MapUtil.builder()
+				.put(1, 0L)
+				.put(2, 1L)
+				.put(3, 1L)
+				.build(), map);
 	}
 }

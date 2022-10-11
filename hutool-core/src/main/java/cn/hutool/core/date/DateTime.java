@@ -783,11 +783,7 @@ public class DateTime extends Date {
 	 * @since 3.0.8
 	 */
 	public boolean isIn(final Date beginDate, final Date endDate) {
-		final long beginMills = beginDate.getTime();
-		final long endMills = endDate.getTime();
-		final long thisMills = this.getTime();
-
-		return thisMills >= Math.min(beginMills, endMills) && thisMills <= Math.max(beginMills, endMills);
+		return DateUtil.isIn(this, beginDate, endDate);
 	}
 
 	/**
@@ -945,6 +941,24 @@ public class DateTime extends Date {
 	public DateTime setMinimalDaysInFirstWeek(final int minimalDaysInFirstWeek) {
 		this.minimalDaysInFirstWeek = minimalDaysInFirstWeek;
 		return this;
+	}
+
+	/**
+	 * 是否为本月最后一天
+	 * @return 是否为本月最后一天
+	 * @since 5.8.8
+	 */
+	public boolean isLastDayOfMonth(){
+		return dayOfMonth() == getLastDayOfMonth();
+	}
+
+	/**
+	 * 获得本月的最后一天
+	 * @return 天
+	 * @since 5.8.8
+	 */
+	public int getLastDayOfMonth(){
+		return monthEnum().getLastDay(isLeapYear());
 	}
 
 	// -------------------------------------------------------------------- toString start

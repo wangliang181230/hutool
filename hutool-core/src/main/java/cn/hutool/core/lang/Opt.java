@@ -25,13 +25,12 @@
 package cn.hutool.core.lang;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.func.Func0;
+import cn.hutool.core.lang.func.SerSupplier;
 import cn.hutool.core.text.StrUtil;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 
 /**
  * 复制jdk16中的Optional，以及自己进行了一点调整和新增，比jdk8中的Optional多了几个实用的函数<br>
- * 详细见：https://gitee.com/dromara/hutool/pulls/426
+ * 详细见：<a href="https://gitee.com/dromara/hutool/pulls/426"></a>
  *
  * @param <T> 包裹里元素的类型
  * @author VampireAchao
@@ -109,7 +108,7 @@ public class Opt<T> {
 	 * @since 5.7.17
 	 */
 	public static <T, R extends Collection<T>> Opt<R> ofEmptyAble(final R value) {
-		return CollUtil.isEmpty(value) || Objects.equals(Collections.frequency(value, null), value.size()) ? empty() : new Opt<>(value);
+		return CollUtil.isEmpty(value) || CollUtil.getFirstNoneNull(value) == null ? empty() : new Opt<>(value);
 	}
 
 	/**
@@ -117,14 +116,27 @@ public class Opt<T> {
 	 * @param <T>      类型
 	 * @return 操作执行后的值
 	 */
-	public static <T> Opt<T> ofTry(final Func0<T> supplier) {
+	public static <T> Opt<T> ofTry(final SerSupplier<T> supplier) {
 		try {
-			return Opt.ofNullable(supplier.call());
+			return Opt.ofNullable(supplier.getting());
 		} catch (final Exception e) {
 			final Opt<T> empty = new Opt<>(null);
 			empty.exception = e;
 			return empty;
 		}
+	}
+
+	/**
+	 * 根据 {@link Optional} 构造 {@code Opt}
+	 *
+	 * @param optional optional
+	 * @param <T>      包裹的元素类型
+	 * @return 一个包裹里元素可能为空的 {@code Opt}
+	 * @since 6.0.0
+	 */
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public static <T> Opt<T> of(Optional<T> optional) {
+		return ofNullable(optional.orElse(null));
 	}
 
 	/**
@@ -169,7 +181,7 @@ public class Opt<T> {
 
 	/**
 	 * 获取异常<br>
-	 * 当调用 {@link #ofTry(Func0)}时，异常信息不会抛出，而是保存，调用此方法获取抛出的异常
+	 * 当调用 {@link #ofTry(SerSupplier)}时，异常信息不会抛出，而是保存，调用此方法获取抛出的异常
 	 *
 	 * @return 异常
 	 * @since 5.7.17
@@ -180,7 +192,7 @@ public class Opt<T> {
 
 	/**
 	 * 是否失败<br>
-	 * 当调用 {@link #ofTry(Func0)}时，抛出异常则表示失败
+	 * 当调用 {@link #ofTry(SerSupplier)}时，抛出异常则表示失败
 	 *
 	 * @return 是否失败
 	 * @since 5.7.17

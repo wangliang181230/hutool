@@ -14,7 +14,6 @@ import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -65,7 +64,7 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * 数组是否为空<br>
 	 * 此方法会匹配单一对象，如果此对象为{@code null}则返回true<br>
 	 * 如果此对象为非数组，理解为此对象为数组的第一个元素，则返回false<br>
-	 * 如果此对象为数组对象，数组长度大于0情况下返回false，否则返回true
+	 * 如果此对象为数组对象，数组长度大于0的情况下返回false，否则返回true
 	 *
 	 * @param array 数组
 	 * @return 是否为空
@@ -1026,7 +1025,7 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 		if (null == array) {
 			return null;
 		}
-		if(null == indexes){
+		if (null == indexes) {
 			return newArray(array.getClass().getComponentType(), 0);
 		}
 
@@ -1307,22 +1306,8 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * @since 3.0.9
 	 */
 	public static <T> T[] toArray(final Iterable<T> iterable, final Class<T> componentType) {
-		return toArray(CollUtil.toCollection(iterable), componentType);
+		return CollUtil.toCollection(iterable).toArray(newArray(componentType, 0));
 	}
-
-	/**
-	 * 将集合转为数组
-	 *
-	 * @param <T>           数组元素类型
-	 * @param collection    集合
-	 * @param componentType 集合元素类型
-	 * @return 数组
-	 * @since 3.0.9
-	 */
-	public static <T> T[] toArray(final Collection<T> collection, final Class<T> componentType) {
-		return collection.toArray(newArray(componentType, 0));
-	}
-
 	// ---------------------------------------------------------------------- remove
 
 	/**
@@ -1565,15 +1550,17 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	}
 
 	/**
-	 * 是否存在{@code null}或空对象，通过{@link ObjUtil#isEmpty(Object)} 判断元素
+	 * 是否存在{@code null}或空对象，通过{@link ObjUtil#isEmpty(Object)} 判断元素<br>
+	 * 如果提供数组本身为空，
 	 *
+	 * @param <T>  元素类型
 	 * @param args 被检查对象
 	 * @return 是否存在
 	 * @since 4.5.18
 	 */
-	public static boolean hasEmpty(final Object... args) {
+	public static <T> boolean hasEmpty(final T[] args) {
 		if (isNotEmpty(args)) {
-			for (final Object element : args) {
+			for (final T element : args) {
 				if (ObjUtil.isEmpty(element)) {
 					return true;
 				}
@@ -1585,12 +1572,13 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	/**
 	 * 是否存都为{@code null}或空对象，通过{@link ObjUtil#isEmpty(Object)} 判断元素
 	 *
+	 * @param <T> 元素类型
 	 * @param args 被检查的对象,一个或者多个
 	 * @return 是否都为空
 	 * @since 4.5.18
 	 */
-	public static boolean isAllEmpty(final Object... args) {
-		for (final Object obj : args) {
+	public static <T> boolean isAllEmpty(final T[] args) {
+		for (final T obj : args) {
 			if (false == ObjUtil.isEmpty(obj)) {
 				return false;
 			}

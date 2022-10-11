@@ -1,5 +1,6 @@
 package cn.hutool.core.math;
 
+import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ArrayUtil;
@@ -267,7 +268,7 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 补充Math.ceilDiv() JDK8中添加了和Math.floorDiv()但却没有ceilDiv()
+	 * 补充Math.ceilDiv() JDK8中添加了和 {@link Math#floorDiv(int, int)} 但却没有ceilDiv()
 	 *
 	 * @param v1 被除数
 	 * @param v2 除数
@@ -303,7 +304,7 @@ public class NumberUtil {
 	 * @return 新值
 	 */
 	public static String roundStr(final double v, final int scale) {
-		return round(v, scale).toString();
+		return round(v, scale).toPlainString();
 	}
 
 	/**
@@ -344,7 +345,7 @@ public class NumberUtil {
 	 * @since 3.2.2
 	 */
 	public static String roundStr(final String numberStr, final int scale) {
-		return round(numberStr, scale).toString();
+		return round(numberStr, scale).toPlainString();
 	}
 
 	/**
@@ -371,7 +372,7 @@ public class NumberUtil {
 	 * @since 3.2.2
 	 */
 	public static String roundStr(final double v, final int scale, final RoundingMode roundingMode) {
-		return round(v, scale, roundingMode).toString();
+		return round(v, scale, roundingMode).toPlainString();
 	}
 
 	/**
@@ -425,7 +426,7 @@ public class NumberUtil {
 	 * @since 3.2.2
 	 */
 	public static String roundStr(final String numberStr, final int scale, final RoundingMode roundingMode) {
-		return round(numberStr, scale, roundingMode).toString();
+		return round(numberStr, scale, roundingMode).toPlainString();
 	}
 
 	/**
@@ -947,78 +948,6 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 检查值是否在指定范围内
-	 *
-	 * @param value      值
-	 * @param minInclude 最小值（包含）
-	 * @param maxInclude 最大值（包含）
-	 * @return 经过检查后的值
-	 * @since 5.8.5
-	 */
-	public static boolean isIn(final BigDecimal value, final BigDecimal minInclude, final BigDecimal maxInclude) {
-		Assert.notNull(value);
-		Assert.notNull(minInclude);
-		Assert.notNull(maxInclude);
-		return isGreaterOrEqual(value, minInclude) && isLessOrEqual(value, maxInclude);
-	}
-
-	/**
-	 * 比较大小，参数1 &gt; 参数2 返回true
-	 *
-	 * @param bigNum1 数字1
-	 * @param bigNum2 数字2
-	 * @return 是否大于
-	 * @since 3.0.9
-	 */
-	public static boolean isGreater(final BigDecimal bigNum1, final BigDecimal bigNum2) {
-		Assert.notNull(bigNum1);
-		Assert.notNull(bigNum2);
-		return bigNum1.compareTo(bigNum2) > 0;
-	}
-
-	/**
-	 * 比较大小，参数1 &gt;= 参数2 返回true
-	 *
-	 * @param bigNum1 数字1
-	 * @param bigNum2 数字2
-	 * @return 是否大于等于
-	 * @since 3, 0.9
-	 */
-	public static boolean isGreaterOrEqual(final BigDecimal bigNum1, final BigDecimal bigNum2) {
-		Assert.notNull(bigNum1);
-		Assert.notNull(bigNum2);
-		return bigNum1.compareTo(bigNum2) >= 0;
-	}
-
-	/**
-	 * 比较大小，参数1 &lt; 参数2 返回true
-	 *
-	 * @param bigNum1 数字1
-	 * @param bigNum2 数字2
-	 * @return 是否小于
-	 * @since 3, 0.9
-	 */
-	public static boolean isLess(final BigDecimal bigNum1, final BigDecimal bigNum2) {
-		Assert.notNull(bigNum1);
-		Assert.notNull(bigNum2);
-		return bigNum1.compareTo(bigNum2) < 0;
-	}
-
-	/**
-	 * 比较大小，参数1&lt;=参数2 返回true
-	 *
-	 * @param bigNum1 数字1
-	 * @param bigNum2 数字2
-	 * @return 是否小于等于
-	 * @since 3, 0.9
-	 */
-	public static boolean isLessOrEqual(final BigDecimal bigNum1, final BigDecimal bigNum2) {
-		Assert.notNull(bigNum1);
-		Assert.notNull(bigNum2);
-		return bigNum1.compareTo(bigNum2) <= 0;
-	}
-
-	/**
 	 * 比较大小，值相等 返回true<br>
 	 * 此方法通过调用{@link Double#doubleToLongBits(double)}方法来判断是否相等<br>
 	 * 此方法判断值相等时忽略精度的，即0.00 == 0
@@ -1067,17 +996,10 @@ public class NumberUtil {
 	 * @param bigNum1 数字1
 	 * @param bigNum2 数字2
 	 * @return 是否相等
+	 * @see CompareUtil#equals(Comparable, Comparable)
 	 */
 	public static boolean equals(final BigDecimal bigNum1, final BigDecimal bigNum2) {
-		//noinspection NumberEquality
-		if (bigNum1 == bigNum2) {
-			// 如果用户传入同一对象，省略compareTo以提高性能。
-			return true;
-		}
-		if (bigNum1 == null || bigNum2 == null) {
-			return false;
-		}
-		return 0 == bigNum1.compareTo(bigNum2);
+		return CompareUtil.equals(bigNum1, bigNum2);
 	}
 
 	/**
@@ -1448,6 +1370,7 @@ public class NumberUtil {
 	 * 4、空串返回0
 	 * 5、.123形式返回0（按照小于0的小数对待）
 	 * 6、123.56截取小数点之前的数字，忽略小数部分
+	 * 7、科学计数法抛出NumberFormatException异常
 	 * </pre>
 	 *
 	 * @param number 数字，支持0x开头、0开头和普通十进制
@@ -1458,6 +1381,11 @@ public class NumberUtil {
 	public static int parseInt(final String number) throws NumberFormatException {
 		if (StrUtil.isBlank(number)) {
 			return 0;
+		}
+
+		if(StrUtil.containsIgnoreCase(number, "E")){
+			// 科学计数法忽略支持，科学计数法一般用于表示非常小和非常大的数字，这类数字转换为int后精度丢失，没有意义。
+			throw new NumberFormatException(StrUtil.format("Unsupported int format: [{}]", number));
 		}
 
 		if (StrUtil.startWithIgnoreCase(number, "0x")) {

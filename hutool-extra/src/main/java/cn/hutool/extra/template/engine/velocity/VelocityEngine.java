@@ -1,6 +1,7 @@
 package cn.hutool.extra.template.engine.velocity;
 
 import cn.hutool.core.text.StrUtil;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
@@ -8,7 +9,7 @@ import org.apache.velocity.app.Velocity;
 
 /**
  * Velocity模板引擎<br>
- * 见：http://velocity.apache.org/
+ * 见：<a href="http://velocity.apache.org/">http://velocity.apache.org</a>
  *
  * @author looly
  */
@@ -69,6 +70,7 @@ public class VelocityEngine implements TemplateEngine {
 	 * @return 原始引擎对象
 	 * @since 5.5.8
 	 */
+	@Override
 	public org.apache.velocity.app.VelocityEngine getRawEngine() {
 		return this.engine;
 	}
@@ -120,8 +122,6 @@ public class VelocityEngine implements TemplateEngine {
 		// loader
 		switch (config.getResourceMode()) {
 			case CLASSPATH:
-				// 新版Velocity弃用
-//			ve.setProperty("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 				ve.setProperty("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 				break;
 			case FILE:
@@ -132,13 +132,13 @@ public class VelocityEngine implements TemplateEngine {
 				}
 				break;
 			case WEB_ROOT:
-				ve.setProperty(Velocity.RESOURCE_LOADER, "webapp");
+				ve.setProperty(Velocity.RESOURCE_LOADERS, "webapp");
 				ve.setProperty("webapp.resource.loader.class", "org.apache.velocity.tools.view.servlet.WebappLoader");
-				ve.setProperty("webapp.resource.loader.path", StrUtil.nullToDefault(config.getPath(), StrUtil.SLASH));
+				ve.setProperty("webapp.resource.loader.path", ObjUtil.defaultIfNull(config.getPath(), StrUtil.SLASH));
 				break;
 			case STRING:
-				ve.setProperty(Velocity.RESOURCE_LOADER, "str");
-				ve.setProperty("str.resource.loader.class", SimpleStringResourceLoader.class.getName());
+				ve.setProperty(Velocity.RESOURCE_LOADERS, "str");
+				ve.setProperty("resource.loader.str.class", SimpleStringResourceLoader.class.getName());
 				break;
 			default:
 				break;

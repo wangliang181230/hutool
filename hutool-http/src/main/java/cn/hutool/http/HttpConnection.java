@@ -1,7 +1,7 @@
 package cn.hutool.http;
 
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.net.URLUtil;
+import cn.hutool.core.net.url.URLUtil;
 import cn.hutool.core.reflect.FieldUtil;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ObjUtil;
@@ -213,7 +213,7 @@ public class HttpConnection {
 			for (final Entry<String, List<String>> entry : headerMap.entrySet()) {
 				name = entry.getKey();
 				for (final String value : entry.getValue()) {
-					this.header(name, StrUtil.nullToEmpty(value), isOverride);
+					this.header(name, StrUtil.emptyIfNull(value), isOverride);
 				}
 			}
 		}

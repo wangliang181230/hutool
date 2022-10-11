@@ -2,10 +2,11 @@ package cn.hutool.poi.excel;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.lang.Console;
+import cn.hutool.core.lang.func.SerBiConsumer;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.poi.excel.cell.CellHandler;
 import lombok.Data;
+import org.apache.poi.ss.usermodel.Cell;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -231,7 +232,7 @@ public class ExcelReadTest {
 	@Ignore
 	public void readNullRowTest(){
 		final ExcelReader reader = ExcelUtil.getReader("d:/test/1.-.xls");
-		reader.read((CellHandler) Console::log);
+		reader.read((SerBiConsumer<Cell, Object>) Console::log);
 	}
 
 	@Test
@@ -250,5 +251,22 @@ public class ExcelReadTest {
 		// https://github.com/dromara/hutool/pull/2234
 		final ExcelReader reader = ExcelUtil.getReader(ResourceUtil.getStream("read_row_npe.xlsx"));
 		reader.readColumn(0, 1);
+	}
+
+	@Test
+	public void readIssueTest() {
+		//https://gitee.com/dromara/hutool/issues/I5OSFC
+		final ExcelReader reader = ExcelUtil.getReader(ResourceUtil.getStream("read.xlsx"));
+		final List<Map<String, Object>> read = reader.read(1,2,2);
+		for (Map<String, Object> map : read) {
+			Console.log(map);
+		}
+		//超出lastIndex 抛出相应提示：startRowIndex row index 4 is greater than last row index 2.
+		//而非:Illegal Capacity: -1
+		try {
+			final List<Map<String, Object>> readGreaterIndex = reader.read(1,4,4);
+		} catch (Exception e) {
+			Console.log(e.toString());
+		}
 	}
 }

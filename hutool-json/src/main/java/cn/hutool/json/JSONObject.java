@@ -1,19 +1,22 @@
 package cn.hutool.json;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.func.LambdaInfo;
+import cn.hutool.core.lang.func.LambdaUtil;
+import cn.hutool.core.lang.func.SerFunction;
+import cn.hutool.core.lang.func.SerSupplier;
 import cn.hutool.core.lang.mutable.MutableEntry;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.map.MapWrapper;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.json.convert.JSONConverterOld;
 import cn.hutool.json.mapper.ObjectMapper;
-import cn.hutool.json.serialize.JSONWriter;
+import cn.hutool.json.writer.JSONWriter;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -151,11 +154,6 @@ public class JSONObject extends MapWrapper<String, Object> implements JSON, JSON
 		return this;
 	}
 
-	@Override
-	public <T> T toBean(final Type type) {
-		return JSON.super.toBean(type);
-	}
-
 	/**
 	 * 将指定KEY列表的值组成新的JSONArray
 	 *
@@ -183,9 +181,16 @@ public class JSONObject extends MapWrapper<String, Object> implements JSON, JSON
 		return this.getOrDefault(key, defaultValue);
 	}
 
-	@Override
-	public <T> T getByPath(final String expression, final Class<T> resultType) {
-		return JSONConverterOld.jsonConvert(resultType, getByPath(expression), getConfig());
+	/**
+	 * 根据lambda的方法引用，获取
+	 * @param func 方法引用
+	 * @param <P> 参数类型
+	 * @param <T> 返回值类型
+	 * @return 获取表达式对应属性和返回的对象
+	 */
+	public <P, T> T get(final SerFunction<P, T> func){
+		final LambdaInfo lambdaInfo = LambdaUtil.resolve(func);
+		return get(lambdaInfo.getFieldName(), lambdaInfo.getReturnType());
 	}
 
 	/**
@@ -211,6 +216,22 @@ public class JSONObject extends MapWrapper<String, Object> implements JSON, JSON
 	 */
 	public JSONObject set(final String key, final Object value) throws JSONException {
 		set(key, value, null);
+		return this;
+	}
+
+	/**
+	 * 通过lambda批量设置值<br>
+	 * 实际使用时，可以使用getXXX的方法引用来完成键值对的赋值：
+	 * <pre>
+	 *     User user = GenericBuilder.of(User::new).with(User::setUsername, "hutool").build();
+	 *     (new JSONObject()).setFields(user::getNickname, user::getUsername);
+	 * </pre>
+	 *
+	 * @param fields lambda,不能为空
+	 * @return this
+	 */
+	public JSONObject setFields(final SerSupplier<?>... fields) {
+		Arrays.stream(fields).forEach(f -> set(LambdaUtil.getFieldName(f), f.get()));
 		return this;
 	}
 
@@ -341,16 +362,11 @@ public class JSONObject extends MapWrapper<String, Object> implements JSON, JSON
 	 * @return JSON字符串
 	 * @since 5.7.15
 	 */
-	public String toJSONString(final int indentFactor, final Predicate<MutableEntry<String, Object>> predicate) {
+	public String toJSONString(final int indentFactor, final Predicate<MutableEntry<Object, Object>> predicate) {
 		final StringWriter sw = new StringWriter();
 		synchronized (sw.getBuffer()) {
 			return this.write(sw, indentFactor, 0, predicate).toString();
 		}
-	}
-
-	@Override
-	public Writer write(final Writer writer, final int indentFactor, final int indent) throws JSONException {
-		return write(writer, indentFactor, indent, null);
 	}
 
 	/**
@@ -365,20 +381,11 @@ public class JSONObject extends MapWrapper<String, Object> implements JSON, JSON
 	 * @throws JSONException JSON相关异常
 	 * @since 5.7.15
 	 */
-	public Writer write(final Writer writer, final int indentFactor, final int indent, final Predicate<MutableEntry<String, Object>> predicate) throws JSONException {
+	@Override
+	public Writer write(final Writer writer, final int indentFactor, final int indent, final Predicate<MutableEntry<Object, Object>> predicate) throws JSONException {
 		final JSONWriter jsonWriter = JSONWriter.of(writer, indentFactor, indent, config)
 				.beginObj();
-		this.forEach((key, value) -> {
-			if (null != predicate) {
-				final MutableEntry<String, Object> pair = new MutableEntry<>(key, value);
-				if (predicate.test(pair)) {
-					// 使用修改后的键值对
-					jsonWriter.writeField(pair.getKey(), pair.getValue());
-				}
-			} else {
-				jsonWriter.writeField(key, value);
-			}
-		});
+		this.forEach((key, value) -> jsonWriter.writeField(new MutableEntry<>(key, value), predicate));
 		jsonWriter.end();
 		// 此处不关闭Writer，考虑writer后续还需要填内容
 		return writer;

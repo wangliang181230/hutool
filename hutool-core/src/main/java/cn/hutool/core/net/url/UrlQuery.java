@@ -6,9 +6,6 @@ import cn.hutool.core.collection.iter.IterUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.map.TableMap;
-import cn.hutool.core.net.FormUrlencoded;
-import cn.hutool.core.net.RFC3986;
-import cn.hutool.core.net.URLDecoder;
 import cn.hutool.core.text.StrUtil;
 
 import java.nio.charset.Charset;
@@ -206,7 +203,7 @@ public class UrlQuery {
 	 * @return 查询的Map，只读
 	 */
 	public Map<CharSequence, CharSequence> getQueryMap() {
-		return MapUtil.unmodifiable(this.query);
+		return MapUtil.view(this.query);
 	}
 
 	/**
@@ -234,7 +231,7 @@ public class UrlQuery {
 	 * @return URL查询字符串
 	 */
 	public String build(final Charset charset) {
-		return build(charset, true);
+		return build(charset, null != charset);
 	}
 
 	/**
@@ -406,7 +403,7 @@ public class UrlQuery {
 	private void addParam(final String key, final String value, final Charset charset) {
 		if (null != key) {
 			final String actualKey = URLDecoder.decode(key, charset, isFormUrlEncoded);
-			this.query.put(actualKey, StrUtil.nullToEmpty(URLDecoder.decode(value, charset, isFormUrlEncoded)));
+			this.query.put(actualKey, StrUtil.emptyIfNull(URLDecoder.decode(value, charset, isFormUrlEncoded)));
 		} else if (null != value) {
 			// name为空，value作为name，value赋值null
 			this.query.put(URLDecoder.decode(value, charset, isFormUrlEncoded), null);

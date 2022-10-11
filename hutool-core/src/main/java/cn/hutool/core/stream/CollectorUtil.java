@@ -4,26 +4,17 @@ import cn.hutool.core.lang.Opt;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ArrayUtil;
 
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.StringJoiner;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
  * 可变的汇聚操作{@link Collector} 相关工具封装
  *
- * @author looly, VampireAchao
+ * @author looly
+ * @author VampireAchao
+ * @author huangchengxing
  * @since 5.6.7
  */
 public class CollectorUtil {
@@ -108,7 +99,7 @@ public class CollectorUtil {
 			final K key = Opt.ofNullable(t).map(classifier).orElse(null);
 			final A container = m.computeIfAbsent(key, k -> downstreamSupplier.get());
 			if (ArrayUtil.isArray(container) || Objects.nonNull(t)) {
-				// 如果是数组类型，不需要判空，场景——分组后需要使用：java.util.stream.Collectors.counting 求null元素个数
+				// 如果是数组类型，不需要判空，场景——分组后需要使用：java.util.unwrap.Collectors.counting 求null元素个数
 				downstreamAccumulator.accept(container, t);
 			}
 		};
@@ -139,9 +130,8 @@ public class CollectorUtil {
 	 * @param <A>        下游操作在进行中间操作时对应类型
 	 * @return {@link Collector}
 	 */
-	public static <T, K, A, D>
-	Collector<T, ?, Map<K, D>> groupingBy(final Function<? super T, ? extends K> classifier,
-										  final Collector<? super T, A, D> downstream) {
+	public static <T, K, A, D> Collector<T, ?, Map<K, D>> groupingBy(final Function<? super T, ? extends K> classifier,
+																	 final Collector<? super T, A, D> downstream) {
 		return groupingBy(classifier, HashMap::new, downstream);
 	}
 
@@ -153,9 +143,36 @@ public class CollectorUtil {
 	 * @param <K>        实体中的分组依据对应类型，也是Map中key的类型
 	 * @return {@link Collector}
 	 */
-	public static <T, K> Collector<T, ?, Map<K, List<T>>>
-	groupingBy(final Function<? super T, ? extends K> classifier) {
+	public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(final Function<? super T, ? extends K> classifier) {
 		return groupingBy(classifier, Collectors.toList());
+	}
+
+
+	/**
+	 * 对null友好的 toMap 操作的 {@link Collector}实现，默认使用HashMap
+	 *
+	 * @param keyMapper   指定map中的key
+	 * @param valueMapper 指定map中的value
+	 * @param <T>         实体类型
+	 * @param <K>         map中key的类型
+	 * @param <U>         map中value的类型
+	 * @return 对null友好的 toMap 操作的 {@link Collector}实现
+	 */
+	public static <T, K, U> Collector<T, ?, Map<K, U>> toMap(final Function<? super T, ? extends K> keyMapper,
+															 final Function<? super T, ? extends U> valueMapper) {
+		return toMap(keyMapper, valueMapper, (l, r) -> r);
+	}
+
+	/**
+	 * 对null友好的 toMap 操作的 {@link Collector}实现，默认使用HashMap
+	 *
+	 * @param keyMapper 指定map中的key
+	 * @param <T>       实体类型
+	 * @param <K>       map中key的类型
+	 * @return 对null友好的 toMap 操作的 {@link Collector}实现
+	 */
+	public static <T, K> Collector<T, ?, Map<K, T>> toMap(final Function<? super T, ? extends K> keyMapper) {
+		return toMap(keyMapper, Function.identity());
 	}
 
 	/**
@@ -169,10 +186,9 @@ public class CollectorUtil {
 	 * @param <U>           map中value的类型
 	 * @return 对null友好的 toMap 操作的 {@link Collector}实现
 	 */
-	public static <T, K, U>
-	Collector<T, ?, Map<K, U>> toMap(final Function<? super T, ? extends K> keyMapper,
-									 final Function<? super T, ? extends U> valueMapper,
-									 final BinaryOperator<U> mergeFunction) {
+	public static <T, K, U> Collector<T, ?, Map<K, U>> toMap(final Function<? super T, ? extends K> keyMapper,
+															 final Function<? super T, ? extends U> valueMapper,
+															 final BinaryOperator<U> mergeFunction) {
 		return toMap(keyMapper, valueMapper, mergeFunction, HashMap::new);
 	}
 
@@ -241,7 +257,7 @@ public class CollectorUtil {
 	 */
 	public static <K, V, R extends Map<K, List<V>>> Collector<Map<K, V>, ?, R> reduceListMap(final Supplier<R> mapSupplier) {
 		return Collectors.reducing(mapSupplier.get(), value -> {
-					R result = mapSupplier.get();
+					final R result = mapSupplier.get();
 					value.forEach((k, v) -> result.computeIfAbsent(k, i -> new ArrayList<>()).add(v));
 					return result;
 				}, (l, r) -> {
@@ -251,5 +267,244 @@ public class CollectorUtil {
 		);
 	}
 
+	/**
+	 * 将流转为{@link EntryStream}
+	 *
+	 * @param keyMapper 键的映射方法
+	 * @param <T>       输入元素类型
+	 * @param <K>       元素的键类型
+	 * @return 收集器
+	 * @since 6.0.0
+	 */
+	public static <T, K> Collector<T, List<T>, EntryStream<K, T>> toEntryStream(
+			final Function<? super T, ? extends K> keyMapper) {
+		return toEntryStream(keyMapper, Function.identity());
+	}
 
+	/**
+	 * 将流转为{@link EntryStream}
+	 *
+	 * @param keyMapper   键的映射方法
+	 * @param valueMapper 值的映射方法
+	 * @param <T>         输入元素类型
+	 * @param <K>         元素的键类型
+	 * @param <V>         元素的值类型
+	 * @return 收集器
+	 * @since 6.0.0
+	 */
+	public static <T, K, V> Collector<T, List<T>, EntryStream<K, V>> toEntryStream(
+			final Function<? super T, ? extends K> keyMapper, final Function<? super T, ? extends V> valueMapper) {
+		Objects.requireNonNull(keyMapper);
+		Objects.requireNonNull(valueMapper);
+		return transform(ArrayList::new, list -> EntryStream.of(list, keyMapper, valueMapper));
+	}
+
+	/**
+	 * 将流转为{@link EasyStream}
+	 *
+	 * @param <T> 输入元素类型
+	 * @return 收集器
+	 * @since 6.0.0
+	 */
+	public static <T> Collector<T, ?, EasyStream<T>> toEasyStream() {
+		return transform(ArrayList::new, EasyStream::of);
+	}
+
+	/**
+	 * 收集元素，将其转为指定{@link Collection}集合后，再对该集合进行转换，并最终返回转换后的结果。
+	 * 返回的收集器的效果等同于：
+	 * <pre>{@code
+	 * 	Collection<T> coll = Stream.of(a, b, c, d)
+	 * 		.collect(Collectors.toColl(collFactory));
+	 * 	R result = mapper.apply(coll);
+	 * }</pre>
+	 *
+	 * @param collFactory 中间收集输入元素的集合的创建方法
+	 * @param mapper      最终将元素集合映射为返回值的方法
+	 * @param <R>         返回值类型
+	 * @param <T>         输入元素类型
+	 * @param <C>         中间收集输入元素的集合类型
+	 * @return 收集器
+	 * @since 6.0.0
+	 */
+	public static <T, R, C extends Collection<T>> Collector<T, C, R> transform(
+			final Supplier<C> collFactory, final Function<C, R> mapper) {
+		Objects.requireNonNull(collFactory);
+		Objects.requireNonNull(mapper);
+		return new SimpleCollector<>(
+				collFactory, C::add, (l1, l2) -> {
+			l1.addAll(l2);
+			return l1;
+		}, mapper, CH_NOID
+		);
+	}
+
+	/**
+	 * 收集元素，将其转为{@link ArrayList}集合后，再对该集合进行转换，并最终返回转换后的结果。
+	 * 返回的收集器的效果等同于：
+	 * <pre>{@code
+	 * 	List<T> coll = Stream.of(a, b, c, d)
+	 * 		.collect(Collectors.toList());
+	 * 	R result = mapper.apply(coll);
+	 * }</pre>
+	 *
+	 * @param mapper 最终将元素集合映射为返回值的方法
+	 * @param <R>    返回值类型
+	 * @param <T>    输入元素类型
+	 * @return 收集器
+	 * @since 6.0.0
+	 */
+	public static <T, R> Collector<T, List<T>, R> transform(final Function<List<T>, R> mapper) {
+		return transform(ArrayList::new, mapper);
+	}
+
+	/**
+	 * 用于{@code Stream<Entry>} 转 Map 的情况
+	 *
+	 * @param <K> key类型
+	 * @param <V> value类型
+	 * @return map
+	 */
+	public static <K, V> Collector<Map.Entry<K, V>, ?, Map<K, V>> entryToMap() {
+		return toMap(Map.Entry::getKey, Map.Entry::getValue);
+	}
+
+	/**
+	 * <p>将集合转换为树，默认用 {@code parentId == null} 来判断树的根节点
+	 * 因为需要在当前传入数据里查找，所以这是一个结束操作 <br>
+	 *
+	 * @param idGetter       id的getter对应的lambda，可以写作 {@code Student::getId} 会过滤掉id为null的元素
+	 * @param pIdGetter      parentId的getter对应的lambda，可以写作 {@code Student::getParentId}
+	 * @param childrenSetter children的setter对应的lambda，可以写作{ @code Student::setChildren}
+	 * @param isParallel     是否并行去组装，数据量特别大时使用
+	 * @param <T>            此处是元素类型
+	 * @param <R>            此处是id、parentId的泛型限制
+	 * @return list 组装好的树 <br>
+	 * eg:
+	 * <pre>{@code
+	 * List<Student> studentTree = students.stream().collect(toTree(Student::getId, Student::getParentId, Student::setChildren, isParallel));
+	 * }</pre>
+	 */
+	public static <R extends Comparable<R>, T> Collector<T, ?, List<T>> toTree(
+			final Function<T, R> idGetter,
+			final Function<T, R> pIdGetter,
+			final BiConsumer<T, List<T>> childrenSetter,
+			final boolean isParallel) {
+		return toTree(idGetter, pIdGetter, null, childrenSetter, isParallel);
+	}
+
+	/**
+	 * <p>将集合转换为树，默认用 {@code parentId == pidValue} 来判断树的根节点，可以为null
+	 * 因为需要在当前传入数据里查找，所以这是一个结束操作 <br>
+	 *
+	 * @param idGetter       id的getter对应的lambda，可以写作 {@code Student::getId} 会过滤掉id为null的元素
+	 * @param pIdGetter      parentId的getter对应的lambda，可以写作 {@code Student::getParentId}
+	 * @param pidValue       pid的值
+	 * @param childrenSetter children的setter对应的lambda，可以写作{ @code Student::setChildren}
+	 * @param isParallel     是否并行去组装，数据量特别大时使用
+	 * @param <T>            此处是元素类型
+	 * @param <R>            此处是id、parentId的泛型限制
+	 * @return list 组装好的树 <br>
+	 * eg:
+	 * <pre>{@code
+	 * List<Student> studentTree = students.stream().collect(toTree(Student::getId, Student::getParentId, 0L, Student::setChildren, isParallel));
+	 * }</pre>
+	 * @author VampireAchao
+	 */
+	public static <R extends Comparable<R>, T> Collector<T, ?, List<T>> toTree(
+			final Function<T, R> idGetter,
+			final Function<T, R> pIdGetter,
+			final R pidValue,
+			final BiConsumer<T, List<T>> childrenSetter,
+			final boolean isParallel) {
+		return Collectors.collectingAndThen(filtering(e -> idGetter.apply(e) != null, groupingBy(pIdGetter, Collectors.toList())),
+				getChildrenFromMapByPidAndSet(idGetter, pIdValuesMap -> pIdValuesMap.get(pidValue), childrenSetter, isParallel));
+	}
+
+	/**
+	 * 将集合转换为树，自定义根节点的判断条件
+	 * 因为需要在当前传入数据里查找，所以这是一个结束操作
+	 *
+	 * @param idGetter        id的getter对应的lambda，可以写作 {@code Student::getId} 会过滤掉id为null的元素
+	 * @param pIdGetter       parentId的getter对应的lambda，可以写作 {@code Student::getParentId}
+	 * @param childrenSetter  children的setter对应的lambda，可以写作 {@code Student::setChildren}
+	 * @param parentPredicate 树顶部的判断条件，可以写作 {@code s -> Objects.equals(s.getParentId(),0L) }
+	 * @param isParallel      是否并行处理
+	 * @param <T>             此处是元素类型
+	 * @param <R>             此处是id、parentId的泛型限制
+	 * @return list 组装好的树 <br>
+	 * eg:
+	 * <pre>{@code
+	 * List<Student> studentTree = EasyStream.of(students).
+	 * 	.toTree(Student::getId, Student::getParentId, Student::setChildren, Student::getMatchParent);
+	 * }</pre>
+	 * @author VampireAchao
+	 */
+	public static <R extends Comparable<R>, T> Collector<T, ?, List<T>> toTree(
+			final Function<T, R> idGetter,
+			final Function<T, R> pIdGetter,
+			final BiConsumer<T, List<T>> childrenSetter,
+			final Predicate<T> parentPredicate,
+			final boolean isParallel) {
+		final List<T> parents = new ArrayList<>();
+		return Collectors.collectingAndThen(filtering(e -> {
+					if (parentPredicate.test(e)) {
+						parents.add(e);
+					}
+					return idGetter.apply(e) != null;
+				}, groupingBy(pIdGetter)),
+				getChildrenFromMapByPidAndSet(idGetter, pIdValuesMap -> parents, childrenSetter, isParallel));
+	}
+
+	/**
+	 * toTree的内联函数
+	 * 因为需要在当前传入数据里查找，所以这是一个结束操作
+	 *
+	 * @param idGetter       id的getter对应的lambda，可以写作 {@code Student::getId}
+	 * @param parentFactory  顶部数据工厂方法
+	 * @param childrenSetter children的setter对应的lambda，可以写作 {@code Student::setChildren}
+	 * @param isParallel     是否并行处理
+	 * @param <T>            此处是元素类型
+	 * @param <R>            此处是id的泛型限制
+	 * @return list 组装好的树
+	 * @author VampireAchao
+	 */
+	private static <R extends Comparable<R>, T> Function<Map<R, List<T>>, List<T>> getChildrenFromMapByPidAndSet(
+			final Function<T, R> idGetter,
+			final Function<Map<R, List<T>>, List<T>> parentFactory,
+			final BiConsumer<T, List<T>> childrenSetter,
+			final boolean isParallel) {
+		return pIdValuesMap -> {
+			EasyStream.of(pIdValuesMap.values(), isParallel).flat(Function.identity())
+					.forEach(value -> {
+						final List<T> children = pIdValuesMap.get(idGetter.apply(value));
+						if (children != null) {
+							childrenSetter.accept(value, children);
+						}
+					});
+			return parentFactory.apply(pIdValuesMap);
+		};
+	}
+
+
+	/**
+	 * <p>过滤</p >
+	 *
+	 * @param predicate  断言
+	 * @param downstream 下游操作
+	 * @param <T>        元素类型
+	 * @param <A>        中间类型
+	 * @param <R>        结束类型
+	 * @return 一个用于过滤元素的 {@link java.util.stream.Collector}
+	 * @author TanShengYuan
+	 */
+	public static <T, A, R>
+	Collector<T, ?, R> filtering(final Predicate<? super T> predicate,
+								 final Collector<? super T, A, R> downstream) {
+		final BiConsumer<A, ? super T> downstreamAccumulator = downstream.accumulator();
+		return new SimpleCollector<>(downstream.supplier(),
+				(r, t) -> Opt.of(t).filter(predicate).ifPresent(e -> downstreamAccumulator.accept(r, e)),
+				downstream.combiner(), downstream.finisher(),
+				downstream.characteristics());
+	}
 }

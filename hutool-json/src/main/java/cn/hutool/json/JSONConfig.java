@@ -1,6 +1,8 @@
 package cn.hutool.json;
 
 import cn.hutool.core.comparator.CompareUtil;
+import cn.hutool.core.convert.Converter;
+import cn.hutool.json.convert.JSONConverter;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -38,7 +40,6 @@ public class JSONConfig implements Serializable {
 	 * 是否支持transient关键字修饰和@Transient注解，如果支持，被修饰的字段或方法对应的字段将被忽略。
 	 */
 	private boolean transientSupport = true;
-
 	/**
 	 * 是否去除末尾多余0，例如如果为true,5.0返回5
 	 */
@@ -47,6 +48,10 @@ public class JSONConfig implements Serializable {
 	 * 是否检查重复key
 	 */
 	private boolean checkDuplicate;
+	/**
+	 * 自定义的类型转换器，用于在getXXX操作中自动转换类型
+	 */
+	private Converter converter = JSONConverter.of(this);
 
 	/**
 	 * 创建默认的配置项
@@ -75,7 +80,7 @@ public class JSONConfig implements Serializable {
 	 * @since 5.7.21
 	 */
 	public JSONConfig setNatureKeyComparator() {
-		return setKeyComparator(CompareUtil.naturalComparator());
+		return setKeyComparator(CompareUtil.natural());
 	}
 
 	/**
@@ -233,8 +238,24 @@ public class JSONConfig implements Serializable {
 	 * @return this
 	 * @since 5.8.5
 	 */
-	public JSONConfig setCheckDuplicate(boolean checkDuplicate) {
+	public JSONConfig setCheckDuplicate(final boolean checkDuplicate) {
 		this.checkDuplicate = checkDuplicate;
 		return this;
+	}
+
+	/**
+	 * 获取自定义的类型转换器，用于在序列化、反序列化操作中实现对象类型转换
+	 * @return 转换器
+	 */
+	public Converter getConverter() {
+		return converter;
+	}
+
+	/**
+	 * 设置自定义的类型转换器，用于在序列化、反序列化操作中实现对象类型转换
+	 * @param converter 转换器
+	 */
+	public void setConverter(final Converter converter) {
+		this.converter = converter;
 	}
 }

@@ -6,11 +6,11 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.bean.copier.ValueProvider;
 import cn.hutool.core.convert.ConvertException;
 import cn.hutool.core.convert.Converter;
+import cn.hutool.core.io.SerializeUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapProxy;
 import cn.hutool.core.reflect.ConstructorUtil;
 import cn.hutool.core.reflect.TypeUtil;
-import cn.hutool.core.util.ObjUtil;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -30,6 +30,9 @@ import java.util.Map;
 public class BeanConverter implements Converter, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 单例对象
+	 */
 	public static BeanConverter INSTANCE = new BeanConverter();
 
 	private final CopyOptions copyOptions;
@@ -51,13 +54,18 @@ public class BeanConverter implements Converter, Serializable {
 	}
 
 	@Override
-	public Object convert(Type targetType, Object value) throws ConvertException {
+	public Object convert(final Type targetType, final Object value) throws ConvertException {
 		Assert.notNull(targetType);
 		if (null == value) {
 			return null;
 		}
 
-		Class<?> targetClass = TypeUtil.getClass(targetType);
+		// value本身实现了Converter接口，直接调用
+		if(value instanceof Converter){
+			return ((Converter) value).convert(targetType, value);
+		}
+
+		final Class<?> targetClass = TypeUtil.getClass(targetType);
 		Assert.notNull(targetClass, "Target type is not a class!");
 
 		return convertInternal(targetType, targetClass, value);
@@ -76,9 +84,9 @@ public class BeanConverter implements Converter, Serializable {
 			return BeanCopier.of(value, ConstructorUtil.newInstanceIfPossible(targetClass), targetType, this.copyOptions).copy();
 		} else if (value instanceof byte[]) {
 			// 尝试反序列化
-			return ObjUtil.deserialize((byte[]) value);
+			return SerializeUtil.deserialize((byte[]) value);
 		}
 
-		throw new ConvertException("Unsupported source type: {}", value.getClass());
+		throw new ConvertException("Unsupported source type: [{}] to [{}]", value.getClass(), targetType);
 	}
 }

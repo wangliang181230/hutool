@@ -1,5 +1,8 @@
 package cn.hutool.json.serialize;
 
+import cn.hutool.core.map.SafeConcurrentHashMap;
+import cn.hutool.core.reflect.NullType;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.json.JSON;
 
 import java.lang.reflect.Type;
@@ -22,8 +25,8 @@ public class GlobalSerializeMapping {
 	private static Map<Type, JSONDeserializer<?>> deserializerMap;
 
 	static {
-		serializerMap = new ConcurrentHashMap<>();
-		deserializerMap = new ConcurrentHashMap<>();
+		serializerMap = new SafeConcurrentHashMap<>();
+		deserializerMap = new SafeConcurrentHashMap<>();
 
 		final TemporalAccessorSerializer localDateSerializer = new TemporalAccessorSerializer(LocalDate.class);
 		serializerMap.put(LocalDate.class, localDateSerializer);
@@ -59,19 +62,6 @@ public class GlobalSerializeMapping {
 	}
 
 	/**
-	 * 加入自定义的序列化器
-	 *
-	 * @param type       对象类型
-	 * @param serializer 序列化器实现
-	 */
-	synchronized private static void putInternal(final Type type, final JSONSerializer<? extends JSON, ?> serializer) {
-		if (null == serializerMap) {
-			serializerMap = new ConcurrentHashMap<>();
-		}
-		serializerMap.put(type, serializer);
-	}
-
-	/**
 	 * 加入自定义的反序列化器
 	 *
 	 * @param type         对象类型
@@ -81,7 +71,7 @@ public class GlobalSerializeMapping {
 		if (null == deserializerMap) {
 			deserializerMap = new ConcurrentHashMap<>();
 		}
-		deserializerMap.put(type, deserializer);
+		deserializerMap.put(ObjUtil.defaultIfNull(type, NullType.INSTANCE), deserializer);
 	}
 
 	/**
@@ -94,7 +84,7 @@ public class GlobalSerializeMapping {
 		if (null == serializerMap) {
 			return null;
 		}
-		return serializerMap.get(type);
+		return serializerMap.get(ObjUtil.defaultIfNull(type, NullType.INSTANCE));
 	}
 
 	/**
@@ -107,6 +97,19 @@ public class GlobalSerializeMapping {
 		if (null == deserializerMap) {
 			return null;
 		}
-		return deserializerMap.get(type);
+		return deserializerMap.get(ObjUtil.defaultIfNull(type, NullType.INSTANCE));
+	}
+
+	/**
+	 * 加入自定义的序列化器
+	 *
+	 * @param type       对象类型
+	 * @param serializer 序列化器实现
+	 */
+	synchronized private static void putInternal(final Type type, final JSONSerializer<? extends JSON, ?> serializer) {
+		if (null == serializerMap) {
+			serializerMap = new ConcurrentHashMap<>();
+		}
+		serializerMap.put(ObjUtil.defaultIfNull(type, NullType.INSTANCE), serializer);
 	}
 }

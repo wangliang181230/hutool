@@ -1,7 +1,7 @@
 package cn.hutool.core.collection;
 
 import cn.hutool.core.collection.iter.IterUtil;
-import cn.hutool.core.comparator.ComparableComparator;
+import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.map.Dict;
@@ -9,9 +9,13 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,8 +29,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.Stack;
+import java.util.function.Function;
 
 /**
  * 集合工具类单元测试
@@ -34,6 +41,49 @@ import java.util.SortedSet;
  * @author looly
  */
 public class CollUtilTest {
+
+	@SuppressWarnings("ConstantConditions")
+	@Test
+	public void emptyIfNullTest() {
+		final Set<?> set = null;
+		final Set<?> set1 = CollUtil.emptyIfNull(set);
+		Assert.assertEquals(SetUtil.empty(), set1);
+
+		final List<?> list = null;
+		final List<?> list1 = CollUtil.emptyIfNull(list);
+		Assert.assertEquals(ListUtil.empty(), list1);
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	@Test
+	public void hasNullTest() {
+		ArrayList<Object> list = null;
+		Assert.assertTrue(CollUtil.hasNull(list));
+
+		list = ListUtil.of();
+		Assert.assertFalse(CollUtil.hasNull(list));
+
+		list = ListUtil.of("");
+		Assert.assertFalse(CollUtil.hasNull(list));
+
+		list = ListUtil.of("", null);
+		Assert.assertTrue(CollUtil.hasNull(list));
+	}
+
+	@Test
+	public void defaultIfEmpty() {
+		ArrayList<String> strings = CollUtil.defaultIfEmpty(ListUtil.of(), ListUtil.of("1"));
+		Assert.assertEquals(ListUtil.of("1"), strings);
+
+		strings = CollUtil.defaultIfEmpty(null, ListUtil.of("1"));
+		Assert.assertEquals(ListUtil.of("1"), strings);
+	}
+
+	@Test
+	public void defaultIfEmpty2() {
+		final ArrayList<String> strings = CollUtil.defaultIfEmpty(ListUtil.of(), Function.identity(), () -> ListUtil.of("1"));
+		Assert.assertEquals(ListUtil.of("1"), strings);
+	}
 
 	@Test
 	public void testPredicateContains() {
@@ -114,6 +164,7 @@ public class CollUtilTest {
 
 		final Collection<String> intersection = CollUtil.intersection(list1, list2);
 		Assert.assertEquals(2, CollUtil.count(intersection, "b"::equals));
+		Assert.assertEquals(0, CollUtil.count(intersection, "x"::equals));
 	}
 
 	@Test
@@ -126,6 +177,7 @@ public class CollUtilTest {
 		Assert.assertEquals(SetUtil.ofLinked("a", "b", "c", "d"), intersectionDistinct);
 
 		final Collection<String> intersectionDistinct2 = CollUtil.intersectionDistinct(list1, list2, list3);
+		Console.log(intersectionDistinct2);
 		Assert.assertTrue(intersectionDistinct2.isEmpty());
 	}
 
@@ -303,7 +355,7 @@ public class CollUtilTest {
 
 		final List<String> removed = new ArrayList<>();
 		final ArrayList<String> filtered = CollUtil.remove(list, t -> {
-			if("a".equals(t)){
+			if ("a".equals(t)) {
 				removed.add(t);
 				return true;
 			}
@@ -465,8 +517,8 @@ public class CollUtilTest {
 
 	@Test
 	public void listTest2() {
-		final List<String> list1 = ListUtil.of( "a", "b", "c");
-		final List<String> list2 = ListUtil.ofLinked( "a", "b", "c");
+		final List<String> list1 = ListUtil.of("a", "b", "c");
+		final List<String> list2 = ListUtil.ofLinked("a", "b", "c");
 		Assert.assertEquals("[a, b, c]", list1.toString());
 		Assert.assertEquals("[a, b, c]", list2.toString());
 	}
@@ -730,7 +782,7 @@ public class CollUtilTest {
 	}
 
 	@Test
-	public void mapToMapTest(){
+	public void mapToMapTest() {
 		final HashMap<String, String> oldMap = new HashMap<>();
 		oldMap.put("a", "1");
 		oldMap.put("b", "12");
@@ -740,9 +792,9 @@ public class CollUtilTest {
 				Map.Entry::getKey,
 				entry -> Long.parseLong(entry.getValue()));
 
-		Assert.assertEquals(1L, (long)map.get("a"));
-		Assert.assertEquals(12L, (long)map.get("b"));
-		Assert.assertEquals(134L, (long)map.get("c"));
+		Assert.assertEquals(1L, (long) map.get("a"));
+		Assert.assertEquals(12L, (long) map.get("b"));
+		Assert.assertEquals(134L, (long) map.get("c"));
 	}
 
 	@Test
@@ -767,8 +819,14 @@ public class CollUtilTest {
 	public void lastIndexOfTest() {
 		// List有优化
 		final ArrayList<String> list = ListUtil.of("a", "b", "c", "c", "a", "b", "d");
-		final int i = CollUtil.lastIndexOf(list, (str) -> str.charAt(0) == 'c');
-		Assert.assertEquals(3, i);
+		final int i = CollUtil.lastIndexOf(list, (str) -> str.charAt(0) == 'a');
+		Assert.assertEquals(4, i);
+
+		final Queue<Integer> set = new ArrayDeque<>(Arrays.asList(1, 2, 3, 3, 2, 1));
+		Assert.assertEquals(5, CollUtil.lastIndexOf(set, num -> num.equals(1)));
+		Assert.assertEquals(4, CollUtil.lastIndexOf(set, num -> num.equals(2)));
+		Assert.assertEquals(3, CollUtil.lastIndexOf(set, num -> num.equals(3)));
+		Assert.assertEquals(-1, CollUtil.lastIndexOf(set, num -> num.equals(4)));
 	}
 
 	@Test
@@ -796,18 +854,18 @@ public class CollUtilTest {
 
 		final List<Long> result = CollUtil.subtractToList(list1, list2);
 		Assert.assertEquals(1, result.size());
-		Assert.assertEquals(1L, result.get(0), 1);
+		Assert.assertEquals(1L, (long)result.get(0));
 	}
 
 	@Test
-	public void sortComparableTest() {
+	public void sortNaturalTest() {
 		final List<String> of = ListUtil.of("a", "c", "b");
-		final List<String> sort = CollUtil.sort(of, new ComparableComparator<>());
+		final List<String> sort = CollUtil.sort(of, CompareUtil.natural());
 		Assert.assertEquals("a,b,c", CollUtil.join(sort, ","));
 	}
 
 	@Test
-	public void setValueByMapTest(){
+	public void setValueByMapTest() {
 		// https://gitee.com/dromara/hutool/pulls/482
 		final List<Person> people = Arrays.asList(
 				new Person("aa", 12, "man", 1),
@@ -848,13 +906,13 @@ public class CollUtilTest {
 	}
 
 	@Test
-	public void distinctTest(){
+	public void distinctTest() {
 		final ArrayList<Integer> distinct = CollUtil.distinct(ListUtil.view(5, 3, 10, 9, 0, 5, 10, 9));
 		Assert.assertEquals(ListUtil.view(5, 3, 10, 9, 0), distinct);
 	}
 
 	@Test
-	public void distinctByFunctionTest(){
+	public void distinctByFunctionTest() {
 		final List<Person> people = Arrays.asList(
 				new Person("aa", 12, "man", 1),
 				new Person("bb", 13, "woman", 2),
@@ -887,14 +945,14 @@ public class CollUtilTest {
 	}
 
 	@Test
-	public void mapTest(){
+	public void mapTest() {
 		final ArrayList<String> list = ListUtil.of("a", "b", "c");
 		final List<Object> extract = CollUtil.map(list, (e) -> e + "_1");
-		Assert.assertEquals(ListUtil.of("a_1",  "b_1", "c_1"), extract);
+		Assert.assertEquals(ListUtil.of("a_1", "b_1", "c_1"), extract);
 	}
 
 	@Test
-	public void mapBeanTest(){
+	public void mapBeanTest() {
 		final List<Person> people = Arrays.asList(
 				new Person("aa", 12, "man", 1),
 				new Person("bb", 13, "woman", 2),
@@ -907,14 +965,14 @@ public class CollUtilTest {
 	}
 
 	@Test
-	public void createTest(){
+	public void createTest() {
 		final Collection<Object> collection = CollUtil.create(Collections.emptyList().getClass());
 		Console.log(collection.getClass());
 		Assert.assertNotNull(collection);
 	}
 
 	@Test
-	public void transTest(){
+	public void transTest() {
 		final List<Person> people = Arrays.asList(
 				new Person("aa", 12, "man", 1),
 				new Person("bb", 13, "woman", 2),
@@ -926,6 +984,7 @@ public class CollUtilTest {
 		Assert.assertEquals("[aa, bb, cc, dd]", trans.toString());
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Test
 	public void unionNullTest() {
 		final List<String> list1 = new ArrayList<>();
@@ -935,6 +994,7 @@ public class CollUtilTest {
 		Assert.assertNotNull(union);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Test
 	public void unionDistinctNullTest() {
 		final List<String> list1 = new ArrayList<>();
@@ -944,6 +1004,7 @@ public class CollUtilTest {
 		Assert.assertNotNull(set);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Test
 	public void unionAllNullTest() {
 		final List<String> list1 = new ArrayList<>();
@@ -951,8 +1012,14 @@ public class CollUtilTest {
 		final List<String> list3 = null;
 		final List<String> list = CollUtil.unionAll(list1, list2, list3);
 		Assert.assertNotNull(list);
+
+		Assert.assertEquals(
+				ListUtil.of(1, 2, 3, 4),
+				CollUtil.unionAll(ListUtil.of(1), ListUtil.of(2), ListUtil.of(3), ListUtil.of(4))
+		);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Test
 	public void intersectionNullTest() {
 		final List<String> list1 = new ArrayList<>();
@@ -964,6 +1031,7 @@ public class CollUtilTest {
 		Assert.assertNotNull(collection);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Test
 	public void intersectionDistinctNullTest() {
 		final List<String> list1 = new ArrayList<>();
@@ -973,5 +1041,85 @@ public class CollUtilTest {
 		final List<String> list3 = null;
 		final Collection<String> collection = CollUtil.intersectionDistinct(list1, list2, list3);
 		Assert.assertNotNull(collection);
+	}
+
+	@Test
+	public void addIfAbsentTest() {
+		// 为false的情况
+		Assert.assertFalse(CollUtil.addIfAbsent(null, null));
+		Assert.assertFalse(CollUtil.addIfAbsent(ListUtil.of(), null));
+		Assert.assertFalse(CollUtil.addIfAbsent(null, "123"));
+		Assert.assertFalse(CollUtil.addIfAbsent(ListUtil.of("123"), "123"));
+		Assert.assertFalse(CollUtil.addIfAbsent(ListUtil.of(new Animal("jack", 20)),
+				new Animal("jack", 20)));
+
+		// 正常情况
+		Assert.assertTrue(CollUtil.addIfAbsent(ListUtil.of("456"), "123"));
+		Assert.assertTrue(CollUtil.addIfAbsent(ListUtil.of(new Animal("jack", 20)),
+				new Dog("jack", 20)));
+		Assert.assertTrue(CollUtil.addIfAbsent(ListUtil.of(new Animal("jack", 20)),
+				new Animal("tom", 20)));
+	}
+
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	static class Animal {
+		private String name;
+		private Integer age;
+	}
+
+	@ToString(callSuper = true)
+	@EqualsAndHashCode(callSuper = true)
+	@Data
+	static class Dog extends Animal {
+		public Dog(final String name, final Integer age) {
+			super(name, age);
+		}
+	}
+
+	@Test
+	public void getFirstTest() {
+		Assert.assertNull(CollUtil.getFirst(null));
+		Assert.assertNull(CollUtil.getFirst(ListUtil.of()));
+
+		Assert.assertEquals("1", CollUtil.getFirst(ListUtil.of("1", "2", "3")));
+		final ArrayDeque<String> deque = new ArrayDeque<>();
+		deque.add("3");
+		deque.add("4");
+		Assert.assertEquals("3", CollUtil.getFirst(deque));
+	}
+
+	@Test
+	public void popPartTest() {
+		final Stack<Integer> stack = new Stack<>();
+		for (int i = 0; i < 10; i++) {
+			stack.push(i);
+		}
+		final List<Integer> popPart1 = CollUtil.popPart(stack, 3);
+		Assert.assertEquals(ListUtil.of(9, 8, 7), popPart1);
+		Assert.assertEquals(7, stack.size());
+
+		final ArrayDeque<Integer> queue = new ArrayDeque<>();
+		for (int i = 0; i < 10; i++) {
+			queue.push(i);
+		}
+		final List<Integer> popPart2 = CollUtil.popPart(queue, 3);
+		Assert.assertEquals(ListUtil.of(9, 8, 7), popPart2);
+		Assert.assertEquals(7, queue.size());
+	}
+
+	@Test
+	public void isEqualListTest() {
+		final List<Integer> list = ListUtil.of(1, 2, 3, 4);
+		Assert.assertTrue(CollUtil.isEqualList(null, null));
+		Assert.assertTrue(CollUtil.isEqualList(ListUtil.of(), ListUtil.of()));
+		Assert.assertTrue(CollUtil.isEqualList(list, list));
+		Assert.assertTrue(CollUtil.isEqualList(list, ListUtil.of(1, 2, 3, 4)));
+
+		Assert.assertFalse(CollUtil.isEqualList(null, ListUtil.of()));
+		Assert.assertFalse(CollUtil.isEqualList(list, ListUtil.of(1, 2, 3, 3)));
+		Assert.assertFalse(CollUtil.isEqualList(list, ListUtil.of(1, 2, 3)));
+		Assert.assertFalse(CollUtil.isEqualList(list, ListUtil.of(4, 3, 2, 1)));
 	}
 }

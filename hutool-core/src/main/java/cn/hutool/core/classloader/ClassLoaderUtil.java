@@ -4,9 +4,11 @@ import cn.hutool.core.convert.BasicType;
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.map.SafeConcurrentHashMap;
 import cn.hutool.core.map.WeakConcurrentMap;
 import cn.hutool.core.text.CharPool;
 import cn.hutool.core.text.StrUtil;
+import cn.hutool.core.util.CharUtil;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -15,7 +17,6 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@link ClassLoader}工具类
@@ -40,7 +41,7 @@ public class ClassLoaderUtil {
 	/**
 	 * 包名分界符: '.'
 	 */
-	private static final char PACKAGE_SEPARATOR = StrUtil.C_DOT;
+	private static final char PACKAGE_SEPARATOR = CharUtil.DOT;
 	/**
 	 * 内部类分界符: '$'
 	 */
@@ -49,13 +50,13 @@ public class ClassLoaderUtil {
 	/**
 	 * 原始类型名和其class对应表，例如：int =》 int.class
 	 */
-	private static final Map<String, Class<?>> PRIMITIVE_TYPE_NAME_MAP = new ConcurrentHashMap<>(32);
-	private static final WeakConcurrentMap<Map.Entry<String, ClassLoader>, Class<?>> CLASS_CACHE = new WeakConcurrentMap<>();
+	private static final Map<String, Class<?>> PRIMITIVE_TYPE_NAME_MAP = new SafeConcurrentHashMap<>(32);
+	private static final Map<Map.Entry<String, ClassLoader>, Class<?>> CLASS_CACHE = new WeakConcurrentMap<>();
 
 	static {
 		final List<Class<?>> primitiveTypes = new ArrayList<>(32);
 		// 加入原始类型
-		primitiveTypes.addAll(BasicType.PRIMITIVE_WRAPPER_MAP.keySet());
+		primitiveTypes.addAll(BasicType.getPrimitiveSet());
 		// 加入原始类型数组类型
 		primitiveTypes.add(boolean[].class);
 		primitiveTypes.add(byte[].class);
