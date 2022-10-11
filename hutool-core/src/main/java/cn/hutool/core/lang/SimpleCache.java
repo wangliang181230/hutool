@@ -4,13 +4,13 @@ import cn.hutool.core.collection.TransIter;
 import cn.hutool.core.lang.func.Func0;
 import cn.hutool.core.lang.mutable.Mutable;
 import cn.hutool.core.lang.mutable.MutableObj;
+import cn.hutool.core.map.SafeConcurrentHashMap;
 import cn.hutool.core.map.WeakConcurrentMap;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -36,7 +36,7 @@ public class SimpleCache<K, V> implements Iterable<Map.Entry<K, V>>, Serializabl
 	/**
 	 * 写的时候每个key一把锁，降低锁的粒度
 	 */
-	protected final Map<K, Lock> keyLockMap = new ConcurrentHashMap<>();
+	protected final Map<K, Lock> keyLockMap = new SafeConcurrentHashMap<>();
 
 	/**
 	 * 构造，默认使用{@link WeakHashMap}实现缓存自动清理

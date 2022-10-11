@@ -7,6 +7,9 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -746,6 +749,24 @@ public class CollUtilTest {
 	}
 
 	@Test
+	public void addIfAbsentTest() {
+		// 为false的情况
+		Assert.assertFalse(CollUtil.addIfAbsent(null, null));
+		Assert.assertFalse(CollUtil.addIfAbsent(CollUtil.newArrayList(), null));
+		Assert.assertFalse(CollUtil.addIfAbsent(null, "123"));
+		Assert.assertFalse(CollUtil.addIfAbsent(CollUtil.newArrayList("123"), "123"));
+		Assert.assertFalse(CollUtil.addIfAbsent(CollUtil.newArrayList(new Animal("jack", 20)),
+				new Animal("jack", 20)));
+
+		// 正常情况
+		Assert.assertTrue(CollUtil.addIfAbsent(CollUtil.newArrayList("456"), "123"));
+		Assert.assertTrue(CollUtil.addIfAbsent(CollUtil.newArrayList(new Animal("jack", 20)),
+				new Dog("jack", 20)));
+		Assert.assertTrue(CollUtil.addIfAbsent(CollUtil.newArrayList(new Animal("jack", 20)),
+				new Animal("tom", 20)));
+	}
+
+	@Test
 	public void mapToMapTest(){
 		final HashMap<String, String> oldMap = new HashMap<>();
 		oldMap.put("a", "1");
@@ -813,7 +834,7 @@ public class CollUtilTest {
 
 		final List<Long> result = CollUtil.subtractToList(list1, list2);
 		Assert.assertEquals(1, result.size());
-		Assert.assertEquals(1L, result.get(0), 1);
+		Assert.assertEquals(1L, (long)result.get(0));
 	}
 
 	@Test
@@ -919,6 +940,56 @@ public class CollUtilTest {
 		final List<String> list3 = null;
 		final List<String> list = CollUtil.unionAll(list1, list2, list3);
 		Assert.assertNotNull(list);
+
+		@SuppressWarnings("ConfusingArgumentToVarargsMethod")
+		final List<String> resList2 = CollUtil.unionAll(null, null, null);
+		Assert.assertNotNull(resList2);
+	}
+
+	@Test
+	public void unionAllOrdinaryTest() {
+		final List<Integer> list1 = CollectionUtil.newArrayList(1, 2, 2, 3, 3);
+		final List<Integer> list2 = CollectionUtil.newArrayList(1, 2, 3);
+		final List<Integer> list3 = CollectionUtil.newArrayList(4, 5, 6);
+		final List<Integer> list = CollUtil.unionAll(list1, list2, list3);
+		Assert.assertNotNull(list);
+		Assert.assertArrayEquals(
+				CollectionUtil.newArrayList(1, 2, 2, 3, 3, 1, 2, 3, 4, 5, 6).toArray(),
+				list.toArray());
+	}
+
+	@Test
+	public void unionAllTwoOrdinaryTest() {
+		final List<Integer> list1 = CollectionUtil.newArrayList(1, 2, 2, 3, 3);
+		final List<Integer> list2 = CollectionUtil.newArrayList(1, 2, 3);
+		final List<Integer> list = CollUtil.unionAll(list1, list2);
+		Assert.assertNotNull(list);
+		Assert.assertArrayEquals(
+				CollectionUtil.newArrayList(1, 2, 2, 3, 3, 1, 2, 3).toArray(),
+				list.toArray());
+	}
+
+	@Test
+	public void unionAllOtherIsNullTest() {
+		final List<Integer> list1 = CollectionUtil.newArrayList(1, 2, 2, 3, 3);
+		final List<Integer> list2 = CollectionUtil.newArrayList(1, 2, 3);
+		@SuppressWarnings("ConfusingArgumentToVarargsMethod")
+		final List<Integer> list = CollUtil.unionAll(list1, list2, null);
+		Assert.assertNotNull(list);
+		Assert.assertArrayEquals(
+				CollectionUtil.newArrayList(1, 2, 2, 3, 3, 1, 2, 3).toArray(),
+				list.toArray());
+	}
+
+	@Test
+	public void unionAllOtherTwoNullTest() {
+		final List<Integer> list1 = CollectionUtil.newArrayList(1, 2, 2, 3, 3);
+		final List<Integer> list2 = CollectionUtil.newArrayList(1, 2, 3);
+		final List<Integer> list = CollUtil.unionAll(list1, list2, null, null);
+		Assert.assertNotNull(list);
+		Assert.assertArrayEquals(
+				CollectionUtil.newArrayList(1, 2, 2, 3, 3, 1, 2, 3).toArray(),
+				list.toArray());
 	}
 
 	@Test
@@ -950,5 +1021,30 @@ public class CollUtilTest {
 		private Integer age;
 		private String gender;
 		private Integer id;
+	}
+
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	static class Animal {
+		private String name;
+		private Integer age;
+	}
+
+	@ToString(callSuper = true)
+	@EqualsAndHashCode(callSuper = true)
+	@Data
+	static class Dog extends Animal {
+
+		public Dog(String name, Integer age) {
+			super(name, age);
+		}
+	}
+
+	@Test
+	public void getFirstTest(){
+		final List<?> nullList = null;
+		final Object first = CollUtil.getFirst(nullList);
+		Assert.assertNull(first);
 	}
 }

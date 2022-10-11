@@ -187,8 +187,19 @@ public final class UrlBuilder implements Builder<String> {
 	 * 创建空的UrlBuilder
 	 *
 	 * @return UrlBuilder
+	 * @deprecated 请使用 {@link #of()}
 	 */
+	@Deprecated
 	public static UrlBuilder create() {
+		return new UrlBuilder();
+	}
+
+	/**
+	 * 创建空的UrlBuilder
+	 *
+	 * @return UrlBuilder
+	 */
+	public static UrlBuilder of() {
 		return new UrlBuilder();
 	}
 
@@ -544,12 +555,7 @@ public final class UrlBuilder implements Builder<String> {
 	 */
 	public URI toURI() {
 		try {
-			return new URI(
-					getSchemeWithDefault(),
-					getAuthority(),
-					getPathStr(),
-					getQueryStr(),
-					getFragmentEncoded());
+			return toURL().toURI();
 		} catch (URISyntaxException e) {
 			return null;
 		}

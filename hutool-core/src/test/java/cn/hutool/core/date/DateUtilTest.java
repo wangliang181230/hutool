@@ -696,6 +696,15 @@ public class DateUtilTest {
 	}
 
 	@Test
+	public void parseUTCTest3() {
+		// issue#I5M6DP
+		final String dateStr = "2022-08-13T09:30";
+		final DateTime dateTime = DateUtil.parse(dateStr);
+		Assert.assertNotNull(dateTime);
+		Assert.assertEquals("2022-08-13 09:30:00", dateTime.toString());
+	}
+
+	@Test
 	public void parseCSTTest() {
 		final String dateStr = "Wed Sep 16 11:26:23 CST 2009";
 
@@ -1084,5 +1093,13 @@ public class DateUtilTest {
 				DateUtil.parse(endTimeStr),
 				DateUtil.parse(sourceStr));
 		Assert.assertTrue(between);
+	}
+
+	@Test
+	public void isLastDayTest(){
+		DateTime dateTime = DateUtil.parse("2022-09-30");
+		int dayOfMonth  = DateUtil.getLastDayOfMonth(dateTime);
+		Assert.assertEquals(dayOfMonth,dateTime.dayOfMonth());
+		Assert.assertTrue("not is last day of this month !!",DateUtil.isLastDayOfMonth(dateTime));
 	}
 }

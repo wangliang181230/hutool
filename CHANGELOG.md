@@ -3,6 +3,110 @@
 
 -------------------------------------------------------------------------------------------------------------
 
+# 5.8.9.M1 (2022-10-09)
+
+### 🐣新特性
+* 【core   】     DateUtil增加isLastDayOfMonth、getLastDayOfMonth方法（pr#824@Gitee）
+* 【core   】     AnnotationUtil类支持Lambda获取某注解属性值（pr#827@Gitee）
+* 【core   】     CharUtil.isBlank添加Hangul Filler字符（issue#I5UGSQ@Gitee）
+* 【poi    】     优化合并单元格读取（issue#I5UJZ1@Gitee）
+
+### 🐞Bug修复
+* 【poi    】     修复ExcelReader读取只有标题行报错问题（issue#I5U1JA@Gitee）
+* 【http   】     修复Http重定向时相对路径导致的问题（issue#I5TPSY@Gitee）
+* 【http   】     修复Http重定全局设置无效问题（pr#2639@Github）
+* 【core   】     修复ReUtil.replaceAll替换变量错误问题（pr#2639@Github）
+* 【core   】     修复FileNameUtil.mainName二级扩展名获取错误问题（issue#2642@Github）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.8 (2022-09-26)
+
+### 🐣新特性
+* 【core   】     StreamUtil.of方法新增对 Iterator 支持；StreamUtil.of(Iterable) 方法优化（pr#807@Gitee）
+* 【core   】     增加.wgt格式的MimeType（pr#2617@Github）
+* 【core   】     EnumUtil.getBy增加带默认值重载（issue#I5RZU6@Gitee）
+* 【core   】     ModifierUtil和ReflectUtil增加removeFinalModify（pr#810@Gitee）
+* 【core   】     AbsCollValueMap添加removeValue和removeValues方法，用于list value值移除（pr#813@Gitee）
+* 【extra  】     hutool-extra ftp 支持上传文件或目录（pr#821@Gitee）
+* 【core   】     CharsetDetector增加默认识别的长度（issue#2547@Github）
+
+### 🐞Bug修复
+* 【core   】     修复FileNameUtil.cleanInvalid无法去除换行符问题（issue#I5RMZV@Gitee）
+* 【core   】     修复murmur3_32实现错误（pr#2616@Github）
+* 【core   】     修复PunyCode处理域名的问题（pr#2620@Github）
+* 【core   】     修复ObjectUtil.defaultIfNull去掉误加的deprecated（issue#I5SIZT@Gitee）
+* 【core   】     修复ReflectUtil 反射方法中桥接判断问题（issue#2625@Github）
+* 【poi    】     修复ExcelWriter导出List<Map>引起的个数混乱问题（issue#2627@Github）
+* 【poi    】     修复ExcelReader读取时间变成12小时形式问题（issue#I5Q1TW@Gitee）
+* 【db     】     修复DB工具分页查询的时候oracle数据库会把ROWNUM_也带出来问题（issue#2618@Github）
+* 【crypto 】     修复部分环境下使用 Bouncy Castle可能的JCE cannot authenticate the provider BC问题（issue#2631@Github）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.7 (2022-09-15)
+
+### 🐣新特性
+* 【core   】     BooleanUtil的andOfWrap和orOfWrap()忽略null（issue#2599@Github）
+* 【jwt    】     优化JWT自动识别header中的算法，并可自定义header中key的顺序（issue#I5QRUO@Gitee）
+* 【core   】     IdcardUtil增加convert18To15方法（issue#I5QYCP@Gitee）
+* 【core   】     新增AnsiColors(改自Spring Boot)、AnsiColorWrapper，优化QrCodeUtil（pr#778@Gitee）
+* 【core   】     TemplateUtil的实现类增加getRawEngine方法（issues#2530@Github）
+* 【core   】     ImgUtil中颜色相关方法剥离到ColorUtil中
+* 【core   】     增加SafeConcurrentHashMap
+
+### 🐞Bug修复
+* 【core   】     修复ObjectUtil.defaultIfXXX中NPE问题（pr#2603@Github）
+* 【db     】     修复Hive2驱动无法识别问题（issue#2606@Github）
+* 【core   】     修复computeIfAbsent问题（issue#I5PTN3@Gitee）
+* 【extra  】     修复Ftp中路径问题（issue#I5R2DE@Gitee）
+* 【core   】     修复ConcurrentHashMap.computeIfAbsent缺陷导致的问题
+* 【core   】     修复DateUtil.parseUTC时对-的处理问题（issue#2612@Github）
+* 【core   】     修复Convert.chineseMoneyToNumber角分丢失问题（issue#2611@Github）
+
+-------------------------------------------------------------------------------------------------------------
+
+# 5.8.6 (2022-09-05)
+
+### ❌不兼容特性
+* 【json   】     由于设计缺陷，导致JSONObject#write方法中Filter中key的泛型不得已变动为Object，以解决无法递归的bug（issue#I5OMSC@Gitee）
+
+### 🐣新特性
+* 【core   】     CollUtil新增addIfAbsent方法（pr#750@Gitee）
+* 【core   】     DateUtil.parseUTC支持只有时分的格式（issue#I5M6DP@Gitee）
+* 【core   】     NumberUtil.parseInt忽略科学计数法（issue#I5M55F@Gitee）
+* 【core   】     IterUtil.getFirst优化（pr#753@Gitee）
+* 【core   】     增加Tree add 类型校验（pr#2542@Github）
+* 【core   】     增加PunyCode处理完整域名（pr#2543@Github）
+* 【core   】     增加替换字符串中第一个指定字符串和最后一个指定字符串方法（pr#2533@Github）
+* 【jwt    】     JWT补充部分算法（pr#2546@Github）
+* 【core   】     NumberUtil.roundStr() 修改为使用toPlainString（pr#775@Gitee）
+* 【extra  】     QrCodeUtil新增SVG格式、Ascii Art字符画格式（pr#763@Gitee）
+* 【jwt    】     JWTUtil的parseToken增加空值异常抛出（issue#I5OCQB@Gitee）
+* 【extra  】     resource.loader等过期参数替换（issue#2571@Github）
+* 【core   】     添加ObjectUtil的别名工具类ObjUtil
+* 【core   】     扩展LocalDateTimeUtil.isIn方法使用场景（pr#2589@Github）
+* 【core   】     MapUtil增加根据entry分组（pr#2591@Github）
+* 【core   】     优化 getProcessorCount 潜在的获取不到的问题（pr#792@Gitee）
+* 【core   】     ImgUtil增加sliceByRowsAndCols重载方法支持自定义图片格式（pr#793@Gitee）
+* 
+### 🐞Bug修复
+* 【http   】     修复https下可能的Patch、Get请求失效问题（issue#I3Z3DH@Gitee）
+* 【core   】     修复RandomUtil#randomString 入参length为负数时报错问题（issue#2515@Github）
+* 【core   】     修复SecureUtil传入null的key抛出异常问题（pr#2521@Github）
+* 【core   】     修复UrlBuilder的toURI方法将url重复编码（issue#2503@Github）
+* 【core   】     修复CollUtil.lastIndexOf序号错误问题
+* 【core   】     修复zip被识别成jar和apk被识别成jar或zip的问题（pr#2548@Github）
+* 【core   】     修复UrlBuilder.addPath 方法传入非有效路径字符串时，会出现空指针异常的问题（issue#I5O4ML@Gitee）
+* 【core   】     修复FilterIter当参数filter为空时存在问题（issue#I5OG7U@Gitee）
+* 【poi    】     修复Excel读取提示信息错误（issue#I5OSFC@Gitee）
+* 【json   】     解决JSONObject#write无法递归的bug（issue#I5OMSC@Gitee）
+* 【json   】     修复DayOfWeek转json异常问题（issue#2572@Github）
+* 【extra  】     Ftp方法isDir和exist修复及改进（pr#2574@Github）
+* 【json   】     修复JSON反序列化时，引用字段类型的自定义JsonDeserializer无效（issue#2555@Github）
+
+-------------------------------------------------------------------------------------------------------------
+
 # 5.8.5 (2022-07-29)
 
 ### ❌不兼容特性

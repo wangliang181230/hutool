@@ -30,6 +30,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Map相关工具类
@@ -121,7 +122,7 @@ public class MapUtil {
 	 * @since 3.0.4
 	 */
 	public static <K, V> HashMap<K, V> newHashMap(int size, boolean isLinked) {
-		int initialCapacity = (int) (size / DEFAULT_LOAD_FACTOR) + 1;
+		final int initialCapacity = (int) (size / DEFAULT_LOAD_FACTOR) + 1;
 		return isLinked ? new LinkedHashMap<>(initialCapacity) : new HashMap<>(initialCapacity);
 	}
 
@@ -246,9 +247,9 @@ public class MapUtil {
 		if (null == mapType || mapType.isAssignableFrom(AbstractMap.class)) {
 			return new HashMap<>();
 		} else {
-			try{
+			try {
 				return (Map<K, V>) ReflectUtil.newInstance(mapType);
-			}catch (UtilException e){
+			} catch (UtilException e) {
 				// 不支持的map类型，返回默认的HashMap
 				return new HashMap<>();
 			}
@@ -510,6 +511,26 @@ public class MapUtil {
 	}
 
 	/**
+	 * 根据给定的entry列表，根据entry的key进行分组;
+	 *
+	 * @param <K>     键类型
+	 * @param <V>     值类型
+	 * @param entries entry列表
+	 * @return entries
+	 */
+	public static <K, V> Map<K, List<V>> grouping(Iterable<Map.Entry<K, V>> entries) {
+		final Map<K, List<V>> map = new HashMap<>();
+		if (CollUtil.isEmpty(entries)) {
+			return map;
+		}
+		for (final Map.Entry<K, V> pair : entries) {
+			final List<V> values = map.computeIfAbsent(pair.getKey(), k -> new ArrayList<>());
+			values.add(pair.getValue());
+		}
+		return map;
+	}
+
+	/**
 	 * 将已知Map转换为key为驼峰风格的Map<br>
 	 * 如果KEY为非String类型，保留原值
 	 *
@@ -714,7 +735,7 @@ public class MapUtil {
 		if (null == map || null == biFunction) {
 			return MapUtil.newHashMap();
 		}
-		return map.entrySet().stream().collect(CollectorUtil.toMap(Map.Entry::getKey, m -> biFunction.apply(m.getKey(), m.getValue()),(l,r)->l));
+		return map.entrySet().stream().collect(CollectorUtil.toMap(Map.Entry::getKey, m -> biFunction.apply(m.getKey(), m.getValue()), (l, r) -> l));
 	}
 
 	/**
@@ -1440,5 +1461,28 @@ public class MapUtil {
 		return isImmutable ?
 				new AbstractMap.SimpleImmutableEntry<>(key, value) :
 				new AbstractMap.SimpleEntry<>(key, value);
+	}
+
+	/**
+	 * 如果 key 对应的 value 不存在，则使用获取 mappingFunction 重新计算后的值，并保存为该 key 的 value，否则返回 value。<br>
+	 * 方法来自Dubbo，解决使用ConcurrentHashMap.computeIfAbsent导致的死循环问题。（issues#2349）<br>
+	 * A temporary workaround for Java 8 specific performance issue JDK-8161372 .<br>
+	 * This class should be removed once we drop Java 8 support.
+	 *
+	 * @param <K>             键类型
+	 * @param <V>             值类型
+	 * @param map             Map
+	 * @param key             键
+	 * @param mappingFunction 值不存在时值的生成函数
+	 * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8161372">https://bugs.openjdk.java.net/browse/JDK-8161372</a>
+	 * @return 值
+	 */
+	public static <K, V> V computeIfAbsent(Map<K, V> map, K key, Function<? super K, ? extends V> mappingFunction) {
+		V value = map.get(key);
+		if (null == value) {
+			map.putIfAbsent(key, mappingFunction.apply(key));
+			value = map.get(key);
+		}
+		return value;
 	}
 }

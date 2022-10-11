@@ -36,6 +36,8 @@ import cn.hutool.core.convert.impl.UUIDConverter;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.lang.Opt;
 import cn.hutool.core.lang.TypeReference;
+import cn.hutool.core.map.SafeConcurrentHashMap;
+import cn.hutool.core.util.ClassLoaderUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -52,11 +54,14 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
+import java.time.MonthDay;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.Period;
@@ -70,7 +75,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
@@ -168,7 +172,7 @@ public class ConverterRegistry implements Serializable {
 		if (null == customConverterMap) {
 			synchronized (this) {
 				if (null == customConverterMap) {
-					customConverterMap = new ConcurrentHashMap<>();
+					customConverterMap = new SafeConcurrentHashMap<>();
 				}
 			}
 		}
@@ -276,6 +280,12 @@ public class ConverterRegistry implements Serializable {
 
 		// 尝试转Bean
 		if (BeanUtil.isBean(rowType)) {
+			try {
+				// 由于5.x设计缺陷，JSON转bean无法实现自定义转换，因此此处临时使用反射方式获取自定义的转换器，此问题会在6.x中彻底解决。
+				final Class<?> clazz = ClassLoaderUtil.loadClass("cn.hutool.json.BeanConverterForJSON");
+				return ((Converter<T>)ReflectUtil.newInstance(clazz, type)).convert(value, defaultValue);
+			}catch (final Throwable ignore){
+			}
 			return new BeanConverter<T>(type).convert(value, defaultValue);
 		}
 
@@ -374,7 +384,7 @@ public class ConverterRegistry implements Serializable {
 	 * @return 转换器
 	 */
 	private ConverterRegistry defaultConverter() {
-		defaultConverterMap = new ConcurrentHashMap<>();
+		defaultConverterMap = new SafeConcurrentHashMap<>();
 
 		// 原始类型转换器
 		defaultConverterMap.put(int.class, new PrimitiveConverter(int.class));
@@ -427,6 +437,9 @@ public class ConverterRegistry implements Serializable {
 		defaultConverterMap.put(ZonedDateTime.class, new TemporalAccessorConverter(ZonedDateTime.class));
 		defaultConverterMap.put(OffsetDateTime.class, new TemporalAccessorConverter(OffsetDateTime.class));
 		defaultConverterMap.put(OffsetTime.class, new TemporalAccessorConverter(OffsetTime.class));
+		defaultConverterMap.put(DayOfWeek.class, new TemporalAccessorConverter(DayOfWeek.class));
+		defaultConverterMap.put(Month.class, new TemporalAccessorConverter(Month.class));
+		defaultConverterMap.put(MonthDay.class, new TemporalAccessorConverter(MonthDay.class));
 		defaultConverterMap.put(Period.class, new PeriodConverter());
 		defaultConverterMap.put(Duration.class, new DurationConverter());
 

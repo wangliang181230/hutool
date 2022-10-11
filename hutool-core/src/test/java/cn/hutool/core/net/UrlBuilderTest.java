@@ -16,17 +16,17 @@ public class UrlBuilderTest {
 
 	@Test
 	public void buildTest() {
-		final String buildUrl = UrlBuilder.create().setHost("www.hutool.cn").build();
+		final String buildUrl = UrlBuilder.of().setHost("www.hutool.cn").build();
 		Assert.assertEquals("http://www.hutool.cn/", buildUrl);
 	}
 
 	@Test
 	public void buildWithoutSlashTest(){
 		// https://github.com/dromara/hutool/issues/2459
-		String buildUrl = UrlBuilder.create().setScheme("http").setHost("192.168.1.1").setPort(8080).setWithEndTag(false).build();
+		String buildUrl = UrlBuilder.of().setScheme("http").setHost("192.168.1.1").setPort(8080).setWithEndTag(false).build();
 		Assert.assertEquals("http://192.168.1.1:8080", buildUrl);
 
-		buildUrl = UrlBuilder.create().setScheme("http").setHost("192.168.1.1").setPort(8080).addQuery("url", "http://192.168.1.1/test/1")
+		buildUrl = UrlBuilder.of().setScheme("http").setHost("192.168.1.1").setPort(8080).addQuery("url", "http://192.168.1.1/test/1")
 				.setWithEndTag(false).build();
 		Assert.assertEquals("http://192.168.1.1:8080?url=http://192.168.1.1/test/1", buildUrl);
 	}
@@ -40,7 +40,7 @@ public class UrlBuilderTest {
 
 	@Test
 	public void testHost() {
-		final String buildUrl = UrlBuilder.create()
+		final String buildUrl = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("www.hutool.cn").build();
 		Assert.assertEquals("https://www.hutool.cn/", buildUrl);
@@ -48,7 +48,7 @@ public class UrlBuilderTest {
 
 	@Test
 	public void testHostPort() {
-		final String buildUrl = UrlBuilder.create()
+		final String buildUrl = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("www.hutool.cn")
 				.setPort(8080)
@@ -58,7 +58,7 @@ public class UrlBuilderTest {
 
 	@Test
 	public void testPathAndQuery() {
-		final String buildUrl = UrlBuilder.create()
+		final String buildUrl = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("www.hutool.cn")
 				.addPath("/aaa").addPath("bbb")
@@ -71,7 +71,7 @@ public class UrlBuilderTest {
 
 	@Test
 	public void testQueryWithChinese() {
-		final String buildUrl = UrlBuilder.create()
+		final String buildUrl = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("www.hutool.cn")
 				.addPath("/aaa").addPath("bbb")
@@ -84,7 +84,7 @@ public class UrlBuilderTest {
 
 	@Test
 	public void testMultiQueryWithChinese() {
-		final String buildUrl = UrlBuilder.create()
+		final String buildUrl = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("www.hutool.cn")
 				.addPath("/s")
@@ -314,7 +314,7 @@ public class UrlBuilderTest {
 
 	@Test
 	public void addPathEncodeTest(){
-		final String url = UrlBuilder.create()
+		final String url = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("domain.cn")
 				.addPath("api")
@@ -328,7 +328,7 @@ public class UrlBuilderTest {
 	@Test
 	public void addPathEncodeTest2(){
 		// https://github.com/dromara/hutool/issues/1912
-		final String url = UrlBuilder.create()
+		final String url = UrlBuilder.of()
 				.setScheme("https")
 				.setHost("domain.cn")
 				.addPath("/api/xxx/bbb")
@@ -444,5 +444,31 @@ public class UrlBuilderTest {
 		final String url = "https://hutool.cn/a.mp3?Expires=1652423884&amp;key=JMv2rKNc7Pz&amp;sign=12zva00BpVqgZcX1wcb%2BrmN7H3E%3D";
 		final UrlBuilder of = UrlBuilder.of(url, null);
 		Assert.assertEquals(url.replace("&amp;", "&"), of.toString());
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	@Test
+	public void issues2503Test() throws URISyntaxException {
+		String duplicate = UrlBuilder.ofHttp("127.0.0.1:8080")
+				.addQuery("param[0].field", "编码")
+				.toURI()
+				.toString();
+		Assert.assertEquals("http://127.0.0.1:8080?param%5B0%5D.field=%E7%BC%96%E7%A0%81", duplicate);
+
+		String normal = UrlBuilder.ofHttp("127.0.0.1:8080")
+				.addQuery("param[0].field", "编码")
+				.toURL()
+				.toURI()
+				.toString();
+		Assert.assertEquals(duplicate, normal);
+	}
+
+	@Test
+	public void addPathTest(){
+		//https://gitee.com/dromara/hutool/issues/I5O4ML
+		UrlBuilder.of().addPath("");
+		UrlBuilder.of().addPath("/");
+		UrlBuilder.of().addPath("//");
+		UrlBuilder.of().addPath("//a");
 	}
 }

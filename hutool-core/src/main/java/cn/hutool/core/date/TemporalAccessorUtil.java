@@ -3,15 +3,18 @@ package cn.hutool.core.date;
 import cn.hutool.core.date.format.GlobalCustomFormat;
 import cn.hutool.core.util.StrUtil;
 
+import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.MonthDay;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.chrono.Era;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalField;
@@ -94,7 +97,7 @@ public class TemporalAccessorUtil extends TemporalUtil{
 			return null;
 		}
 
-		if(time instanceof Month){
+		if(time instanceof DayOfWeek || time instanceof java.time.Month || time instanceof Era || time instanceof MonthDay){
 			return time.toString();
 		}
 
@@ -120,6 +123,10 @@ public class TemporalAccessorUtil extends TemporalUtil{
 	public static long toEpochMilli(TemporalAccessor temporalAccessor) {
 		if(temporalAccessor instanceof Month){
 			return ((Month) temporalAccessor).getValue();
+		} else if(temporalAccessor instanceof DayOfWeek){
+			return ((DayOfWeek) temporalAccessor).getValue();
+		} else if(temporalAccessor instanceof Era){
+			return ((Era) temporalAccessor).getValue();
 		}
 		return toInstant(temporalAccessor).toEpochMilli();
 	}
@@ -173,11 +180,49 @@ public class TemporalAccessorUtil extends TemporalUtil{
 	 * @return 是否在范围内
 	 * @since 5.8.5
 	 */
-	public static boolean isIn(TemporalAccessor date, TemporalAccessor beginDate, TemporalAccessor endDate){
+	public static boolean isIn(TemporalAccessor date, TemporalAccessor beginDate, TemporalAccessor endDate) {
+		return isIn(date, beginDate, endDate, true, true);
+	}
+
+	/**
+	 * 当前日期是否在日期指定范围内<br>
+	 * 起始日期和结束日期可以互换<br>
+	 * 通过includeBegin, includeEnd参数控制日期范围区间是否为开区间，例如：传入参数：includeBegin=true, includeEnd=false，
+	 * 则本方法会判断 date ∈ (beginDate, endDate] 是否成立
+	 *
+	 * @param date         被检查的日期
+	 * @param beginDate    起始日期
+	 * @param endDate      结束日期
+	 * @param includeBegin 时间范围是否包含起始日期
+	 * @param includeEnd   时间范围是否包含结束日期
+	 * @return 是否在范围内
+	 * @author FengBaoheng
+	 * @since 5.8.6
+	 */
+	public static boolean isIn(TemporalAccessor date, TemporalAccessor beginDate, TemporalAccessor endDate,
+							   boolean includeBegin, boolean includeEnd) {
+		if (date == null || beginDate == null || endDate == null) {
+			throw new IllegalArgumentException("参数不可为null");
+		}
+
 		final long thisMills = toEpochMilli(date);
 		final long beginMills = toEpochMilli(beginDate);
 		final long endMills = toEpochMilli(endDate);
+		final long rangeMin = Math.min(beginMills, endMills);
+		final long rangeMax = Math.max(beginMills, endMills);
 
-		return thisMills >= Math.min(beginMills, endMills) && thisMills <= Math.max(beginMills, endMills);
+		// 先判断是否满足 date ∈ (beginDate, endDate)
+		boolean isIn = rangeMin < thisMills && thisMills < rangeMax;
+
+		// 若不满足，则再判断是否在时间范围的边界上
+		if (!isIn && includeBegin) {
+			isIn = thisMills == rangeMin;
+		}
+
+		if (!isIn && includeEnd) {
+			isIn = thisMills == rangeMax;
+		}
+
+		return isIn;
 	}
 }

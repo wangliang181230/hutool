@@ -207,27 +207,39 @@ public class CollUtil {
 	 */
 	@SafeVarargs
 	public static <T> List<T> unionAll(Collection<T> coll1, Collection<T> coll2, Collection<T>... otherColls) {
-		final List<T> result;
-		if (isEmpty(coll1)) {
-			result = new ArrayList<>();
-		} else {
-			result = new ArrayList<>(coll1);
+		if (CollUtil.isEmpty(coll1) && CollUtil.isEmpty(coll2) && ArrayUtil.isEmpty(otherColls)) {
+			return new ArrayList<>(0);
 		}
 
-		if (isNotEmpty(coll2)) {
-			result.addAll(coll2);
-		}
-
-		if (ArrayUtil.isNotEmpty(otherColls)) {
-			for (Collection<T> otherColl : otherColls) {
-				if (isEmpty(otherColl)) {
-					continue;
-				}
-				result.addAll(otherColl);
+		// 计算元素总数
+		int totalSize = 0;
+		totalSize += size(coll1);
+		totalSize += size(coll2);
+		if (otherColls != null) {
+			for (final Collection<T> otherColl : otherColls) {
+				totalSize += size(otherColl);
 			}
 		}
 
-		return result;
+		// 根据size创建，防止多次扩容
+		final List<T> res = new ArrayList<>(totalSize);
+		if (coll1 != null) {
+			res.addAll(coll1);
+		}
+		if (coll2 != null) {
+			res.addAll(coll2);
+		}
+		if (otherColls == null) {
+			return res;
+		}
+
+		for (final Collection<T> otherColl : otherColls) {
+			if (otherColl != null) {
+				res.addAll(otherColl);
+			}
+		}
+
+		return res;
 	}
 
 	/**
@@ -1608,12 +1620,12 @@ public class CollUtil {
 		}
 		int matchIndex = -1;
 		if (isNotEmpty(collection)) {
-			int index = collection.size();
+			int index = 0;
 			for (T t : collection) {
 				if (null == matcher || matcher.match(t)) {
 					matchIndex = index;
 				}
-				index--;
+				index++;
 			}
 		}
 		return matchIndex;
@@ -2073,6 +2085,32 @@ public class CollUtil {
 	 */
 	public static <K, V, E> Map<K, V> toMap(Iterable<E> values, Map<K, V> map, Func1<E, K> keyFunc, Func1<E, V> valueFunc) {
 		return IterUtil.toMap(null == values ? null : values.iterator(), map, keyFunc, valueFunc);
+	}
+
+	/**
+	 * 一个对象不为空且不存在于该集合中时，加入到该集合中<br>
+	 * <pre>
+	 *     null, null -&gt; false
+	 *     [], null -&gt; false
+	 *     null, "123" -&gt; false
+	 *     ["123"], "123" -&gt; false
+	 *     [], "123" -&gt; true
+	 *     ["456"], "123" -&gt; true
+	 *     [Animal{"name": "jack"}], Dog{"name": "jack"} -&gt; true
+	 * </pre>
+	 * @param collection 被加入的集合
+	 * @param object 要添加到集合的对象
+	 * @param <T> 集合元素类型
+	 * @param <S> 要添加的元素类型【为集合元素类型的类型或子类型】
+	 * @return 是否添加成功
+	 * @author Cloud-Style
+	 */
+	public static <T, S extends T> boolean addIfAbsent(Collection<T> collection, S object) {
+		if (object == null || collection == null || collection.contains(object)) {
+			return false;
+		}
+
+		return collection.add(object);
 	}
 
 	/**

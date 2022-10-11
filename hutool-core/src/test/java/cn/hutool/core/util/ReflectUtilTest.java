@@ -13,7 +13,9 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,7 +74,7 @@ public class ReflectUtilTest {
 	@Test
 	public void getFieldTest() {
 		// 能够获取到父类字段
-		Field privateField = ReflectUtil.getField(TestSubClass.class, "privateField");
+		final Field privateField = ReflectUtil.getField(TestSubClass.class, "privateField");
 		Assert.assertNotNull(privateField);
 	}
 
@@ -85,14 +87,14 @@ public class ReflectUtilTest {
 
 	@Test
 	public void setFieldTest() {
-		TestClass testClass = new TestClass();
+		final TestClass testClass = new TestClass();
 		ReflectUtil.setFieldValue(testClass, "a", "111");
 		Assert.assertEquals(111, testClass.getA());
 	}
 
 	@Test
 	public void invokeTest() {
-		TestClass testClass = new TestClass();
+		final TestClass testClass = new TestClass();
 		ReflectUtil.invoke(testClass, "setA", 10);
 		Assert.assertEquals(10, testClass.getA());
 	}
@@ -153,7 +155,7 @@ public class ReflectUtilTest {
 		private String n;
 	}
 
-	public static Method getMethodWithReturnTypeCheck(Class<?> clazz, boolean ignoreCase, String methodName, Class<?>... paramTypes) throws SecurityException {
+	public static Method getMethodWithReturnTypeCheck(final Class<?> clazz, final boolean ignoreCase, final String methodName, final Class<?>... paramTypes) throws SecurityException {
 		if (null == clazz || StrUtil.isBlank(methodName)) {
 			return null;
 		}
@@ -161,7 +163,7 @@ public class ReflectUtilTest {
 		Method res = null;
 		final Method[] methods = ReflectUtil.getMethods(clazz);
 		if (ArrayUtil.isNotEmpty(methods)) {
-			for (Method method : methods) {
+			for (final Method method : methods) {
 				if (StrUtil.equals(methodName, method.getName(), ignoreCase)
 						&& ClassUtil.isAllAssignableFrom(method.getParameterTypes(), paramTypes)
 						&& (res == null
@@ -250,22 +252,65 @@ public class ReflectUtilTest {
 	@Test
 	public void newInstanceIfPossibleTest(){
 		//noinspection ConstantConditions
-		int intValue = ReflectUtil.newInstanceIfPossible(int.class);
+		final int intValue = ReflectUtil.newInstanceIfPossible(int.class);
 		Assert.assertEquals(0, intValue);
 
-		Integer integer = ReflectUtil.newInstanceIfPossible(Integer.class);
+		final Integer integer = ReflectUtil.newInstanceIfPossible(Integer.class);
 		Assert.assertEquals(new Integer(0), integer);
 
-		Map<?, ?> map = ReflectUtil.newInstanceIfPossible(Map.class);
+		final Map<?, ?> map = ReflectUtil.newInstanceIfPossible(Map.class);
 		Assert.assertNotNull(map);
 
-		Collection<?> collection = ReflectUtil.newInstanceIfPossible(Collection.class);
+		final Collection<?> collection = ReflectUtil.newInstanceIfPossible(Collection.class);
 		Assert.assertNotNull(collection);
 
-		Week week = ReflectUtil.newInstanceIfPossible(Week.class);
+		final Week week = ReflectUtil.newInstanceIfPossible(Week.class);
 		Assert.assertEquals(Week.SUNDAY, week);
 
-		int[] intArray = ReflectUtil.newInstanceIfPossible(int[].class);
+		final int[] intArray = ReflectUtil.newInstanceIfPossible(int[].class);
 		Assert.assertArrayEquals(new int[0], intArray);
+	}
+
+	public static class JdbcDialects {
+		private static final List<Number> DIALECTS =
+				Arrays.asList(1L, 2L, 3L);
+	}
+
+	@Test
+	public void setFieldValueWithFinalTest() {
+		final String fieldName = "DIALECTS";
+		final List<Number> dialects =
+				Arrays.asList(
+						1,
+						2,
+						3,
+						99
+				);
+		final Field field = ReflectUtil.getField(JdbcDialects.class, fieldName);
+		ReflectUtil.removeFinalModify(field);
+		ReflectUtil.setFieldValue(JdbcDialects.class, fieldName, dialects);
+
+		Assert.assertEquals(dialects, ReflectUtil.getFieldValue(JdbcDialects.class, fieldName));
+	}
+
+	@Test
+	public void issue2625Test(){
+		// 内部类继承的情况下父类方法会被定义为桥接方法，因此按照pr#1965@Github判断返回值的继承关系来代替判断桥接。
+		final Method getThis = ReflectUtil.getMethod(A.C.class, "getThis");
+		Assert.assertTrue(getThis.isBridge());
+	}
+
+	@SuppressWarnings("InnerClassMayBeStatic")
+	public class A{
+
+		public class C extends B{
+
+		}
+
+		protected class B{
+			public B getThis(){
+				return this;
+			}
+		}
 	}
 }

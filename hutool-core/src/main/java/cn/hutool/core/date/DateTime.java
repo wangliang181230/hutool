@@ -160,7 +160,7 @@ public class DateTime extends Date {
 	 * @since 4.1.2
 	 */
 	public DateTime(Date date, TimeZone timeZone) {
-		this(ObjectUtil.defaultIfNull(date, Date::new).getTime(), timeZone);
+		this(ObjectUtil.defaultIfNull(date, new Date()).getTime(), timeZone);
 	}
 
 	/**
@@ -944,6 +944,24 @@ public class DateTime extends Date {
 	public DateTime setMinimalDaysInFirstWeek(int minimalDaysInFirstWeek) {
 		this.minimalDaysInFirstWeek = minimalDaysInFirstWeek;
 		return this;
+	}
+
+	/**
+	 * 是否为本月最后一天
+	 * @return 是否为本月最后一天
+	 * @since 5.8.9
+	 */
+	public boolean isLastDayOfMonth(){
+		return dayOfMonth() == getLastDayOfMonth();
+	}
+
+	/**
+	 * 获得本月的最后一天
+	 * @return 天
+	 * @since 5.8.9
+	 */
+	public int getLastDayOfMonth(){
+		return monthEnum().getLastDay(isLeapYear());
 	}
 
 	// -------------------------------------------------------------------- toString start

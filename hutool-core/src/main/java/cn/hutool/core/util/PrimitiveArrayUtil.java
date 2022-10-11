@@ -1283,7 +1283,8 @@ public class PrimitiveArrayUtil {
 	}
 
 	/**
-	 * 包装类数组转为原始类型数组
+	 * 包装类数组转为原始类型数组<br>
+	 * {@code null} 按照 {@code false} 对待
 	 *
 	 * @param values 包装类型数组
 	 * @return 原始类型数组
@@ -1850,7 +1851,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -1884,7 +1885,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -1918,7 +1919,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -1952,7 +1953,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -1986,7 +1987,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -2020,7 +2021,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -2054,7 +2055,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9
@@ -2088,7 +2089,7 @@ public class PrimitiveArrayUtil {
 	 * 反转数组，会变更原数组
 	 *
 	 * @param array               数组，会变更
-	 * @param startIndexInclusive 其实位置（包含）
+	 * @param startIndexInclusive 起始位置（包含）
 	 * @param endIndexExclusive   结束位置（不包含）
 	 * @return 变更后的原数组
 	 * @since 3.0.9

@@ -9,12 +9,10 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.TypeUtil;
 import cn.hutool.json.serialize.GlobalSerializeMapping;
 import cn.hutool.json.serialize.JSONArraySerializer;
 import cn.hutool.json.serialize.JSONDeserializer;
 import cn.hutool.json.serialize.JSONObjectSerializer;
-import cn.hutool.json.serialize.JSONSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -763,19 +761,6 @@ public class JSONUtil {
 			return object;
 		}
 
-		// 自定义序列化
-		final JSONSerializer serializer = GlobalSerializeMapping.getSerializer(object.getClass());
-		if (null != serializer) {
-			final Type jsonType = TypeUtil.getTypeArgument(serializer.getClass());
-			if (null != jsonType) {
-				if (serializer instanceof JSONObjectSerializer) {
-					serializer.serialize(new JSONObject(jsonConfig), object);
-				} else if (serializer instanceof JSONArraySerializer) {
-					serializer.serialize(new JSONArray(jsonConfig), object);
-				}
-			}
-		}
-
 		try {
 			// fix issue#1399@Github
 			if(object instanceof SQLException){
@@ -810,7 +795,7 @@ public class JSONUtil {
 
 			// 默认按照JSONObject对待
 			return new JSONObject(object, jsonConfig);
-		} catch (Exception exception) {
+		} catch (final Exception exception) {
 			return null;
 		}
 	}

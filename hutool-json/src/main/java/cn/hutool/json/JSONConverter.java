@@ -28,7 +28,7 @@ public class JSONConverter implements Converter<JSON> {
 
 	static {
 		// 注册到转换中心
-		ConverterRegistry registry = ConverterRegistry.getInstance();
+		final ConverterRegistry registry = ConverterRegistry.getInstance();
 		registry.putCustom(JSON.class, JSONConverter.class);
 		registry.putCustom(JSONObject.class, JSONConverter.class);
 		registry.putCustom(JSONArray.class, JSONConverter.class);
@@ -80,7 +80,7 @@ public class JSONConverter implements Converter<JSON> {
 			final Class<?> clazz = (Class<?>) targetType;
 			if (JSONBeanParser.class.isAssignableFrom(clazz)){
 				@SuppressWarnings("rawtypes")
-				JSONBeanParser target = (JSONBeanParser) ReflectUtil.newInstanceIfPossible(clazz);
+				final JSONBeanParser target = (JSONBeanParser) ReflectUtil.newInstanceIfPossible(clazz);
 				if(null == target){
 					throw new ConvertException("Can not instance [{}]", targetType);
 				}

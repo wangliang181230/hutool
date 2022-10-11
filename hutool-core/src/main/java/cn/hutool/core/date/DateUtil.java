@@ -834,7 +834,7 @@ public class DateUtil extends CalendarUtil {
 		if (utcString == null) {
 			return null;
 		}
-		int length = utcString.length();
+		final int length = utcString.length();
 		if (StrUtil.contains(utcString, 'Z')) {
 			if (length == DatePattern.UTC_PATTERN.length() - 4) {
 				// 格式类似：2018-09-13T05:34:31Z，-4表示减去4个单引号的长度
@@ -867,10 +867,29 @@ public class DateUtil extends CalendarUtil {
 				// 格式类似：2018-09-13T05:34:31+08:00
 				return parse(utcString, DatePattern.UTC_WITH_XXX_OFFSET_FORMAT);
 			}
+		} else if(ReUtil.contains("-\\d{2}:?00", utcString)){
+			// Issue#2612，类似 2022-09-14T23:59:00-08:00 或者 2022-09-14T23:59:00-0800
+
+			// 去除类似2019-06-01T19:45:43 -08:00加号前的空格
+			utcString = utcString.replace(" -", "-");
+			if(':' != utcString.charAt(utcString.length() - 3)){
+				utcString = utcString.substring(0, utcString.length() - 2) + ":00";
+			}
+
+			if (StrUtil.contains(utcString, CharUtil.DOT)) {
+				// 带毫秒，格式类似：2018-09-13T05:34:31.999-08:00
+				return new DateTime(utcString, DatePattern.UTC_MS_WITH_XXX_OFFSET_FORMAT);
+			} else {
+				// 格式类似：2018-09-13T05:34:31-08:00
+				return new DateTime(utcString, DatePattern.UTC_WITH_XXX_OFFSET_FORMAT);
+			}
 		} else {
 			if (length == DatePattern.UTC_SIMPLE_PATTERN.length() - 2) {
 				// 格式类似：2018-09-13T05:34:31
 				return parse(utcString, DatePattern.UTC_SIMPLE_FORMAT);
+			} else if (length == DatePattern.UTC_SIMPLE_PATTERN.length() - 5) {
+				// 格式类似：2018-09-13T05:34
+				return parse(utcString + ":00", DatePattern.UTC_SIMPLE_FORMAT);
 			} else if (StrUtil.contains(utcString, CharUtil.DOT)) {
 				// 可能为：  2021-03-17T06:31:33.99
 				return parse(utcString, DatePattern.UTC_SIMPLE_MS_FORMAT);
@@ -2226,6 +2245,26 @@ public class DateUtil extends CalendarUtil {
 		// 则有交集的逻辑为 !(x>b||a>y)
 		// 根据德摩根公式，可化简为 x<=b && a<=y
 		return startTime.before(realEndTime) && endTime.after(realStartTime);
+	}
+
+	/**
+	 * 是否为本月最后一天
+	 * @param date {@link Date}
+	 * @return 是否为本月最后一天
+	 * @since 5.8.9
+	 */
+	public static boolean isLastDayOfMonth(Date date){
+		return date(date).isLastDayOfMonth();
+	}
+
+	/**
+	 * 获得本月的最后一天
+	 * @param date {@link Date}
+	 * @return 天
+	 * @since 5.8.9
+	 */
+	public static int getLastDayOfMonth(Date date){
+		return date(date).getLastDayOfMonth();
 	}
 
 	// ------------------------------------------------------------------------ Private method start

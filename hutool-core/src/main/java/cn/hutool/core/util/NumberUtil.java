@@ -793,7 +793,7 @@ public class NumberUtil {
 	 * @return 新值
 	 */
 	public static String roundStr(double v, int scale) {
-		return round(v, scale).toString();
+		return round(v, scale).toPlainString();
 	}
 
 	/**
@@ -834,7 +834,7 @@ public class NumberUtil {
 	 * @since 3.2.2
 	 */
 	public static String roundStr(String numberStr, int scale) {
-		return round(numberStr, scale).toString();
+		return round(numberStr, scale).toPlainString();
 	}
 
 	/**
@@ -861,7 +861,7 @@ public class NumberUtil {
 	 * @since 3.2.2
 	 */
 	public static String roundStr(double v, int scale, RoundingMode roundingMode) {
-		return round(v, scale, roundingMode).toString();
+		return round(v, scale, roundingMode).toPlainString();
 	}
 
 	/**
@@ -915,7 +915,7 @@ public class NumberUtil {
 	 * @since 3.2.2
 	 */
 	public static String roundStr(String numberStr, int scale, RoundingMode roundingMode) {
-		return round(numberStr, scale, roundingMode).toString();
+		return round(numberStr, scale, roundingMode).toPlainString();
 	}
 
 	/**
@@ -2439,6 +2439,11 @@ public class NumberUtil {
 	public static int parseInt(String number) throws NumberFormatException {
 		if (StrUtil.isBlank(number)) {
 			return 0;
+		}
+
+		if(StrUtil.containsIgnoreCase(number, "E")){
+			// 科学计数法忽略支持，科学计数法一般用于表示非常小和非常大的数字，这类数字转换为int后精度丢失，没有意义。
+			throw new NumberFormatException(StrUtil.format("Unsupported int format: [{}]", number));
 		}
 
 		if (StrUtil.startWithIgnoreCase(number, "0x")) {
