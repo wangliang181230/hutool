@@ -37,9 +37,19 @@ public class MapToMapCopier extends AbsCopier<Map, Map> {
 			if (null == sKey) {
 				return;
 			}
+			// 忽略空值
+			if (true == copyOptions.ignoreNullValue && sValue == null) {
+				return;
+			}
+
 			final String sKeyStr = copyOptions.editFieldName(sKey.toString());
 			// 对key做转换，转换后为null的跳过
 			if (null == sKeyStr) {
+				return;
+			}
+
+			// 忽略不需要拷贝的 key,
+			if (false == copyOptions.testKeyFilter(sKeyStr)) {
 				return;
 			}
 
@@ -51,7 +61,7 @@ public class MapToMapCopier extends AbsCopier<Map, Map> {
 
 			// 获取目标值真实类型并转换源值
 			final Type[] typeArguments = TypeUtil.getTypeArguments(this.targetType);
-			if(null != typeArguments){
+			if (null != typeArguments) {
 				//sValue = Convert.convertWithCheck(typeArguments[1], sValue, null, this.copyOptions.ignoreError);
 				sValue = this.copyOptions.convertField(typeArguments[1], sValue);
 				sValue = copyOptions.editFieldValue(sKeyStr, sValue);

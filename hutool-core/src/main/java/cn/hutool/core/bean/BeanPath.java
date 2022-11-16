@@ -139,6 +139,7 @@ public class BeanPath implements Serializable {
 	 * @param bean         Bean、Map或List
 	 * @param patternParts 表达式块列表
 	 * @param value        值
+	 * @return 值
 	 */
 	private void set(Object bean, List<String> patternParts, boolean nextNumberPart, Object value) {
 		Object subBean = this.get(patternParts, bean, true);

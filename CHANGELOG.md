@@ -3,13 +3,45 @@
 
 -------------------------------------------------------------------------------------------------------------
 
-# 5.8.9.M1 (2022-10-09)
+# 5.8.10.M1 (2022-11-12)
+
+### 🐣新特性
+* 【http  】      HttpResponse增加getFileNameFromDisposition方法（pr#2676@Github）
+* 【core  】      FileUtil.copy，当来源为文件时，返回文件而非目录（issue#I5YCVL@Gitee）
+* 【db    】      DialectFactory增加identifyDriver重载（issue#I5YWI6@Gitee）
+* 【core  】      去除ClassloaderUtil的Cache（issue#I5YWI6@Gitee）
+* 【core  】      ClassScanner 增加忽略加载错误类的扫描方法（pr#855@Gitee）
+* 【core  】      DateUtil和LocalDateTimeUtil添加区间退化为点，点与区间，点与点之间关系判断。（pr#2725@Github）
+* 【http  】      UserAgentUtil增加对钉钉PC端的支持（issue#I60UOP@Gitee）
+
+### 🐞Bug修复
+* 【db    】      修复分页时order by截断问题（issue#I5X6FM@Gitee）
+* 【core  】      修复Partition计算size除数为0报错问题（pr#2677@Github）
+* 【core  】      由于对于ASCII的编码解码有缺陷，且这种BCD实现并不规范，因此BCD标记为弃用（issue#I5XEC6@Gitee）
+* 【core  】      修复IoUtil.copyByNIO方法写出时没有flush的问题
+* 【core  】      修复TreeBuilder中使用HashMap导致默认乱序问题（issue#I5Z8C5@Gitee）
+* 【core  】      修复StrUtil.subWithLength负数问题（issue#I5YN49@Gitee）
+* 【core  】      修复DefaultTrustManager空指针问题（issue#2716@Github）
+* 【core  】      修复时间轮添加任务线程安全问题（pr#2712@Github）
+* 【core  】      修复 BeanUtil#copyProperties 源对象与目标对象都是 Map 时设置忽略属性无效问题（pr#2698@Github）
+* 【core  】      修复ChineseDate传入农历日期非闰月时获取公历错误问题（issue#I5YB1A@Gitee）
+* 【core  】      修复key为弱引用 value为强引用 会导致key无法被回收 弱引用失效问题（pr#2723@Github）
+* 【core  】      修复BeanUtil.copyProperties 包含EnumSet ，类型转换异常问题（pr#2684@Github）
+
+-------------------------------------------------------------------------------------------------------------
+# 5.8.9 (2022-10-22)
 
 ### 🐣新特性
 * 【core   】     DateUtil增加isLastDayOfMonth、getLastDayOfMonth方法（pr#824@Gitee）
 * 【core   】     AnnotationUtil类支持Lambda获取某注解属性值（pr#827@Gitee）
 * 【core   】     CharUtil.isBlank添加Hangul Filler字符（issue#I5UGSQ@Gitee）
 * 【poi    】     优化合并单元格读取（issue#I5UJZ1@Gitee）
+* 【extra  】     增加QLExpress支持（issue#2653@Github）
+* 【core   】     UrlBuilder增加getPortWithDefault方法（pr#835@Gitee）
+* 【core   】     FuncKeyMap的子类，传入可被序列化的keyFunc（pr#838@Gitee）
+* 【extra  】     SpringUtil支持SpringBoot3自动配置（pr#839@Gitee）
+* 【core   】     CollectorUtil添加支持对值集合进行映射的分组方法（pr#844@Gitee）
+* 【core  】      FileTypeUtil增加ppt识别（issue#2663@Github）
 
 ### 🐞Bug修复
 * 【poi    】     修复ExcelReader读取只有标题行报错问题（issue#I5U1JA@Gitee）
@@ -17,6 +49,10 @@
 * 【http   】     修复Http重定全局设置无效问题（pr#2639@Github）
 * 【core   】     修复ReUtil.replaceAll替换变量错误问题（pr#2639@Github）
 * 【core   】     修复FileNameUtil.mainName二级扩展名获取错误问题（issue#2642@Github）
+* 【cache  】     修复LRUCache移除事件监听失效问题（issue#2647@Github）
+* 【core   】     修复MapToMap中ignoreNullValue无效问题（issue#2647@Github）
+* 【core   】     修复ReflectUtil.invokeRaw方法转换失败抛出异常问题（pr#837@Gitee）
+* 【core   】     修复TableMap没有default方法导致的问题（issue#I5WMST@Gitee）
 
 -------------------------------------------------------------------------------------------------------------
 
