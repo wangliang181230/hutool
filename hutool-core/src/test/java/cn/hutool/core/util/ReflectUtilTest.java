@@ -277,6 +277,7 @@ public class ReflectUtilTest {
 	}
 
 	@Test
+	@Ignore(" “ReflectUtil.removeFinalModify(field);” 不兼容java17")
 	public void setFieldValueWithFinalTest() {
 		final String fieldName = "DIALECTS";
 		final List<Number> dialects =
