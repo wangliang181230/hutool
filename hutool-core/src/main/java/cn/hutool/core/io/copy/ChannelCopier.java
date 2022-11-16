@@ -3,7 +3,6 @@ package cn.hutool.core.io.copy;
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.StreamProgress;
-import cn.hutool.core.lang.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,9 +58,6 @@ public class ChannelCopier extends IoCopier<ReadableByteChannel, WritableByteCha
 
 	@Override
 	public long copy(final ReadableByteChannel source, final WritableByteChannel target) {
-		Assert.notNull(source, "InputStream is null !");
-		Assert.notNull(target, "OutputStream is null !");
-
 		final StreamProgress progress = this.progress;
 		if (null != progress) {
 			progress.start();
@@ -107,7 +103,8 @@ public class ChannelCopier extends IoCopier<ReadableByteChannel, WritableByteCha
 			numToRead -= read;
 			total += read;
 			if (null != progress) {
-				progress.progress(this.count, total);
+				// 总长度未知的情况下，-1表示未知
+				progress.progress(this.count < Long.MAX_VALUE ? this.count : -1, total);
 			}
 		}
 

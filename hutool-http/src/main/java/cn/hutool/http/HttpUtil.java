@@ -1,6 +1,6 @@
 package cn.hutool.http;
 
-import cn.hutool.core.codec.Base64;
+import cn.hutool.core.codec.BaseN.Base64;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
@@ -13,7 +13,11 @@ import cn.hutool.core.regex.ReUtil;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.http.cookie.GlobalCookieManager;
+import cn.hutool.http.client.HttpDownloader;
+import cn.hutool.http.client.cookie.GlobalCookieManager;
+import cn.hutool.http.client.engine.jdk.HttpRequest;
+import cn.hutool.http.meta.ContentType;
+import cn.hutool.http.meta.Method;
 import cn.hutool.http.server.SimpleServer;
 
 import java.io.File;
@@ -120,7 +124,7 @@ public class HttpUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static String get(final String urlString, final Charset customCharset) {
-		return HttpRequest.get(urlString).charset(customCharset).execute().body();
+		return HttpRequest.get(urlString).charset(customCharset).execute().bodyStr();
 	}
 
 	/**
@@ -143,7 +147,7 @@ public class HttpUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static String get(final String urlString, final int timeout) {
-		return HttpRequest.get(urlString).timeout(timeout).execute().body();
+		return HttpRequest.get(urlString).timeout(timeout).execute().bodyStr();
 	}
 
 	/**
@@ -155,7 +159,7 @@ public class HttpUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static String get(final String urlString, final Map<String, Object> paramMap) {
-		return HttpRequest.get(urlString).form(paramMap).execute().body();
+		return HttpRequest.get(urlString).form(paramMap).execute().bodyStr();
 	}
 
 	/**
@@ -169,7 +173,7 @@ public class HttpUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static String get(final String urlString, final Map<String, Object> paramMap, final int timeout) {
-		return HttpRequest.get(urlString).form(paramMap).timeout(timeout).execute().body();
+		return HttpRequest.get(urlString).form(paramMap).timeout(timeout).execute().bodyStr();
 	}
 
 	/**
@@ -194,7 +198,7 @@ public class HttpUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static String post(final String urlString, final Map<String, Object> paramMap, final int timeout) {
-		return HttpRequest.post(urlString).form(paramMap).timeout(timeout).execute().body();
+		return HttpRequest.post(urlString).form(paramMap).timeout(timeout).execute().bodyStr();
 	}
 
 	/**
@@ -231,7 +235,7 @@ public class HttpUtil {
 	 */
 	@SuppressWarnings("resource")
 	public static String post(final String urlString, final String body, final int timeout) {
-		return HttpRequest.post(urlString).timeout(timeout).body(body).execute().body();
+		return HttpRequest.post(urlString).timeout(timeout).body(body).execute().bodyStr();
 	}
 
 	// ---------------------------------------------------------------------------------------- download
@@ -275,9 +279,9 @@ public class HttpUtil {
 	 *
 	 * @param url  请求的url
 	 * @param dest 目标文件或目录，当为目录时，取URL中的文件名，取不到使用编码后的URL做为文件名
-	 * @return 文件大小
+	 * @return 文件
 	 */
-	public static long downloadFile(final String url, final String dest) {
+	public static File downloadFile(final String url, final String dest) {
 		return downloadFile(url, FileUtil.file(dest));
 	}
 
@@ -286,9 +290,9 @@ public class HttpUtil {
 	 *
 	 * @param url      请求的url
 	 * @param destFile 目标文件或目录，当为目录时，取URL中的文件名，取不到使用编码后的URL做为文件名
-	 * @return 文件大小
+	 * @return 文件
 	 */
-	public static long downloadFile(final String url, final File destFile) {
+	public static File downloadFile(final String url, final File destFile) {
 		return downloadFile(url, destFile, null);
 	}
 
@@ -298,10 +302,10 @@ public class HttpUtil {
 	 * @param url      请求的url
 	 * @param destFile 目标文件或目录，当为目录时，取URL中的文件名，取不到使用编码后的URL做为文件名
 	 * @param timeout  超时，单位毫秒，-1表示默认超时
-	 * @return 文件大小
+	 * @return 文件
 	 * @since 4.0.4
 	 */
-	public static long downloadFile(final String url, final File destFile, final int timeout) {
+	public static File downloadFile(final String url, final File destFile, final int timeout) {
 		return downloadFile(url, destFile, timeout, null);
 	}
 
@@ -311,9 +315,9 @@ public class HttpUtil {
 	 * @param url            请求的url
 	 * @param destFile       目标文件或目录，当为目录时，取URL中的文件名，取不到使用编码后的URL做为文件名
 	 * @param streamProgress 进度条
-	 * @return 文件大小
+	 * @return 文件
 	 */
-	public static long downloadFile(final String url, final File destFile, final StreamProgress streamProgress) {
+	public static File downloadFile(final String url, final File destFile, final StreamProgress streamProgress) {
 		return downloadFile(url, destFile, -1, streamProgress);
 	}
 
@@ -324,10 +328,10 @@ public class HttpUtil {
 	 * @param destFile       目标文件或目录，当为目录时，取URL中的文件名，取不到使用编码后的URL做为文件名
 	 * @param timeout        超时，单位毫秒，-1表示默认超时
 	 * @param streamProgress 进度条
-	 * @return 文件大小
+	 * @return 文件
 	 * @since 4.0.4
 	 */
-	public static long downloadFile(final String url, final File destFile, final int timeout, final StreamProgress streamProgress) {
+	public static File downloadFile(final String url, final File destFile, final int timeout, final StreamProgress streamProgress) {
 		return HttpDownloader.downloadFile(url, destFile, timeout, streamProgress);
 	}
 
@@ -469,8 +473,8 @@ public class HttpUtil {
 	 * key1=v1&amp;key2=&amp;key3=v3
 	 * </pre>
 	 *
-	 * @param paramMap 表单数据
-	 * @param charset  编码，null表示不encode键值对
+	 * @param paramMap         表单数据
+	 * @param charset          编码，null表示不encode键值对
 	 * @param isFormUrlEncoded 是否为x-www-form-urlencoded模式，此模式下空格会编码为'+'
 	 * @return url参数
 	 * @since 5.7.16
@@ -530,7 +534,7 @@ public class HttpUtil {
 	 * @since 4.5.2
 	 */
 	public static String normalizeParams(final String paramPart, final Charset charset) {
-		if(StrUtil.isEmpty(paramPart)){
+		if (StrUtil.isEmpty(paramPart)) {
 			return paramPart;
 		}
 		final StringBuilder builder = new StringBuilder(paramPart.length() + 16);
@@ -700,7 +704,7 @@ public class HttpUtil {
 	 * @param conn HTTP连接对象
 	 * @return 字符集
 	 */
-	public static String getCharset(final HttpURLConnection conn) {
+	public static Charset getCharset(final HttpURLConnection conn) {
 		if (conn == null) {
 			return null;
 		}
@@ -715,7 +719,19 @@ public class HttpUtil {
 	 * @return 字符集
 	 * @since 5.2.6
 	 */
-	public static String getCharset(final String contentType) {
+	public static Charset getCharset(final String contentType) {
+		return CharsetUtil.parse(getCharsetName(contentType), null);
+	}
+
+	/**
+	 * 从Http连接的头信息中获得字符集<br>
+	 * 从ContentType中获取
+	 *
+	 * @param contentType Content-Type
+	 * @return 字符集
+	 * @since 5.2.6
+	 */
+	public static String getCharsetName(final String contentType) {
 		if (StrUtil.isBlank(contentType)) {
 			return null;
 		}

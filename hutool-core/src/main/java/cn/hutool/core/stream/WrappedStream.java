@@ -25,7 +25,7 @@ import java.util.stream.*;
 public interface WrappedStream<T, S extends WrappedStream<T, S>> extends Stream<T>, Iterable<T> {
 
 	/**
-	 * 代表不存在的下标, 一般用于并行流的下标, 或者未找到元素时的下标
+	 * 代表不存在的下标, 或者未找到元素时的下标
 	 */
 	int NOT_FOUND_ELEMENT_INDEX = -1;
 
@@ -586,5 +586,21 @@ public interface WrappedStream<T, S extends WrappedStream<T, S>> extends Stream<
 	 */
 	@Override
 	String toString();
+
+	/**
+	 * 转换为EasyStream
+	 *
+	 * @return 转换后的EasyStream
+	 */
+	@SuppressWarnings("unchecked")
+	default EasyStream<T> easyStream() {
+		if (this instanceof EasyStream) {
+			return (EasyStream<T>) this;
+		} else if (this instanceof Iterator) {
+			return (EasyStream<T>) EasyStream.of((Iterator<T>) this);
+		} else {
+			return EasyStream.of(collect(Collectors.toList()));
+		}
+	}
 
 }

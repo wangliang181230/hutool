@@ -1,6 +1,6 @@
 package cn.hutool.crypto.asymmetric;
 
-import cn.hutool.core.codec.Base64;
+import cn.hutool.core.codec.BaseN.Base64;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.codec.HexUtil;
 import cn.hutool.core.text.StrUtil;
@@ -73,18 +73,6 @@ public class SM2Test {
 		final byte[] encrypt = sm2.encrypt(StrUtil.bytes("我是一段测试aaaa", CharsetUtil.UTF_8), KeyType.PublicKey);
 		final byte[] decrypt = sm2.decrypt(encrypt, KeyType.PrivateKey);
 		Assert.assertEquals("我是一段测试aaaa", StrUtil.str(decrypt, CharsetUtil.UTF_8));
-	}
-
-	@Test
-	public void sm2BcdTest() {
-		final String text = "我是一段测试aaaa";
-
-		final SM2 sm2 = SmUtil.sm2();
-
-		// 公钥加密，私钥解密
-		final String encryptStr = sm2.encryptBcd(text, KeyType.PublicKey);
-		final String decryptStr = StrUtil.utf8Str(sm2.decryptFromBcd(encryptStr, KeyType.PrivateKey));
-		Assert.assertEquals(text, decryptStr);
 	}
 
 	@Test

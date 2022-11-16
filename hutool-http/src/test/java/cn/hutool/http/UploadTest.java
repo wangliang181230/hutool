@@ -2,6 +2,9 @@ package cn.hutool.http;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Console;
+import cn.hutool.http.client.engine.jdk.HttpRequest;
+import cn.hutool.http.client.engine.jdk.HttpResponse;
+import cn.hutool.http.meta.Header;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -80,7 +83,7 @@ public class UploadTest {
 				.header(Header.USER_AGENT, "PostmanRuntime/7.28.4")
 				.auth(token)
 				.form("smfile", FileUtil.file("d:/test/qrcodeCustom.png"))
-				.execute().body();
+				.execute().bodyStr();
 
 		Console.log(result);
 	}

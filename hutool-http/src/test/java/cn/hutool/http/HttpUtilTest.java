@@ -1,10 +1,13 @@
 package cn.hutool.http;
 
-import cn.hutool.core.codec.Base64;
+import cn.hutool.core.codec.BaseN.Base64;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.regex.ReUtil;
+import cn.hutool.http.client.engine.jdk.HttpRequest;
+import cn.hutool.http.meta.Header;
+import cn.hutool.http.meta.Method;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,7 +40,7 @@ public class HttpUtilTest {
 	public void postTest() {
 		final String result = HttpUtil.createPost("api.uhaozu.com/goods/description/1120448506")
 				.charset(CharsetUtil.NAME_UTF_8)
-				.execute().body();
+				.execute().bodyStr();
 		Console.log(result);
 	}
 
@@ -49,7 +52,7 @@ public class HttpUtilTest {
 				.createPost("http://cmp.ishanghome.com/cmp/v1/community/queryClusterCommunity")
 				.header(Header.ACCEPT, "*/*")
 				.execute()
-				.body();
+				.bodyStr();
 		Console.log(result);
 	}
 
@@ -67,7 +70,7 @@ public class HttpUtilTest {
 		// 自定义的默认header无效
 		final String result = HttpRequest
 				.get("https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101457313&redirect_uri=http%3A%2F%2Fwww.benmovip.com%2Fpay-cloud%2Fqqlogin%2FgetCode&state=ok")
-				.removeHeader(Header.USER_AGENT).execute().body();
+				.removeHeader(Header.USER_AGENT).execute().bodyStr();
 		Console.log(result);
 	}
 
@@ -269,7 +272,7 @@ public class HttpUtilTest {
 	@Ignore
 	public void patchTest() {
 		// 验证patch请求是否可用
-		final String body = HttpRequest.patch("https://www.baidu.com").execute().body();
+		final String body = HttpRequest.patch("https://www.baidu.com").execute().bodyStr();
 		Console.log(body);
 	}
 
@@ -365,7 +368,7 @@ public class HttpUtilTest {
 	@Ignore
 	public void acplayTest(){
 		final String body = HttpRequest.get("https://api.acplay.net/api/v2/bangumi/9541")
-				.execute().body();
+				.execute().bodyStr();
 		Console.log(body);
 	}
 

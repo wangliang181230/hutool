@@ -75,7 +75,7 @@ public class CharSequenceResource implements Resource, Serializable {
 
 	@Override
 	public BufferedReader getReader(final Charset charset) {
-		return IoUtil.getReader(new StringReader(this.data.toString()));
+		return IoUtil.toBuffered(new StringReader(this.data.toString()));
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class CharSequenceResource implements Resource, Serializable {
 
 	@Override
 	public byte[] readBytes() throws IORuntimeException {
-		return this.data.toString().getBytes(this.charset);
+		return StrUtil.bytes(this.data, this.charset);
 	}
 
 }

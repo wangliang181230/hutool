@@ -342,9 +342,9 @@ public class BeanUtilTest {
 		student.setNo(3158L);
 
 		final Student student2 = new Student();
-		student.setName("李四");
-		student.setAge(125);
-		student.setNo(8848L);
+		student2.setName("李四");
+		student2.setAge(125);
+		student2.setNo(8848L);
 
 		final List<Student> studentList = ListUtil.view(student, student2);
 
@@ -576,6 +576,21 @@ public class BeanUtilTest {
 	}
 
 	@Test
+	public void copyPropertiesMapToMapIgnoreNullTest() {
+		// 测试MapToMap
+		final Map<String, Object> p1 = new HashMap<>();
+		p1.put("isSlow", true);
+		p1.put("name", "测试");
+		p1.put("subName", null);
+
+		final Map<String, Object> map = MapUtil.newHashMap();
+		BeanUtil.copyProperties(p1, map, CopyOptions.of().setIgnoreNullValue(true));
+		Assert.assertTrue((Boolean) map.get("isSlow"));
+		Assert.assertEquals("测试", map.get("name"));
+		Assert.assertFalse(map.containsKey("subName"));
+	}
+
+	@Test
 	public void copyBeanPropertiesFilterTest() {
 		final Food info = new Food();
 		info.setBookID("0");
@@ -654,9 +669,9 @@ public class BeanUtilTest {
 		student.setNo(3158L);
 
 		final Student student2 = new Student();
-		student.setName("李四");
-		student.setAge(125);
-		student.setNo(8848L);
+		student2.setName("李四");
+		student2.setAge(125);
+		student2.setNo(8848L);
 
 		final List<Student> studentList = ListUtil.view(student, student2);
 		final List<Person> people = BeanUtil.copyToList(studentList, Person.class);
@@ -665,6 +680,30 @@ public class BeanUtilTest {
 		for (int i = 0; i < studentList.size(); i++) {
 			Assert.assertEquals(studentList.get(i).getName(), people.get(i).getName());
 			Assert.assertEquals(studentList.get(i).getAge(), people.get(i).getAge());
+		}
+
+	}
+
+	@Test
+	public void copyListTest2() {
+		final Student student = new Student();
+		student.setName("张三");
+		student.setAge(123);
+		student.setNo(3158L);
+
+		final Student student2 = new Student();
+		student2.setName("李四");
+		student2.setAge(125);
+		student2.setNo(8848L);
+
+		final List<Student> studentList = ListUtil.view(student, student2);
+		final List<Person> people = BeanUtil.copyToList(studentList, Person.class, CopyOptions.of().setFieldMapping(MapUtil.of("no", "openid")));
+
+		Assert.assertEquals(studentList.size(), people.size());
+		for (int i = 0; i < studentList.size(); i++) {
+			Assert.assertEquals(studentList.get(i).getName(), people.get(i).getName());
+			Assert.assertEquals(studentList.get(i).getAge(), people.get(i).getAge());
+			Assert.assertEquals(studentList.get(i).getNo().toString(), people.get(i).getOpenid());
 		}
 
 	}

@@ -62,8 +62,17 @@ public class DateUtil extends CalendarUtil {
 	 *
 	 * @return 当前时间
 	 */
-	public static DateTime date() {
+	public static DateTime now() {
 		return new DateTime();
+	}
+
+	/**
+	 * 当天开始的时间，结果类似：2022-10-26 00:00:00
+	 *
+	 * @return 当天开始的时间
+	 */
+	public static DateTime today() {
+		return new DateTime(beginOfDay(Calendar.getInstance()));
 	}
 
 	/**
@@ -73,7 +82,7 @@ public class DateUtil extends CalendarUtil {
 	 * @since 4.6.2
 	 */
 	public static DateTime dateSecond() {
-		return beginOfSecond(date());
+		return beginOfSecond(now());
 	}
 
 	/**
@@ -126,7 +135,7 @@ public class DateUtil extends CalendarUtil {
 
 	/**
 	 * Long类型时间转为{@link DateTime}<br>
-	 * 只支持毫秒级别时间戳，如果需要秒级别时间戳，请自行×1000
+	 * 只支持毫秒级别时间戳，如果需要秒级别时间戳，请自行×1000L
 	 *
 	 * @param date Long类型Date（Unix时间戳）
 	 * @return 时间对象
@@ -393,56 +402,56 @@ public class DateUtil extends CalendarUtil {
 	 * @return 今年
 	 */
 	public static int thisYear() {
-		return year(date());
+		return year(now());
 	}
 
 	/**
 	 * @return 当前月份
 	 */
 	public static int thisMonth() {
-		return month(date());
+		return month(now());
 	}
 
 	/**
 	 * @return 当前月份 {@link Month}
 	 */
 	public static Month thisMonthEnum() {
-		return monthEnum(date());
+		return monthEnum(now());
 	}
 
 	/**
 	 * @return 当前日期所在年份的第几周
 	 */
 	public static int thisWeekOfYear() {
-		return weekOfYear(date());
+		return weekOfYear(now());
 	}
 
 	/**
 	 * @return 当前日期所在月份的第几周
 	 */
 	public static int thisWeekOfMonth() {
-		return weekOfMonth(date());
+		return weekOfMonth(now());
 	}
 
 	/**
 	 * @return 当前日期是这个日期所在月份的第几天
 	 */
 	public static int thisDayOfMonth() {
-		return dayOfMonth(date());
+		return dayOfMonth(now());
 	}
 
 	/**
 	 * @return 当前日期是星期几
 	 */
 	public static int thisDayOfWeek() {
-		return dayOfWeek(date());
+		return dayOfWeek(now());
 	}
 
 	/**
 	 * @return 当前日期是星期几 {@link Week}
 	 */
 	public static Week thisDayOfWeekEnum() {
-		return dayOfWeekEnum(date());
+		return dayOfWeekEnum(now());
 	}
 
 	/**
@@ -450,28 +459,28 @@ public class DateUtil extends CalendarUtil {
 	 * @return 当前日期的小时数部分<br>
 	 */
 	public static int thisHour(final boolean is24HourClock) {
-		return hour(date(), is24HourClock);
+		return hour(now(), is24HourClock);
 	}
 
 	/**
 	 * @return 当前日期的分钟数部分<br>
 	 */
 	public static int thisMinute() {
-		return minute(date());
+		return minute(now());
 	}
 
 	/**
 	 * @return 当前日期的秒数部分<br>
 	 */
 	public static int thisSecond() {
-		return second(date());
+		return second(now());
 	}
 
 	/**
 	 * @return 当前日期的毫秒数部分<br>
 	 */
 	public static int thisMillisecond() {
-		return millisecond(date());
+		return millisecond(now());
 	}
 	// -------------------------------------------------------------- Part of Date end
 
@@ -1408,7 +1417,7 @@ public class DateUtil extends CalendarUtil {
 
 		final long thisMills = date.getTime();
 		final long beginMills = beginDate.getTime();
-		final long endMills =  endDate.getTime();
+		final long endMills = endDate.getTime();
 		final long rangeMin = Math.min(beginMills, endMills);
 		final long rangeMax = Math.max(beginMills, endMills);
 
@@ -1584,7 +1593,7 @@ public class DateUtil extends CalendarUtil {
 	 * @return 年龄
 	 */
 	public static int ageOfNow(final Date birthDay) {
-		return age(birthDay, date());
+		return age(birthDay, now());
 	}
 
 	/**
@@ -1607,7 +1616,7 @@ public class DateUtil extends CalendarUtil {
 	public static int age(final Date birthday, Date dateToCompare) {
 		Assert.notNull(birthday, "Birthday can not be null !");
 		if (null == dateToCompare) {
-			dateToCompare = date();
+			dateToCompare = now();
 		}
 		return age(birthday.getTime(), dateToCompare.getTime());
 	}
@@ -1986,13 +1995,19 @@ public class DateUtil extends CalendarUtil {
 
 	/**
 	 * 检查两个时间段是否有时间重叠<br>
-	 * 重叠指两个时间段是否有交集
+	 * 重叠指两个时间段是否有交集，注意此方法时间段重合时如：
+	 * <ul>
+	 *     <li>此方法未纠正开始时间小于结束时间</li>
+	 *     <li>当realStartTime和realEndTime或startTime和endTime相等时,退化为判断区间是否包含点</li>
+	 *     <li>当realStartTime和realEndTime和startTime和endTime相等时,退化为判断点与点是否相等</li>
+	 * </ul>
+	 * See <a href="https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html">准确的区间关系参考:艾伦区间代数</a>
 	 *
 	 * @param realStartTime 第一个时间段的开始时间
 	 * @param realEndTime   第一个时间段的结束时间
 	 * @param startTime     第二个时间段的开始时间
 	 * @param endTime       第二个时间段的结束时间
-	 * @return true 表示时间有重合
+	 * @return true 表示时间有重合或包含或相等
 	 * @since 5.7.22
 	 */
 	public static boolean isOverlap(final Date realStartTime, final Date realEndTime,
@@ -2000,27 +2015,29 @@ public class DateUtil extends CalendarUtil {
 
 		// x>b||a>y 无交集
 		// 则有交集的逻辑为 !(x>b||a>y)
-		// 根据德摩根公式，可化简为 x<=b && a<=y
-		return startTime.before(realEndTime) && endTime.after(realStartTime);
+		// 根据德摩根公式，可化简为 x<=b && a<=y 即 realStartTime<=endTime && startTime<=realEndTime
+		return realStartTime.compareTo(endTime) <=0 && startTime.compareTo(realEndTime) <= 0;
 	}
 
 	/**
 	 * 是否为本月最后一天
+	 *
 	 * @param date {@link Date}
 	 * @return 是否为本月最后一天
 	 * @since 5.8.8
 	 */
-	public static boolean isLastDayOfMonth(final Date date){
+	public static boolean isLastDayOfMonth(final Date date) {
 		return date(date).isLastDayOfMonth();
 	}
 
 	/**
 	 * 获得本月的最后一天
+	 *
 	 * @param date {@link Date}
 	 * @return 天
 	 * @since 5.8.8
 	 */
-	public static int getLastDayOfMonth(final Date date){
+	public static int getLastDayOfMonth(final Date date) {
 		return date(date).getLastDayOfMonth();
 	}
 

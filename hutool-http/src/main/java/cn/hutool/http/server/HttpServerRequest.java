@@ -11,9 +11,10 @@ import cn.hutool.core.net.multipart.UploadSetting;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.CharsetUtil;
-import cn.hutool.http.Header;
+import cn.hutool.core.util.ObjUtil;
+import cn.hutool.http.meta.Header;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.http.Method;
+import cn.hutool.http.meta.Method;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.sun.net.httpserver.Headers;
@@ -169,8 +170,7 @@ public class HttpServerRequest extends HttpServerBase {
 	public Charset getCharset() {
 		if(null == this.charsetCache){
 			final String contentType = getContentType();
-			final String charsetStr = HttpUtil.getCharset(contentType);
-			this.charsetCache = CharsetUtil.parse(charsetStr, DEFAULT_CHARSET);
+			this.charsetCache = ObjUtil.defaultIfNull(HttpUtil.getCharset(contentType), DEFAULT_CHARSET);
 		}
 
 		return this.charsetCache;

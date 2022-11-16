@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.collection.UniqueKeySet;
 import cn.hutool.core.comparator.CompareUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
@@ -137,6 +138,20 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	@SuppressWarnings("unchecked")
 	public static <T> boolean isAllNull(final T... array) {
 		return null == firstNonNull(array);
+	}
+
+	/**
+	 * 是否包含非{@code null}元素<br>
+	 * 如果列表是{@code null}或者空，返回{@code false}，否则当列表中有非{@code null}字符时返回{@code true}
+	 *
+	 * @param <T>   数组元素类型
+	 * @param array 被检查的数组
+	 * @return 是否包含非{@code null}元素
+	 * @since 5.4.0
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> boolean hasNonNull(final T... array) {
+		return null != firstNonNull(array);
 	}
 
 	/**
@@ -317,15 +332,18 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * 将新元素添加到已有数组中<br>
 	 * 添加新元素会生成一个新的数组，不影响原数组
 	 *
+	 * @param <A>         数组类型
 	 * @param <T>         数组元素类型
 	 * @param array       已有数组
 	 * @param newElements 新元素
 	 * @return 新数组
 	 */
+	@SuppressWarnings("unchecked")
 	@SafeVarargs
-	public static <T> Object append(final Object array, final T... newElements) {
+	public static <A, T> A append(final A array, final T... newElements) {
 		if (isEmpty(array)) {
-			return newElements;
+			// 可变长参数可能为包装类型，如果array是原始类型，则此处强转不合适，采用万能转换器完成转换
+			return (A) Convert.convert(array.getClass(), newElements);
 		}
 		return insert(array, length(array), newElements);
 	}
@@ -357,13 +375,14 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	/**
 	 * 将元素值设置为数组的某个位置，当给定的index大于数组长度，则追加
 	 *
+	 * @param <A>   数组类型
 	 * @param array 已有数组
 	 * @param index 位置，大于长度追加，否则替换
 	 * @param value 新值
 	 * @return 新数组或原有数组
 	 * @since 4.1.2
 	 */
-	public static Object setOrAppend(final Object array, final int index, final Object value) {
+	public static <A> A setOrAppend(final A array, final int index, final Object value) {
 		if (index < length(array)) {
 			Array.set(array, index, value);
 			return array;
@@ -436,6 +455,7 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * 添加新元素会生成一个新的数组，不影响原数组<br>
 	 * 如果插入位置为为负数，从原数组从后向前计数，若大于原数组长度，则空白处用null填充
 	 *
+	 * @param <A>         数组类型
 	 * @param <T>         数组元素类型
 	 * @param array       已有数组
 	 * @param index       插入位置，此位置为对应此位置元素之前的空档
@@ -444,12 +464,12 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * @since 4.0.8
 	 */
 	@SuppressWarnings({"unchecked", "SuspiciousSystemArraycopy"})
-	public static <T> Object insert(final Object array, int index, final T... newElements) {
+	public static <A, T> A insert(final A array, int index, final T... newElements) {
 		if (isEmpty(newElements)) {
 			return array;
 		}
 		if (isEmpty(array)) {
-			return newElements;
+			return (A) Convert.convert(array.getClass(), newElements);
 		}
 
 		final int len = length(array);
@@ -457,13 +477,13 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 			index = (index % len) + len;
 		}
 
-		final T[] result = newArray(array.getClass().getComponentType(), Math.max(len, index) + newElements.length);
+		final Object result = Array.newInstance(array.getClass().getComponentType(), Math.max(len, index) + newElements.length);
 		System.arraycopy(array, 0, result, 0, Math.min(len, index));
 		System.arraycopy(newElements, 0, result, index, newElements.length);
 		if (index < len) {
 			System.arraycopy(array, index, result, index + newElements.length, len - index);
 		}
-		return result;
+		return (A) result;
 	}
 
 	/**
@@ -495,6 +515,7 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * @param array   原数组
 	 * @param newSize 新的数组大小
 	 * @return 调整后的新数组
+	 * @see System#arraycopy(Object, int, Object, int, int)
 	 * @since 4.6.7
 	 */
 	public static Object resize(final Object array, final int newSize) {
@@ -560,8 +581,37 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 
 	/**
 	 * 包装 {@link System#arraycopy(Object, int, Object, int, int)}<br>
+	 * 数组复制，缘数组和目标数组都是从位置0开始复制，复制长度为源数组的长度
+	 *
+	 * @param <T>  目标数组类型
+	 * @param src  源数组
+	 * @param dest 目标数组
+	 * @return 目标数组
+	 */
+	public static <T> T copy(final Object src, final T dest) {
+		return copy(src, dest, length(src));
+	}
+
+	/**
+	 * 包装 {@link System#arraycopy(Object, int, Object, int, int)}<br>
+	 * 数组复制，缘数组和目标数组都是从位置0开始复制
+	 *
+	 * @param <T>  目标数组类型
+	 * @param src    源数组
+	 * @param dest   目标数组
+	 * @param length 拷贝数组长度
+	 * @return 目标数组
+	 * @since 3.0.6
+	 */
+	public static <T> T copy(final Object src, final T dest, final int length) {
+		return copy(src, 0, dest, 0, length);
+	}
+
+	/**
+	 * 包装 {@link System#arraycopy(Object, int, Object, int, int)}<br>
 	 * 数组复制
 	 *
+	 * @param <T>  目标数组类型
 	 * @param src     源数组
 	 * @param srcPos  源数组开始位置
 	 * @param dest    目标数组
@@ -570,25 +620,9 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	 * @return 目标数组
 	 * @since 3.0.6
 	 */
-	public static Object copy(final Object src, final int srcPos, final Object dest, final int destPos, final int length) {
+	public static <T> T copy(final Object src, final int srcPos, final T dest, final int destPos, final int length) {
 		//noinspection SuspiciousSystemArraycopy
 		System.arraycopy(src, srcPos, dest, destPos, length);
-		return dest;
-	}
-
-	/**
-	 * 包装 {@link System#arraycopy(Object, int, Object, int, int)}<br>
-	 * 数组复制，缘数组和目标数组都是从位置0开始复制
-	 *
-	 * @param src    源数组
-	 * @param dest   目标数组
-	 * @param length 拷贝数组长度
-	 * @return 目标数组
-	 * @since 3.0.6
-	 */
-	public static Object copy(final Object src, final Object dest, final int length) {
-		//noinspection SuspiciousSystemArraycopy
-		System.arraycopy(src, 0, dest, 0, length);
 		return dest;
 	}
 
@@ -1572,7 +1606,7 @@ public class ArrayUtil extends PrimitiveArrayUtil {
 	/**
 	 * 是否存都为{@code null}或空对象，通过{@link ObjUtil#isEmpty(Object)} 判断元素
 	 *
-	 * @param <T> 元素类型
+	 * @param <T>  元素类型
 	 * @param args 被检查的对象,一个或者多个
 	 * @return 是否都为空
 	 * @since 4.5.18

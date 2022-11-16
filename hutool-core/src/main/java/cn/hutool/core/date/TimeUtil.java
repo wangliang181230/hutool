@@ -1,9 +1,9 @@
 package cn.hutool.core.date;
 
 import cn.hutool.core.date.format.GlobalCustomFormat;
-import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.regex.ReUtil;
 import cn.hutool.core.text.StrUtil;
+import cn.hutool.core.util.ObjUtil;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -22,6 +22,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalUnit;
 import java.time.temporal.WeekFields;
 import java.util.Date;
@@ -35,7 +36,7 @@ import java.util.TimeZone;
  * @see DatePattern 常用格式工具类
  * @since 6.0.0
  */
-public class TimeUtil extends TemporalAccessorUtil{
+public class TimeUtil extends TemporalAccessorUtil {
 
 	/**
 	 * 当前时间，默认时区
@@ -171,8 +172,8 @@ public class TimeUtil extends TemporalAccessorUtil{
 			return ((LocalDate) temporalAccessor).atStartOfDay();
 		} else if (temporalAccessor instanceof Instant) {
 			return LocalDateTime.ofInstant((Instant) temporalAccessor, ZoneId.systemDefault());
-		} else if(temporalAccessor instanceof ZonedDateTime){
-			return ((ZonedDateTime)temporalAccessor).toLocalDateTime();
+		} else if (temporalAccessor instanceof ZonedDateTime) {
+			return ((ZonedDateTime) temporalAccessor).toLocalDateTime();
 		}
 
 		return LocalDateTime.of(
@@ -224,7 +225,7 @@ public class TimeUtil extends TemporalAccessorUtil{
 	public static LocalDateTime parseByISO(final CharSequence text) {
 		if (StrUtil.contains(text, 'T')) {
 			return parse(text, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-		}else{
+		} else {
 			return parse(text, DatePattern.NORM_DATETIME_FORMATTER);
 		}
 	}
@@ -449,6 +450,16 @@ public class TimeUtil extends TemporalAccessorUtil{
 	}
 
 	/**
+	 * 获取给定日期月底的时间
+	 *
+	 * @param time 日期时间
+	 * @return 月底
+	 */
+	public static LocalDateTime endOfMonth(final LocalDateTime time) {
+		return time.with(TemporalAdjusters.lastDayOfMonth());
+	}
+
+	/**
 	 * 是否为周末（周六或周日）
 	 *
 	 * @param localDateTime 判定的日期{@link LocalDateTime}
@@ -484,7 +495,13 @@ public class TimeUtil extends TemporalAccessorUtil{
 
 	/**
 	 * 检查两个时间段是否有时间重叠<br>
-	 * 重叠指两个时间段是否有交集
+	 * 重叠指两个时间段是否有交集，注意此方法时间段重合时如：
+	 * <ul>
+	 *     <li>此方法未纠正开始时间小于结束时间</li>
+	 *     <li>当realStartTime和realEndTime或startTime和endTime相等时,退化为判断区间是否包含点</li>
+	 *     <li>当realStartTime和realEndTime和startTime和endTime相等时,退化为判断点与点是否相等</li>
+	 * </ul>
+	 * See <a href="https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html">准确的区间关系参考:艾伦区间代数</a>
 	 *
 	 * @param realStartTime 第一个时间段的开始时间
 	 * @param realEndTime   第一个时间段的结束时间
@@ -498,8 +515,8 @@ public class TimeUtil extends TemporalAccessorUtil{
 
 		// x>b||a>y 无交集
 		// 则有交集的逻辑为 !(x>b||a>y)
-		// 根据德摩根公式，可化简为 x<=b && a<=y
-		return startTime.isBefore(realEndTime) && endTime.isAfter(realStartTime);
+		// 根据德摩根公式，可化简为 x<=b && a<=y 即 realStartTime<=endTime && startTime<=realEndTime
+		return realStartTime.compareTo(endTime) <=0 && startTime.compareTo(realEndTime) <= 0;
 	}
 
 	/**

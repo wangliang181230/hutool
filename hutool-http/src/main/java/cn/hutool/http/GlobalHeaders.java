@@ -3,6 +3,8 @@ package cn.hutool.http;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.text.StrUtil;
+import cn.hutool.http.client.engine.jdk.HttpRequest;
+import cn.hutool.http.meta.Header;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,9 @@ import java.util.Map.Entry;
  * @author looly
  */
 public enum GlobalHeaders {
+	/**
+	 * 单例对象
+	 */
 	INSTANCE;
 
 	/**

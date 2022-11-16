@@ -7,6 +7,10 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.net.ssl.SSLProtocols;
 import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.http.client.engine.jdk.HttpRequest;
+import cn.hutool.http.client.engine.jdk.HttpResponse;
+import cn.hutool.http.meta.Header;
+import cn.hutool.http.meta.Method;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -27,7 +31,7 @@ public class HttpRequestTest {
 	@Test
 	@Ignore
 	public void getHttpsTest() {
-		final String body = HttpRequest.get("https://www.hutool.cn/").timeout(10).execute().body();
+		final String body = HttpRequest.get("https://www.hutool.cn/").timeout(10).execute().bodyStr();
 		Console.log(body);
 	}
 
@@ -44,7 +48,7 @@ public class HttpRequestTest {
 	public void getCookiesTest() {
 		// 检查在Connection关闭情况下Cookie是否可以正常获取
 		final HttpResponse res = HttpRequest.get("https://www.oschina.net/").execute();
-		final String body = res.body();
+		final String body = res.bodyStr();
 		Console.log(res.getCookies());
 		Console.log(body);
 	}
@@ -115,15 +119,17 @@ public class HttpRequestTest {
 	@Test
 	@Ignore
 	public void getDeflateTest() {
-		final String res = HttpRequest.get("https://comment.bilibili.com/67573272.xml")
-				.execute().body();
-		Console.log(res);
+		final HttpResponse res = HttpRequest.get("https://comment.bilibili.com/67573272.xml")
+				.header(Header.ACCEPT_ENCODING, "deflate")
+				.execute();
+		Console.log(res.header(Header.CONTENT_ENCODING));
+		Console.log(res.body());
 	}
 
 	@Test
 	@Ignore
 	public void bodyTest() {
-		final String ddddd1 = HttpRequest.get("https://baijiahao.baidu.com/s").body("id=1625528941695652600").execute().body();
+		final String ddddd1 = HttpRequest.get("https://baijiahao.baidu.com/s").body("id=1625528941695652600").execute().bodyStr();
 		Console.log(ddddd1);
 	}
 
@@ -180,22 +186,6 @@ public class HttpRequestTest {
 
 	@Test
 	@Ignore
-	public void addInterceptorTest() {
-		HttpUtil.createGet("https://hutool.cn")
-				.addInterceptor(Console::log)
-				.addResponseInterceptor((res)-> Console.log(res.getStatus()))
-				.execute();
-	}
-
-	@Test
-	@Ignore
-	public void addGlobalInterceptorTest() {
-		GlobalInterceptor.INSTANCE.addRequestInterceptor(Console::log);
-		HttpUtil.createGet("https://hutool.cn").execute();
-	}
-
-	@Test
-	@Ignore
 	public void getWithFormTest(){
 		final String url = "https://postman-echo.com/get";
 		final Map<String, Object> map = new HashMap<>();
@@ -211,7 +201,7 @@ public class HttpRequestTest {
 		urlBuilder.setScheme("https").setHost("hutool.cn");
 
 		final HttpRequest httpRequest = new HttpRequest(urlBuilder);
-		httpRequest.setMethod(Method.GET).execute();
+		httpRequest.method(Method.GET).execute();
 	}
 
 	@Test
@@ -249,5 +239,12 @@ public class HttpRequestTest {
 	public void postToStringTest() {
 		final HttpRequest a = HttpRequest.post("https://hutool.cn/").form("a", 1);
 		Console.log(a.toString());
+	}
+
+	@Test
+	@Ignore
+	public void issueI5Y68WTest() {
+		final HttpResponse httpResponse = HttpRequest.get("http://82.157.17.173:8100/app/getAddress").execute();
+		Console.log(httpResponse.body());
 	}
 }

@@ -181,14 +181,36 @@ public interface TerminableWrappedStream<T, S extends TerminableWrappedStream<T,
 		Objects.requireNonNull(valueMapper);
 		Objects.requireNonNull(mergeFunction);
 		Objects.requireNonNull(mapSupplier);
-		return unwrap().collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction, mapSupplier));
+		return unwrap().collect(CollectorUtil.toMap(keyMapper, valueMapper, mergeFunction, mapSupplier));
 	}
+
+	/**
+	 * 转换为map，key为下标,value为元素
+	 *
+	 * @return map
+	 */
+	default Map<Integer, T> toIdxMap() {
+		return toIdxMap(Function.identity());
+	}
+
+	/**
+	 * 转换为map，key为下标,value为给定操作执行后的返回值
+	 *
+	 * @param valueMapper 指定value操作
+	 * @param <U>         value类型
+	 * @return map
+	 */
+	default <U> Map<Integer, U> toIdxMap(final Function<? super T, ? extends U> valueMapper) {
+		final MutableInt index = new MutableInt(NOT_FOUND_ELEMENT_INDEX);
+		return EasyStream.of(toList()).toMap(e -> index.incrementAndGet(), valueMapper, (l, r) -> r);
+	}
+
 
 	/**
 	 * <p>将集合转换为树，默认用 {@code parentId == null} 来判断树的根节点
 	 * 因为需要在当前传入数据里查找，所以这是一个结束操作 <br>
 	 *
-	 * @param idGetter       id的getter对应的lambda，可以写作 {@code Student::getId} 会过滤掉id为null的元素
+	 * @param idGetter       id的getter对应的lambda，可以写作 {@code Student::getId}
 	 * @param pIdGetter      parentId的getter对应的lambda，可以写作 {@code Student::getParentId}
 	 * @param childrenSetter children的setter对应的lambda，可以写作{ @code Student::setChildren}
 	 * @param <R>            此处是id、parentId的泛型限制
@@ -208,10 +230,35 @@ public interface TerminableWrappedStream<T, S extends TerminableWrappedStream<T,
 	}
 
 	/**
+	 * <p>将集合转换为树，传入 {@code parentId == pidValue} 来判断树的根节点
+	 * 因为需要在当前传入数据里查找，所以这是一个结束操作 <br>
+	 *
+	 * @param idGetter       id的getter对应的lambda，可以写作 {@code Student::getId}
+	 * @param pIdGetter      parentId的getter对应的lambda，可以写作 {@code Student::getParentId}
+	 * @param pIdValue       parentId的值，支持 {@code null}
+	 * @param childrenSetter children的setter对应的lambda，可以写作{ @code Student::setChildren}
+	 * @param <R>            此处是id、parentId的泛型限制
+	 * @return list 组装好的树 <br>
+	 * eg:
+	 * <pre>{@code
+	 * List<Student> studentTree = EasyStream.of(students).
+	 * 	toTree(Student::getId, Student::getParentId, 0L, Student::setChildren);
+	 * }</pre>
+	 * @author VampireAchao
+	 */
+	default <R extends Comparable<R>> List<T> toTree(
+			final Function<T, R> idGetter,
+			final Function<T, R> pIdGetter,
+			final R pIdValue,
+			final BiConsumer<T, List<T>> childrenSetter) {
+		return collect(CollectorUtil.toTree(idGetter, pIdGetter, pIdValue, childrenSetter, isParallel()));
+	}
+
+	/**
 	 * 将集合转换为树，自定义根节点的判断条件
 	 * 因为需要在当前传入数据里查找，所以这是一个结束操作
 	 *
-	 * @param idGetter        id的getter对应的lambda，可以写作 {@code Student::getId} 会过滤掉id为null的元素
+	 * @param idGetter        id的getter对应的lambda，可以写作 {@code Student::getId}
 	 * @param pIdGetter       parentId的getter对应的lambda，可以写作 {@code Student::getParentId}
 	 * @param childrenSetter  children的setter对应的lambda，可以写作 {@code Student::setChildren}
 	 * @param parentPredicate 树顶部的判断条件，可以写作 {@code s -> Objects.equals(s.getParentId(),0L) }
@@ -266,18 +313,6 @@ public interface TerminableWrappedStream<T, S extends TerminableWrappedStream<T,
 	// endregion
 
 	// region ============ to optional ============
-
-	/**
-	 * 将当前流转为另一对象。用于提供针对流本身而非流中元素的操作
-	 *
-	 * @param <R>       转换类型
-	 * @param transform 转换
-	 * @return 转换后的流
-	 */
-	default <R> Optional<R> transform(final Function<? super S, R> transform) {
-		Objects.requireNonNull(transform);
-		return Optional.ofNullable(transform.apply(wrap(this)));
-	}
 
 	/**
 	 * 获取与给定断言匹配的第一个元素
@@ -535,7 +570,8 @@ public interface TerminableWrappedStream<T, S extends TerminableWrappedStream<T,
 	default void forEachIdx(final BiConsumer<? super T, Integer> action) {
 		Objects.requireNonNull(action);
 		if (isParallel()) {
-			unwrap().forEach(e -> action.accept(e, NOT_FOUND_ELEMENT_INDEX));
+			EasyStream.of(toIdxMap().entrySet()).parallel(isParallel())
+					.forEach(e -> action.accept(e.getValue(), e.getKey()));
 		} else {
 			final MutableInt index = new MutableInt(NOT_FOUND_ELEMENT_INDEX);
 			unwrap().forEach(e -> action.accept(e, index.incrementAndGet()));
@@ -551,7 +587,9 @@ public interface TerminableWrappedStream<T, S extends TerminableWrappedStream<T,
 	default void forEachOrderedIdx(final BiConsumer<? super T, Integer> action) {
 		Objects.requireNonNull(action);
 		if (isParallel()) {
-			unwrap().forEachOrdered(e -> action.accept(e, NOT_FOUND_ELEMENT_INDEX));
+			EasyStream.of(toIdxMap().entrySet())
+					.parallel(isParallel())
+					.forEachOrdered(e -> action.accept(e.getValue(), e.getKey()));
 		} else {
 			final MutableInt index = new MutableInt(NOT_FOUND_ELEMENT_INDEX);
 			unwrap().forEachOrdered(e -> action.accept(e, index.incrementAndGet()));

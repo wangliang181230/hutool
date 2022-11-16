@@ -1,6 +1,6 @@
 package cn.hutool.json.jwt;
 
-import cn.hutool.core.codec.Base64;
+import cn.hutool.core.codec.BaseN.Base64;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.exceptions.ValidateException;
@@ -388,7 +388,7 @@ public class JWT implements RegisteredPayload<JWT> {
 
 		// 校验时间字段
 		try {
-			JWTValidator.of(this).validateDate(DateUtil.date(), leeway);
+			JWTValidator.of(this).validateDate(DateUtil.now(), leeway);
 		} catch (final ValidateException e) {
 			return false;
 		}

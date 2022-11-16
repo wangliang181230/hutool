@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IORuntimeException;
 import cn.hutool.core.io.StreamProgress;
 import cn.hutool.core.lang.Console;
+import cn.hutool.http.client.engine.jdk.HttpRequest;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,13 +34,13 @@ public class DownloadTest {
 	@Ignore
 	public void downloadSizeTest() {
 		final String url = "https://res.t-io.org/im/upload/img/67/8948/1119501/88097554/74541310922/85/231910/366466 - 副本.jpg";
-		HttpRequest.get(url).setSSLProtocol("TLSv1.2").executeAsync().writeBody("e:/pic/366466.jpg");
+		HttpRequest.get(url).setSSLProtocol("TLSv1.2").executeAsync().body().write("e:/pic/366466.jpg");
 	}
 
 	@Test
 	@Ignore
 	public void downloadTest1() {
-		final long size = HttpUtil.downloadFile("http://explorer.bbfriend.com/crossdomain.xml", "e:/temp/");
+		final File size = HttpUtil.downloadFile("http://explorer.bbfriend.com/crossdomain.xml", "e:/temp/");
 		System.out.println("Download size: " + size);
 	}
 
