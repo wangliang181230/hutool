@@ -3,7 +3,9 @@ package cn.hutool.extra.script;
 import cn.hutool.core.exceptions.UtilException;
 import cn.hutool.core.io.resource.ResourceUtil;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.test.context.junit.jupiter.DisabledIf;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptException;
@@ -14,6 +16,7 @@ import javax.script.ScriptException;
  * @author looly
  *
  */
+@Ignore("不支持java17")
 public class ScriptUtilTest {
 
 	@Test
