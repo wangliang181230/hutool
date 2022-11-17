@@ -1078,13 +1078,16 @@ public class CollUtil {
 	 * @since 5.3.5
 	 */
 	public static <T, R> List<R> map(final Iterable<T> collection, final Function<? super T, ? extends R> mapper, final boolean ignoreNull) {
-		return StreamUtil.of(collection)
-				// 检查映射前的结果
-				.filter((e) -> (false == ignoreNull) || null != e)
-				.map(mapper)
-				// 检查映射后的结果
-				.filter((e) -> (false == ignoreNull) || null != e)
-				.collect(Collectors.toList());
+		if (ignoreNull) {
+			return StreamUtil.of(collection)
+					// 检查映射前的结果
+					.filter(Objects::nonNull)
+					.map(mapper)
+					// 检查映射后的结果
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+		}
+		return StreamUtil.of(collection).map(mapper).collect(Collectors.toList());
 	}
 
 	/**
