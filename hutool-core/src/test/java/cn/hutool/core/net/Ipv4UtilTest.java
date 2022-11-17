@@ -2,6 +2,7 @@ package cn.hutool.core.net;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 import java.util.List;
 
@@ -15,13 +16,8 @@ public class Ipv4UtilTest {
 
 	@Test
 	public void getMaskBitByIllegalMaskTest() {
-		try {
-			Ipv4Util.getMaskBitByMask("255.255.0.255");
-		} catch (Exception e) {
-			Assert.assertEquals(IllegalArgumentException.class, e.getClass());
-			return;
-		}
-		throw new RuntimeException("未抛出异常");
+		final ThrowingRunnable getMaskBitByMaskRunnable = () -> Ipv4Util.getMaskBitByMask("255.255.0.255");
+		Assert.assertThrows("非法掩码测试", IllegalArgumentException.class, getMaskBitByMaskRunnable);
 	}
 
 	@Test
