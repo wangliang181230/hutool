@@ -26,6 +26,7 @@
 				<maven.surefire.argLine>
 					--add-opens java.base/java.lang=ALL-UNNAMED
 					--add-opens java.base/java.util.regex=ALL-UNNAMED
+					--add-opens java.base/sun.reflect.annotation=ALL-UNNAMED
 					--illegal-access=permit
 					-Dillegal-access=permit
 				</maven.surefire.argLine>

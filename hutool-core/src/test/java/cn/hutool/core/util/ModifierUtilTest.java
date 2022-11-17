@@ -3,6 +3,7 @@ package cn.hutool.core.util;
 import cn.hutool.core.reflect.FieldUtil;
 import cn.hutool.core.reflect.ModifierUtil;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -26,6 +27,7 @@ public class ModifierUtilTest {
 	}
 
 	@Test
+	@Ignore("不兼容java17")
 	public void setFinalFieldValueTest() {
 		final String fieldName = "DIALECTS";
 		final List<Number> dialects =
