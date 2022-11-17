@@ -5,7 +5,6 @@ import cn.hutool.core.io.resource.ResourceUtil;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.context.junit.jupiter.DisabledIf;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptException;
