@@ -19,6 +19,7 @@ public class Ipv4UtilTest {
 			Ipv4Util.getMaskBitByMask("255.255.0.255");
 		} catch (Exception e) {
 			Assert.assertEquals(IllegalArgumentException.class, e.getClass());
+			return;
 		}
 		throw new RuntimeException("未抛出异常");
 	}
