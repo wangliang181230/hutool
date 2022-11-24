@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>cn.hutool</groupId>
 		<artifactId>hutool-parent</artifactId>
-		<version>5.8.10.M1</version>
+		<version>5.8.11.M1</version>
 	</parent>
 
 	<artifactId>hutool-extra</artifactId>
@@ -19,7 +19,7 @@
 	<properties>
 		<!-- versions -->
 		<velocity.version>2.3</velocity.version>
-		<beetl.version>3.10.0.RELEASE</beetl.version>
+		<beetl.version>3.13.0.RELEASE</beetl.version>
 		<rythm.version>1.4.1</rythm.version>
 		<freemarker.version>2.3.31</freemarker.version>
 		<enjoy.version>5.0.3</enjoy.version>
@@ -421,7 +421,7 @@
 		<dependency>
 			<groupId>com.googlecode.aviator</groupId>
 			<artifactId>aviator</artifactId>
-			<version>5.3.2</version>
+			<version>5.3.3</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
