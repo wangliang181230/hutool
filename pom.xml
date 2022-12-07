@@ -35,7 +35,7 @@
 		<project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 
 		<!-- versions -->
-		<spring-boot.version>2.7.5</spring-boot.version>
+		<spring-boot.version>2.7.6</spring-boot.version>
 		<compile.version>8</compile.version>
 		<junit.version>5.9.0</junit.version>
 		<lombok.version>1.18.24</lombok.version>
