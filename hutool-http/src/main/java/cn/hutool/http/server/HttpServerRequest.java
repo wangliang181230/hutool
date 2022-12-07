@@ -8,12 +8,13 @@ import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.net.multipart.MultipartFormData;
 import cn.hutool.core.net.multipart.UploadSetting;
+import cn.hutool.core.net.url.UrlQueryUtil;
 import cn.hutool.core.text.StrUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.http.meta.ContentTypeUtil;
 import cn.hutool.http.meta.Header;
-import cn.hutool.http.HttpUtil;
 import cn.hutool.http.meta.Method;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
@@ -170,7 +171,7 @@ public class HttpServerRequest extends HttpServerBase {
 	public Charset getCharset() {
 		if(null == this.charsetCache){
 			final String contentType = getContentType();
-			this.charsetCache = ObjUtil.defaultIfNull(HttpUtil.getCharset(contentType), DEFAULT_CHARSET);
+			this.charsetCache = ObjUtil.defaultIfNull(ContentTypeUtil.getCharset(contentType), DEFAULT_CHARSET);
 		}
 
 		return this.charsetCache;
@@ -329,7 +330,7 @@ public class HttpServerRequest extends HttpServerBase {
 			//解析URL中的参数
 			final String query = getQuery();
 			if(StrUtil.isNotBlank(query)){
-				this.paramsCache.putAll(HttpUtil.decodeParams(query, charset));
+				this.paramsCache.putAll(UrlQueryUtil.decodeQueryList(query, charset));
 			}
 
 			// 解析multipart中的参数
@@ -339,7 +340,7 @@ public class HttpServerRequest extends HttpServerBase {
 				// 解析body中的参数
 				final String body = getBody();
 				if(StrUtil.isNotBlank(body)){
-					this.paramsCache.putAll(HttpUtil.decodeParams(body, charset));
+					this.paramsCache.putAll(UrlQueryUtil.decodeQueryList(body, charset));
 				}
 			}
 		}
