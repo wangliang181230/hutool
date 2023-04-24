@@ -44,7 +44,7 @@
 		<Automatic-Module-Name>cn.hutool</Automatic-Module-Name>
 
 		<!-- versions -->
-		<spring-boot.version>2.7.6</spring-boot.version>
+		<spring-boot.version>2.7.11</spring-boot.version>
 		<compile.version>8</compile.version>
 		<junit.version>5.9.2</junit.version>
 		<lombok.version>1.18.26</lombok.version>
