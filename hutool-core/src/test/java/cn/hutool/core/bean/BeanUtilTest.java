@@ -248,8 +248,10 @@ public class BeanUtilTest {
 
 		final SubPersonWithAlias subPersonWithAlias = BeanUtil.toBean(map, SubPersonWithAlias.class);
 		Assert.assertEquals("sub名字", subPersonWithAlias.getSubName());
-		Assert.assertTrue(subPersonWithAlias.isBooleana());
-		Assert.assertEquals(true, subPersonWithAlias.getBooleanb());
+
+		//https://gitee.com/dromara/hutool/issues/I6H0XF
+		Assert.assertFalse(subPersonWithAlias.isBooleana());
+		Assert.assertNull(subPersonWithAlias.getBooleanb());
 	}
 
 	@Test
@@ -915,5 +917,12 @@ public class BeanUtilTest {
 
 		userEntity.setSex(0);
 		Assert.assertTrue(BeanUtil.isCommonFieldsEqual(userDTO, userEntity, "age", "sex"));
+	}
+
+	@Test
+	public void hasGetterTest() {
+		// https://gitee.com/dromara/hutool/issues/I6M7Z7
+		final boolean b = BeanUtil.hasGetter(Object.class);
+		Assert.assertFalse(b);
 	}
 }

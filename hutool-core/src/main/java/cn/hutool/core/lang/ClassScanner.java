@@ -255,7 +255,7 @@ public class ClassScanner implements Serializable {
 		this.classes.clear();
 		this.classesOfLoadError.clear();
 
-		for (URL url : ResourceUtil.getResourceIter(this.packagePath)) {
+		for (URL url : ResourceUtil.getResourceIter(this.packagePath, this.classLoader)) {
 			switch (url.getProtocol()) {
 				case "file":
 					scanFile(new File(URLUtil.decode(url.getFile(), this.charset.name())), null);
@@ -295,6 +295,7 @@ public class ClassScanner implements Serializable {
 
 	/**
 	 * 忽略加载错误扫描后，可以获得之前扫描时加载错误的类名字集合
+	 * @return 加载错误的类名字集合
 	 */
 	public Set<String> getClassesOfLoadError() {
 		return Collections.unmodifiableSet(this.classesOfLoadError);

@@ -8,7 +8,7 @@
 
 	<groupId>cn.hutool</groupId>
 	<artifactId>hutool-parent</artifactId>
-	<version>5.8.11.M1</version>
+	<version>5.8.19.M1</version>
 	<name>hutool</name>
 	<description>Hutool是一个小而全的Java工具类库，通过静态方法封装，降低相关API的学习成本，提高工作效率，使Java拥有函数式语言般的优雅，让Java语言也可以“甜甜的”。</description>
 	<url>https://github.com/dromara/hutool</url>
@@ -41,11 +41,13 @@
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 
+		<Automatic-Module-Name>cn.hutool</Automatic-Module-Name>
+
 		<!-- versions -->
 		<spring-boot.version>2.7.6</spring-boot.version>
 		<compile.version>8</compile.version>
-		<junit.version>4.13.2</junit.version>
-		<lombok.version>1.18.24</lombok.version>
+		<junit.version>5.9.2</junit.version>
+		<lombok.version>1.18.26</lombok.version>
 
 		<maven.surefire.argLine/>
 	</properties>
@@ -65,8 +67,8 @@
 	<dependencies>
 		<!-- 全局单元测试 -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -117,11 +119,31 @@
 					<parameters>true</parameters>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Build-OS>${os.name}</Build-OS>
+							<Built-By>${user.name}</Built-By>
+							<Build-Jdk>${java.version}</Build-Jdk>
+							<Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
+							<Automatic-Module-Name>${Automatic-Module-Name}</Automatic-Module-Name>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 			<!-- Javadoc -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.5.0</version>
 				<configuration>
 					<failOnError>false</failOnError>
 					<failOnWarnings>false</failOnWarnings>

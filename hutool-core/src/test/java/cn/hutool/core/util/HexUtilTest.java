@@ -39,6 +39,9 @@ public class HexUtilTest {
 
 	@Test
 	public void isHexNumberTest() {
+		Assert.assertTrue(HexUtil.isHexNumber("0"));
+		Assert.assertTrue(HexUtil.isHexNumber("002c"));
+
 		String a = "0x3544534F444";
 		Assert.assertTrue(HexUtil.isHexNumber(a));
 
@@ -48,6 +51,10 @@ public class HexUtilTest {
 
 		// 错误的
 		a = "0x0000001000T00001158e460913d00000";
+		Assert.assertFalse(HexUtil.isHexNumber(a));
+
+		// 错误的,https://github.com/dromara/hutool/issues/2857
+		a = "-1";
 		Assert.assertFalse(HexUtil.isHexNumber(a));
 	}
 

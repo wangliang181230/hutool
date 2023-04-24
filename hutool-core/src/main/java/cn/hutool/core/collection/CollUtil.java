@@ -365,11 +365,18 @@ public class CollUtil {
 	 */
 	public static <T> Collection<T> subtract(Collection<T> coll1, Collection<T> coll2) {
 		Collection<T> result = ObjectUtil.clone(coll1);
-		if (null == result) {
-			result = CollUtil.create(coll1.getClass());
+		try {
+			if (null == result) {
+				result = CollUtil.create(coll1.getClass());
+				result.addAll(coll1);
+			}
+			result.removeAll(coll2);
+		} catch (UnsupportedOperationException e) {
+			// 针对 coll1 为只读集合的补偿
+			result = CollUtil.create(AbstractCollection.class);
 			result.addAll(coll1);
+			result.removeAll(coll2);
 		}
-		result.removeAll(coll2);
 		return result;
 	}
 
@@ -991,6 +998,7 @@ public class CollUtil {
 	 *
 	 * @param <T>            集合元素类型
 	 * @param collectionType 集合类型，rawtype 如 ArrayList.class, EnumSet.class ...
+	 * @param elementType    集合元素类型
 	 * @return 集合类型对应的实例
 	 * @since v5
 	 */
@@ -1181,11 +1189,12 @@ public class CollUtil {
 			return result;
 		}
 
-		ArrayList<T> subList = new ArrayList<>(size);
+		final int initSize = Math.min(collection.size(), size);
+		List<T> subList = new ArrayList<>(initSize);
 		for (T t : collection) {
 			if (subList.size() >= size) {
 				result.add(subList);
-				subList = new ArrayList<>(size);
+				subList = new ArrayList<>(initSize);
 			}
 			subList.add(t);
 		}
@@ -1732,7 +1741,7 @@ public class CollUtil {
 	 * @return 是否为非空
 	 */
 	public static boolean isNotEmpty(Collection<?> collection) {
-		return false == isEmpty(collection);
+		return !isEmpty(collection);
 	}
 
 	/**

@@ -9,6 +9,8 @@ import cn.hutool.core.util.CharsetUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,9 +52,9 @@ public class HttpRequestTest {
 	@Test
 	@Ignore
 	public void toStringTest() {
-		final String url = "http://gc.ditu.aliyun.com/geocoding?ccc=你好";
+		final String url = "https://hutool.cn?ccc=你好";
 
-		final HttpRequest request = HttpRequest.get(url).body("a=乌海");
+		final HttpRequest request = HttpRequest.get(url).form("a", "测试");
 		Console.log(request.toString());
 	}
 
@@ -167,6 +169,33 @@ public class HttpRequestTest {
 		// 方式2，单独设置
 		execute = HttpRequest.get(url).setMaxRedirectCount(1).execute();
 		Console.log(execute.getStatus(), execute.header(Header.LOCATION));
+	}
+
+	@Test
+	@Ignore
+	public void followRedirectsCookieTrueTest() {
+		final String url = "http://localhost:8888/redirect1";
+		CookieManager cookieManager = new CookieManager();
+		HttpRequest.setCookieManager(cookieManager);
+		HttpResponse execute = HttpRequest.get(url)
+				.setMaxRedirectCount(20)
+				.setFollowRedirectsCookie(true)
+				.execute();
+		List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
+		Console.log(execute.getStatus(), cookies);
+	}
+
+	@Test
+	@Ignore
+	public void followRedirectsCookieFalseTest() {
+		final String url = "http://localhost:8888/redirect1";
+		CookieManager cookieManager = new CookieManager();
+		HttpRequest.setCookieManager(cookieManager);
+		HttpResponse execute = HttpRequest.get(url)
+				.setMaxRedirectCount(20)
+				.execute();
+		List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
+		Console.log(execute.getStatus(), cookies);
 	}
 
 	@Test
