@@ -1,4 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Copyright (c) 2023 looly(loolly@aliyun.com)
+  ~ Hutool is licensed under Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~          http://license.coscl.org.cn/MulanPSL2
+  ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+  ~ EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+  ~ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+  ~ See the Mulan PSL v2 for more details.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -7,23 +19,27 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>cn.hutool</groupId>
+		<groupId>org.dromara.hutool</groupId>
 		<artifactId>hutool-parent</artifactId>
-		<version>6.0.0.M1</version>
+		<version>6.0.0.M3</version>
 	</parent>
 
 	<artifactId>hutool-http</artifactId>
 	<name>${project.artifactId}</name>
 	<description>Hutool Http客户端</description>
 
+	<properties>
+		<Automatic-Module-Name>org.dromara.hutool.http</Automatic-Module-Name>
+	</properties>
+
 	<dependencies>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-log</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -34,17 +50,32 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<!-- 版本固定5.0.0，可以支持jdk8 -->
+			<version>5.0.0</version>
+			<optional>true</optional>
+		</dependency>
+
 		<!-- 第三方HTTP客户端库 -->
 		<dependency>
 			<groupId>org.apache.httpcomponents.client5</groupId>
 			<artifactId>httpclient5</artifactId>
-			<version>5.1.3</version>
+			<version>5.2.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
+			<version>4.5.14</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -55,7 +86,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-json</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>test</scope>
@@ -78,6 +109,12 @@
 			<artifactId>mockwebserver</artifactId>
 			<version>4.10.0</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>kotlin-stdlib-jdk8</artifactId>
+					<groupId>org.jetbrains.kotlin</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

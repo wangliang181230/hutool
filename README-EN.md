@@ -1,16 +1,16 @@
 <p align="center">
-	<a href="https://hutool.cn/"><img src="https://cdn.jsdelivr.net/gh/looly/hutool-site/images/logo.jpg" width="45%"></a>
+	<a href="https://hutool.cn/"><img src="https://plus.hutool.cn/images/hutool.svg" width="45%"></a>
 </p>
 <p align="center">
-	<strong>🍬A set of tools that keep Java sweet.</strong>
+	<strong>🍬Make Java Sweet Again.</strong>
 </p>
 <p align="center">
 	👉 <a href="https://hutool.cn">https://hutool.cn/</a> 👈
 </p>
 
 <p align="center">
-	<a target="_blank" href="https://search.maven.org/artifact/cn.hutool/hutool-all">
-		<img src="https://img.shields.io/maven-central/v/cn.hutool/hutool-all.svg?label=Maven%20Central" />
+	<a target="_blank" href="https://search.maven.org/artifact/org.dromara.hutool/hutool-all">
+		<img src="https://img.shields.io/maven-central/v/org.dromara.hutool/hutool-all.svg?label=Maven%20Central" />
 	</a>
 	<a target="_blank" href="http://license.coscl.org.cn/MulanPSL2/index.html">
 		<img src="https://img.shields.io/:license-MulanPSL2-blue.svg" />
@@ -19,7 +19,7 @@
 		<img src="https://img.shields.io/badge/JDK-8+-green.svg" />
 	</a>
 	<a target="_blank" href="https://travis-ci.com/dromara/hutool">
-		<img src="https://travis-ci.com/dromara/hutool.svg?branch=v4-master" />
+		<img src="https://travis-ci.com/dromara/hutool.svg?branch=v5-master" />
 	</a>
 	<a href="https://www.codacy.com/gh/dromara/hutool/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dromara/hutool&amp;utm_campaign=Badge_Grade">
 		<img src="https://app.codacy.com/project/badge/Grade/8a6897d9de7440dd9de8804c28d2871d"/>
@@ -40,8 +40,8 @@
 
 <br/>
 <p align="center">
-	<a href="https://qm.qq.com/cgi-bin/qm/qr?k=jPq9DsjXs7GUWbXRZU3wygSJyMEy4pqr&jump_from=webapi">
-	<img src="https://img.shields.io/badge/QQ%E7%BE%A4%E2%91%A5-610134978-orange"/></a>
+	<a href="https://qm.qq.com/cgi-bin/qm/qr?k=QtsqXLkHpLjE99tkre19j6pjPMhSay1a&jump_from=webapi">
+	<img src="https://img.shields.io/badge/QQ%E7%BE%A4%E2%91%A5-715292493-orange"/></a>
 </p>
 
 -------------------------------------------------------------------------------
@@ -51,7 +51,7 @@
 -------------------------------------------------------------------------------
 
 ## 📚Introduction
-**Hutool** is a small but comprehensive library of Java tools, encapsulation by static methods, reduce the cost of learning related APIs, increase productivity, and make Java as elegant as a functional programming language,let the Java be "sweet" too.
+**Hutool** is a small but comprehensive library of Java tools, achieved by encapsulation through static methods, reduce the cost of learning related APIs, increase productivity, and make Java as elegant as a functional programming language,let the Java be "sweet" too.
 
 **Hutool** tools and methods from each user's crafted, it covers all aspects of the underlying code of Java development, it is a powerful tool for large project development to solve small problems, but also the efficiency of small projects;
 
@@ -136,20 +136,20 @@ We provide the T-Shirt and Sweater with Hutool Logo, please visit the shop：
 ### 🍊Maven
 ```xml
 <dependency>
-    <groupId>cn.hutool</groupId>
+    <groupId>org.dromara.hutool</groupId>
     <artifactId>hutool-all</artifactId>
-    <version>6.0.0.M1</version>
+    <version>6.0.0.M3</version>
 </dependency>
 ```
 
 ### 🍐Gradle
 ```
-implementation 'cn.hutool:hutool-all:6.0.0.M1'
+implementation 'org.dromara.hutool:hutool-all:6.0.0.M3'
 ```
 
 ## 📥Download
 
-- [Maven Repo](https://repo1.maven.org/maven2/cn/hutool/hutool-all/6.0.0.M1/)
+- [Maven Repo](https://repo1.maven.org/maven2/cn/hutool/hutool-all/6.0.0.M3/)
 
 > 🔔️note:
 > Hutool 5.x supports JDK8+ and is not tested on Android platforms, and cannot guarantee that all tool classes or tool methods are available.
@@ -176,10 +176,10 @@ cd ${hutool}
 
 Hutool's source code is divided into two branches:
 
-| branch | description                                               |
-|-----------|---------------------------------------------------------------|
+| branch    | description                                                                                                                                                         |
+|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | v6-master | The master branch, the branch used by the release version, is the same as the jar committed to the central repository and does not receive any pr or modifications. |
-| v6-dev    | Development branch, which defaults to the next SNAPSHOT version, accepts modifications or pr |
+| v6-dev    | Development branch, which defaults to the next SNAPSHOT version, accepts modifications or pr                                                                        |
 
 ### 🐞Provide feedback or suggestions on bugs
 
@@ -206,6 +206,5 @@ Hutool welcomes anyone to contribute code to Hutool, but the author suffers from
 ## 📌WeChat Official Account
 
 <div align="center">
-	<img src="https://cdn.jsdelivr.net/gh/looly/hutool-site/images/qr_tuling.jpg" height="150">
 	<img src="https://dromara.org/img/qrcode/qrcode_1.png" height="150">
 </div>

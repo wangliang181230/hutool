@@ -1,4 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Copyright (c) 2023 looly(loolly@aliyun.com)
+  ~ Hutool is licensed under Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~          http://license.coscl.org.cn/MulanPSL2
+  ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+  ~ EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+  ~ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+  ~ See the Mulan PSL v2 for more details.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -7,9 +19,9 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>cn.hutool</groupId>
+		<groupId>org.dromara.hutool</groupId>
 		<artifactId>hutool-parent</artifactId>
-		<version>6.0.0.M1</version>
+		<version>6.0.0.M3</version>
 	</parent>
 
 	<artifactId>hutool-extra</artifactId>
@@ -17,18 +29,19 @@
 	<description>Hutool 扩展工具类（提供其它类库的封装）</description>
 
 	<properties>
+		<Automatic-Module-Name>org.dromara.hutool.extra</Automatic-Module-Name>
 		<!-- versions -->
 		<velocity.version>2.3</velocity.version>
-		<beetl.version>3.13.0.RELEASE</beetl.version>
-		<rythm.version>1.4.1</rythm.version>
-		<freemarker.version>2.3.31</freemarker.version>
+		<beetl.version>3.14.1.RELEASE</beetl.version>
+		<rythm.version>1.4.2</rythm.version>
+		<freemarker.version>2.3.32</freemarker.version>
 		<enjoy.version>4.9.21</enjoy.version>
 		<thymeleaf.version>3.0.15.RELEASE</thymeleaf.version>
 		<mail.version>1.6.2</mail.version>
 		<jsch.version>0.1.55</jsch.version>
-		<sshj.version>0.34.0</sshj.version>
-		<zxing.version>3.5.0</zxing.version>
-		<net.version>3.8.0</net.version>
+		<sshj.version>0.35.0</sshj.version>
+		<zxing.version>3.5.1</zxing.version>
+		<net.version>3.9.0</net.version>
 		<emoji-java.version>5.1.1</emoji-java.version>
 		<servlet-api.version>4.0.1</servlet-api.version>
 		<cglib.version>3.3.0</cglib.version>
@@ -37,34 +50,19 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-swing</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-setting</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet-api.version}</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<!-- 版本固定5.0.0，可以支持jdk8 -->
-			<version>5.0.0</version>
-			<scope>provided</scope>
-			<optional>true</optional>
 		</dependency>
 
 		<!-- 模板引擎 -->
@@ -93,8 +91,16 @@
 					<groupId>org.apache.commons</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>mvel2</artifactId>
-					<groupId>org.mvel</groupId>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>mockito-core</artifactId>
+					<groupId>org.mockito</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
 				</exclusion>
 			</exclusions>
 			<optional>true</optional>
@@ -136,6 +142,28 @@
 			<groupId>com.github.subchen</groupId>
 			<artifactId>jetbrick-template</artifactId>
 			<version>2.1.10</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>antlr4-runtime</artifactId>
+					<groupId>org.antlr</groupId>
+				</exclusion>
+			</exclusions>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.pebbletemplates</groupId>
+			<artifactId>pebble</artifactId>
+			<version>3.2.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 			<optional>true</optional>
 		</dependency>
 
@@ -143,12 +171,12 @@
 		<dependency>
 			<groupId>jakarta.mail</groupId>
 			<artifactId>jakarta.mail-api</artifactId>
-			<version>2.1.0</version>
+			<version>2.1.1</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.mail</groupId>
+			<groupId>org.eclipse.angus</groupId>
 			<artifactId>jakarta.mail</artifactId>
 			<version>2.0.1</version>
 			<scope>test</scope>
@@ -167,6 +195,12 @@
 			<artifactId>sshj</artifactId>
 			<version>${sshj.version}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -211,6 +245,12 @@
 			<artifactId>emoji-java</artifactId>
 			<version>${emoji-java.version}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>json</artifactId>
+					<groupId>org.json</groupId>
+				</exclusion>
+			</exclusions>
 			<optional>true</optional>
 		</dependency>
 
@@ -236,7 +276,7 @@
 		<dependency>
 			<groupId>org.lionsoul</groupId>
 			<artifactId>jcseg-core</artifactId>
-			<version>2.6.2</version>
+			<version>2.6.3</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -311,8 +351,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mayabot.mynlp</groupId>
-			<artifactId>mynlp-segment</artifactId>
-			<version>3.0.2</version>
+			<artifactId>mynlp-all</artifactId>
+			<version>4.0.0</version>
 			<optional>true</optional>
 		</dependency>
 		<!-- Spring Boot -->
@@ -322,12 +362,12 @@
 			<version>${spring-boot.version}</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>spring-expression</artifactId>
-					<groupId>org.springframework</groupId>
-				</exclusion>
-				<exclusion>
 					<artifactId>slf4j-api</artifactId>
 					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>snakeyaml</artifactId>
+					<groupId>org.yaml</groupId>
 				</exclusion>
 			</exclusions>
 			<optional>true</optional>
@@ -360,12 +400,18 @@
 			<groupId>com.github.houbb</groupId>
 			<artifactId>pinyin</artifactId>
 			<version>0.3.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>apiguardian-api</artifactId>
+					<groupId>org.apiguardian</groupId>
+				</exclusion>
+			</exclusions>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>${cglib.version}</version>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.14.4</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
@@ -382,6 +428,12 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>7.0.4.Final</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jakarta.validation-api</artifactId>
+					<groupId>jakarta.validation</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -397,20 +449,16 @@
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
-					<artifactId>asm</artifactId>
-					<groupId>org.ow2.asm</groupId>
+					<artifactId>jakarta.activation-api</artifactId>
+					<groupId>jakarta.activation</groupId>
 				</exclusion>
 				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>junit-jupiter-api</artifactId>
+					<artifactId>junit-jupiter</artifactId>
 					<groupId>org.junit.jupiter</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>json-path</artifactId>
+					<groupId>com.jayway.jsonpath</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -425,68 +473,10 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- 表达式引擎可选依赖 begin -->
-		<dependency>
-			<groupId>com.googlecode.aviator</groupId>
-			<artifactId>aviator</artifactId>
-			<version>5.3.3</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<!-- 手动引入aviator的关联依赖，解决版本问题 -->
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-jexl3</artifactId>
-			<version>3.2.1</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.mvel</groupId>
-			<artifactId>mvel2</artifactId>
-			<version>2.4.14.Final</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.jfirer</groupId>
-			<artifactId>jfireEl</artifactId>
-			<version>1.0</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-expression</artifactId>
-			<version>5.3.24</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.mozilla</groupId>
-			<artifactId>rhino</artifactId>
-			<version>1.7.14</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>QLExpress</artifactId>
-			<version>3.3.0</version>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<!-- 表达式引擎可选依赖 end -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>1.21</version>
+			<version>1.22</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
@@ -496,12 +486,24 @@
 			<artifactId>oshi-core</artifactId>
 			<version>6.3.2</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
 			<version>2.3.7</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jakarta.activation</artifactId>
+					<groupId>com.sun.activation</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>

@@ -1,4 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Copyright (c) 2023 looly(loolly@aliyun.com)
+  ~ Hutool is licensed under Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~          http://license.coscl.org.cn/MulanPSL2
+  ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+  ~ EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+  ~ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+  ~ See the Mulan PSL v2 for more details.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -7,9 +19,9 @@
 	<packaging>jar</packaging>
 
 	<parent>
-		<groupId>cn.hutool</groupId>
+		<groupId>org.dromara.hutool</groupId>
 		<artifactId>hutool-parent</artifactId>
-		<version>6.0.0.M1</version>
+		<version>6.0.0.M3</version>
 	</parent>
 
 	<artifactId>hutool-poi</artifactId>
@@ -17,18 +29,19 @@
 	<description>Hutool POI工具类（对Office文档、OFD等操作）</description>
 
 	<properties>
+		<Automatic-Module-Name>org.dromara.hutool.poi</Automatic-Module-Name>
 		<!-- versions -->
-		<poi.version>5.2.2</poi.version>
+		<poi.version>5.2.3</poi.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>org.dromara.hutool</groupId>
 			<artifactId>hutool-log</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -39,13 +52,19 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>${poi.version}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j-api</artifactId>
+					<groupId>org.apache.logging.log4j</groupId>
+				</exclusion>
+			</exclusions>
 			<optional>true</optional>
 		</dependency>
 		<!-- OFD -->
 		<dependency>
 			<groupId>org.ofdrw</groupId>
 			<artifactId>ofdrw-full</artifactId>
-			<version>1.18.2</version>
+			<version>2.0.4</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>

@@ -1,16 +1,16 @@
 <p align="center">
-	<a href="https://hutool.cn/"><img src="https://cdn.jsdelivr.net/gh/looly/hutool-site/images/logo.jpg" width="45%"></a>
+	<a href="https://hutool.cn/"><img src="https://plus.hutool.cn/images/hutool.svg" width="45%"></a>
 </p>
 <p align="center">
-	<strong>🍬A set of tools that keep Java sweet.</strong>
+	<strong>🍬Make Java Sweet Again.</strong>
 </p>
 <p align="center">
 	👉 <a href="https://hutool.cn">https://hutool.cn/</a> 👈
 </p>
 
 <p align="center">
-	<a target="_blank" href="https://search.maven.org/artifact/cn.hutool/hutool-all">
-		<img src="https://img.shields.io/maven-central/v/cn.hutool/hutool-all.svg?label=Maven%20Central" />
+	<a target="_blank" href="https://search.maven.org/artifact/org.dromara.hutool/hutool-all">
+		<img src="https://img.shields.io/maven-central/v/org.dromara.hutool/hutool-all.svg?label=Maven%20Central" />
 	</a>
 	<a target="_blank" href="http://license.coscl.org.cn/MulanPSL2/index.html">
 		<img src="https://img.shields.io/:license-MulanPSL2-blue.svg" />
@@ -19,7 +19,7 @@
 		<img src="https://img.shields.io/badge/JDK-8+-green.svg" />
 	</a>
 	<a target="_blank" href="https://travis-ci.com/dromara/hutool">
-		<img src="https://travis-ci.com/dromara/hutool.svg?branch=v4-master" />
+		<img src="https://travis-ci.com/dromara/hutool.svg?branch=v5-master" />
 	</a>
 	<a href="https://www.codacy.com/gh/dromara/hutool/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dromara/hutool&amp;utm_campaign=Badge_Grade">
 		<img src="https://app.codacy.com/project/badge/Grade/8a6897d9de7440dd9de8804c28d2871d"/>
@@ -40,8 +40,8 @@
 
 <br/>
 <p align="center">
-	<a href="https://qm.qq.com/cgi-bin/qm/qr?k=jPq9DsjXs7GUWbXRZU3wygSJyMEy4pqr&jump_from=webapi">
-	<img src="https://img.shields.io/badge/QQ%E7%BE%A4%E2%91%A5-610134978-orange"/></a>
+	<a href="https://qm.qq.com/cgi-bin/qm/qr?k=QtsqXLkHpLjE99tkre19j6pjPMhSay1a&jump_from=webapi">
+	<img src="https://img.shields.io/badge/QQ%E7%BE%A4%E2%91%A5-715292493-orange"/></a>
 </p>
 
 -------------------------------------------------------------------------------
@@ -139,23 +139,23 @@ Hutool的存在就是为了减少代码搜索成本，避免网络上参差不�
 ```xml
 
 <dependency>
-	<groupId>cn.hutool</groupId>
+	<groupId>org.dromara.hutool</groupId>
 	<artifactId>hutool-all</artifactId>
-	<version>6.0.0.M1</version>
+	<version>6.0.0.M3</version>
 </dependency>
 ```
 
 ### 🍐Gradle
 
 ```
-implementation 'cn.hutool:hutool-all:6.0.0.M1'
+implementation 'org.dromara.hutool:hutool-all:6.0.0.M3'
 ```
 
 ### 📥下载jar
 
 点击以下链接，下载`hutool-all-X.X.X.jar`即可：
 
-- [Maven中央库](https://repo1.maven.org/maven2/cn/hutool/hutool-all/6.0.0.M1/)
+- [Maven中央库](https://repo1.maven.org/maven2/cn/hutool/hutool-all/6.0.0.M3/)
 
 > 🔔️注意
 > Hutool 5.x支持JDK8+，对Android平台没有测试，不能保证所有工具类或工具方法可用。
@@ -180,10 +180,10 @@ implementation 'cn.hutool:hutool-all:6.0.0.M1'
 
 Hutool的源码分为两个分支，功能如下：
 
-| 分支       | 作用                                                          |
-|-----------|---------------------------------------------------------------|
+| 分支        | 作用                                         |
+|-----------|--------------------------------------------|
 | v6-master | 主分支，release版本使用的分支，与中央库提交的jar一致，不接收任何pr或修改 |
-| v6-dev    | 开发分支，默认为下个版本的SNAPSHOT版本，接受修改或pr                 |
+| v6-dev    | 开发分支，默认为下个版本的SNAPSHOT版本，接受修改或pr            |
 
 ### 🐞提供bug反馈或建议
 
@@ -220,6 +220,5 @@ Hutool欢迎任何人为Hutool添砖加瓦，贡献代码，不过维护者是�
 ## 📌公众号
 
 <div align="center">
-	<img src="https://cdn.jsdelivr.net/gh/looly/hutool-site/images/qr_tuling.jpg" height="150">
 	<img src="https://dromara.org/img/qrcode/qrcode_1.png" height="150">
 </div>

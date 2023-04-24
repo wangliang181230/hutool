@@ -1,4 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Copyright (c) 2023 looly(loolly@aliyun.com)
+  ~ Hutool is licensed under Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~          http://license.coscl.org.cn/MulanPSL2
+  ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+  ~ EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+  ~ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+  ~ See the Mulan PSL v2 for more details.
+  -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -7,75 +19,75 @@
 	<packaging>pom</packaging>
 
 	<parent>
-		<groupId>cn.hutool</groupId>
+		<groupId>org.dromara.hutool</groupId>
 		<artifactId>hutool-parent</artifactId>
-		<version>6.0.0.M1</version>
+		<version>6.0.0.M3</version>
 	</parent>
 
 	<artifactId>hutool-bom</artifactId>
 	<name>${project.artifactId}</name>
 	<description>提供丰富的Java工具方法，此模块为Hutool所有模块汇总，最终形式为拆分开的多个jar包，可以通过exclude方式排除不需要的模块</description>
-	<url>https://github.com/looly/hutool</url>
+	<url>https://github.com/dromara/hutool</url>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-core</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-crypto</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-db</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-extra</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-http</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-log</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-setting</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-cron</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-json</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-poi</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-socket</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.hutool</groupId>
+				<groupId>${project.parent.groupId}</groupId>
 				<artifactId>hutool-swing</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
@@ -84,51 +96,51 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-crypto</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-db</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-extra</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-http</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-log</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-setting</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-cron</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-json</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-poi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-socket</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>cn.hutool</groupId>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>hutool-swing</artifactId>
 		</dependency>
 	</dependencies>
